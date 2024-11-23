@@ -3,9 +3,9 @@ networks:
   appsare:
     name: appsare
 services:
-  postgres:
+  ar_postgres:
     image: postgres:14.12
-    container_name: postgres
+    container_name: ar_postgres
     networks:
       - appsare
     ports:
@@ -18,55 +18,55 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
 
-  php:
+  ar_php:
     build:
       context: .
       dockerfile: php.dockerfile
-    container_name: php
+    container_name: ar_php
     volumes:
       - ./src:/var/www/html
     restart: unless-stopped
     networks:
       - appsare
-  nginx:
+  ar_nginx:
     build:
       context: .
       dockerfile: nginx.dockerfile
-    container_name: nginx
+    container_name: ar_nginx
     depends_on:
-      - php
-      - postgres
+      - ar_php
+      - ar_postgres
     networks:
       - appsare
     ports:
-      - 8085:80
+      - 80:80
     volumes:
       - ./src:/var/www/html
     restart: unless-stopped
 
-  composer:
+  ar_composer:
     image: composer:latest
-    container_name: composer
+    container_name: ar_composer
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     networks:
       - appsare
 
-  artisan:
+  ar_artisan:
     build:
       context: .
       dockerfile: php.dockerfile
-    container_name: artisan
+    container_name: ar_artisan
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     entrypoint: ["php", "artisan"]
     networks:
       - appsare
-  npm:
+  ar_npm:
     image: node:current-alpine
-    container_name: npm
+    container_name: ar_npm
     ports:
       - 5173:5173
     volumes:
@@ -75,11 +75,11 @@ services:
     entrypoint: ['npm']
     networks:
       - appsare
-  runtests:
+  ar_runtests:
     build:
       context: .
       dockerfile: php.dockerfile
-    container_name: runtests
+    container_name: ar_runtests
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
@@ -87,31 +87,43 @@ services:
     networks:
       - appsare
 
-  scheduler:
+  ar_scheduler:
     build:
       context: .
-      dockerfile: php.prod.dockerfile
-    container_name: scheduler
+      dockerfile: php.dockerfile
+    container_name: ar_scheduler
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     entrypoint: ["php", "artisan", "schedule:work"]
     networks:
       - appsare
-  supervisord:
+  ar_supervisord:
     build:
       context: .
       dockerfile: supervisord.dockerfile
-    container_name: supervisord
+    container_name: ar_supervisord
     depends_on:
-      - nginx
-      - php
-      - postgres
-      - scheduler
+      - ar_nginx
+      - ar_php
+      - ar_postgres
+      - ar_scheduler
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     networks:
       - appsare
-    restart: unless-stopped
+  ar_pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ar_pgadmin
+    environment:
+      - 'PGADMIN_DEFAULT_EMAIL=madhukar@seasonsurvey.com'
+      - 'PGADMIN_DEFAULT_PASSWORD=slash123'
+    ports:
+      - 8084:80
+    volumes:
+      - ./pgadmin-data:/var/lib/pgadmin
+    networks:
+      - appsare
+    
   
