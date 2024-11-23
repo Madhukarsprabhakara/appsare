@@ -1,0 +1,117 @@
+
+networks:
+  appsare:
+    name: appsare
+services:
+  postgres:
+    image: postgres:14.12
+    container_name: postgres
+    networks:
+      - appsare
+    ports:
+      - 5434:5432
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=appsare
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: php
+    volumes:
+      - ./src:/var/www/html
+    restart: unless-stopped
+    networks:
+      - appsare
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    container_name: nginx
+    depends_on:
+      - php
+      - postgres
+    networks:
+      - appsare
+    ports:
+      - 8085:80
+    volumes:
+      - ./src:/var/www/html
+    restart: unless-stopped
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - appsare
+
+  artisan:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: artisan
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan"]
+    networks:
+      - appsare
+  npm:
+    image: node:current-alpine
+    container_name: npm
+    ports:
+      - 5173:5173
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+    networks:
+      - appsare
+  runtests:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: runtests
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan", "test"]
+    networks:
+      - appsare
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: php.prod.dockerfile
+    container_name: scheduler
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan", "schedule:work"]
+    networks:
+      - appsare
+  supervisord:
+    build:
+      context: .
+      dockerfile: supervisord.dockerfile
+    container_name: supervisord
+    depends_on:
+      - nginx
+      - php
+      - postgres
+      - scheduler
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - appsare
+    restart: unless-stopped
+  
