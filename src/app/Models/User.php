@@ -10,10 +10,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
-
+use Spark\Billable;
 class User extends Authenticatable
 {
-    use HasApiTokens;
+    use HasApiTokens, Billable;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
@@ -33,6 +33,9 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $casts = [
+        'trial_ends_at' => 'datetime',
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *

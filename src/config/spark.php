@@ -132,13 +132,13 @@ return [
         'user' => [
             'model' => User::class,
 
-            'trial_days' => 5,
+            'trial_days' => 10,
 
-            'default_interval' => 'monthly',
+            'default_interval' => 'yearly',
 
             'plans' => [
                 [
-                    'name' => 'Standard',
+                    'name' => 'Appsare',
                     'short_description' => 'This is a short, human friendly description of the plan.',
                     'monthly_id' => env('SPARK_STANDARD_MONTHLY_PLAN', 'price_id'),
                     'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'price_id'),
