@@ -11,6 +11,7 @@
         "laravel/framework": "^11.31",
         "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
+        "laravel/spark-stripe": "^5.5.0",
         "laravel/tinker": "^2.9",
         "tightenco/ziggy": "^2.0"
     },
@@ -70,6 +71,12 @@
             "php-http/discovery": true
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://spark.laravel.com"
+        }
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true
 }
