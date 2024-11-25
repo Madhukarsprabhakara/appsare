@@ -12,6 +12,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::get('/phpinfo', function() {
+    // dd(extension_loaded('soap'));
+    return phpinfo();
+});
 
 Route::middleware([
     'auth:sanctum',
