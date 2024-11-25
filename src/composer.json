@@ -13,6 +13,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/spark-stripe": "^5.5.0",
         "laravel/tinker": "^2.9",
+        "mpociot/vat-calculator": "^3.14",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
