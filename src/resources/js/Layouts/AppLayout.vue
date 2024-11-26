@@ -146,6 +146,9 @@ const logout = () => {
                                             API Tokens
                                         </DropdownLink>
 
+                                        <DropdownLink href="/billing">
+                                            Billing
+                                        </DropdownLink>
                                         <div class="border-t border-gray-200" />
 
                                         <!-- Authentication -->
