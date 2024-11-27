@@ -26,7 +26,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-
+    // Route::get('/dashboard', [App\Http\Controllers\TrackerController::class, 'index'])->name('dashboard');
     #Trackers route
     Route::get('/trackers', [App\Http\Controllers\TrackerController::class, 'index'])->name('trackers.index');
     Route::get('/trackers/create', [App\Http\Controllers\TrackerController::class, 'create'])->name('trackers.create');

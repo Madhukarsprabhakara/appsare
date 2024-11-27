@@ -4,15 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Tracker;
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
+use App\Services\TrackerService;
+use App\Services\EssentialService;
+use App\Services\UserService;
 class TrackerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TrackerService $trackerService, UserService $userService)
     {
-        //
+        try {
+            //return $userService->getLoggedinUserTeam();
+             $trackers=$trackerService->getTrackersOnTeamId($userService->getLoggedinUserTeam());
+             return Inertia::render('Dashboard', [
+                    'trackers' => $trackers, 
+
+                    
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -21,14 +36,27 @@ class TrackerController extends Controller
     public function create()
     {
         //
+        return Inertia::render('Trackers/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, EssentialService $essentialService, TrackerService $trackerService)
     {
         //
+        $data=$request->all();
+        $validated = $request->validate([
+            'url' => 'required|string',
+
+        ]);    
+        $tracker_to_save=$essentialService->addUserIdTeamIdToArray($data);
+        $status=$trackerService->storeTracker($tracker_to_save);
+
+        if ($status)
+        {
+            return \Redirect::route('trackers.index');
+        }
     }
 
     /**

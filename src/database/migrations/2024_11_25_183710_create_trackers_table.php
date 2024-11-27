@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('team_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('tracker_type_id')->constrained();
+            $table->foreignId('tracker_type_id')->default(1)->constrained();
             $table->text('url');
             $table->text('descr')->nullable();
             $table->ipAddress('ip_address')->nullable();
             $table->integer('port')->nullable();
+            $table->integer('retries')->default(3);
             $table->string('check_frequency')->default('every_1_min');
             $table->boolean('is_active')->default(1);
+            $table->boolean('is_archived')->default(false);
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('icon')->nullable();
             $table->boolean('is_active')->default(1);
+            $table->integer('sort_order')->nullable();
             $table->timestamps();
         });
     }

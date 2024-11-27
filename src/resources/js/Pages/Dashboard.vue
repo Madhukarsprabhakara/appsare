@@ -15,7 +15,7 @@ import Show from '@/Pages/Dashboard/Show.vue';
         <div class="">
             <div class="max-w-full mx-auto ">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <show/>
+                    <Show/>
                 </div>
             </div>
         </div>

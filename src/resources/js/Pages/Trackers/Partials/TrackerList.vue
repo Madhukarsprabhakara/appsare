@@ -2,7 +2,7 @@
   <ul role="list" class="divide-y divide-gray-100">
     <li v-for="person in people" :key="person.email" class="flex justify-between gap-x-6 py-5">
       <div class="flex min-w-0 gap-x-4">
-        <img class="size-12 flex-none rounded-full bg-gray-50" :src="person.imageUrl" alt="" />
+        <!-- <img class="size-12 flex-none rounded-full bg-gray-50" :src="person.imageUrl" alt="" /> -->
         <div class="min-w-0 flex-auto">
           <p class="text-sm/6 font-semibold text-gray-900">
             <a :href="person.href" class="hover:underline">{{ person.name }}</a>
@@ -14,7 +14,7 @@
       </div>
       <div class="flex shrink-0 items-center gap-x-6">
         <div class="hidden sm:flex sm:flex-col sm:items-end">
-          <p class="text-sm/6 text-gray-900">{{ person.role }}</p>
+          <UptimeIndicator />
           <p v-if="person.lastSeen" class="mt-1 text-xs/5 text-gray-500">
             Last seen <time :datetime="person.lastSeenDateTime">{{ person.lastSeen }}</time>
           </p>
@@ -53,7 +53,7 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
-
+import UptimeIndicator from '@/Components/UptimeIndicator.vue'; 
 const people = [
   {
     name: 'Leslie Alexander',
