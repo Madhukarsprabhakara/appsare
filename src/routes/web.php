@@ -38,8 +38,12 @@ Route::middleware([
 
     Route::get('/statuscheck', function(){
 
-        $response = Http::get('http://demo-test.sopact.com');
-        return $response->status();
+
+        $start_time = microtime(true);
+        $response = Http::head('https://seasonsurvey.com');
+        $end_time = microtime(true);
+        $response_time = $end_time - $start_time;
+        return  $response_time*1000;
 
         $host = 'demo-test.sopact.com';
 $port = 443;

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->ipAddress('ip_address')->nullable();
             $table->integer('port')->nullable();
             $table->integer('retries')->default(3);
-            $table->string('check_frequency')->default('every_1_min');
+            $table->string('check_frequency')->default('every_30s');
             $table->boolean('is_active')->default(1);
             $table->boolean('is_archived')->default(false);
             $table->timestamps();

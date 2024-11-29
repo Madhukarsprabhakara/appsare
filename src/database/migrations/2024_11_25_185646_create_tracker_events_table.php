@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('tracker_events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tracker_id')->constrained();
-            $table->bigInteger('response_time')->nullable();
+            $table->double('response_time')->nullable();
             $table->string('http_status_code')->nullable();
             $table->text('message')->nullable();
             $table->dateTimeTz('start_time')->nullable();
             $table->dateTimeTz('end_time')->nullable();
+            $table->double('epoch_start_time')->nullable();
+            $table->double('epoch_end_time')->nullable();
+            $table->longText('exception')->nullable();
             $table->timestamps();
         });
     }
