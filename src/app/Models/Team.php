@@ -45,4 +45,9 @@ class Team extends JetstreamTeam
             'personal_team' => 'boolean',
         ];
     }
+
+    public function trackers()
+    {
+        return $this->hasMany(Tracker::class, 'team_id')->orderBy('created_at', 'desc')->where('is_archived', null)->orWhere('is_archived', false);
+    }
 }
