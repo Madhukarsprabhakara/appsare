@@ -98,7 +98,16 @@ services:
     working_dir: /var/www/html
     networks:
       - appsare
-
+  ar_scheduler:
+    build:
+      context: .
+      dockerfile: php.prod.dockerfile
+    container_name: ar_scheduler
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan", "schedule:work"]
+    networks:
+      - appsare
+    restart: unless-stopped
   certbot:
     image: certbot/certbot
     volumes:
