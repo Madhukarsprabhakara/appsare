@@ -45,6 +45,8 @@ services:
     image: composer:latest
     container_name: ar_composer
     working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html
     networks:
       - appsare
 
@@ -70,6 +72,8 @@ services:
     container_name: ar_npm
     ports:
       - 5173:5173
+    volumes:
+      - ./src:/var/www/html
     working_dir: /var/www/html
     entrypoint: ['npm']
     networks:
