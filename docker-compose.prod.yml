@@ -38,7 +38,7 @@ services:
     networks:
       - appsare
     ports:
-      - 8001:80
+      - 8089:80
       
 
   ar_composer:
