@@ -1,0 +1,102 @@
+
+networks:
+  appsare:
+    name: appsare
+services:
+  ar_postgres:
+    image: postgres:14.12
+    container_name: ar_postgres
+    networks:
+      - appsare
+    ports:
+      - 5433:5432
+    
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=appsare
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+
+  ar_php:
+    build:
+      context: .
+      dockerfile: php.prod.dockerfile
+    container_name: ar_php
+    networks:
+      - appsare
+  ar_nginx:
+    build:
+      context: .
+      dockerfile: nginx.prod.dockerfile
+    container_name: ar_nginx
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - ar_php
+    networks:
+      - appsare
+    ports:
+      - 8001:80
+      
+
+  ar_composer:
+    image: composer:latest
+    container_name: ar_composer
+    working_dir: /var/www/html
+    networks:
+      - appsare
+
+  llama31:
+    image: ilopezluna/llama3.1:0.3.11-8b
+    container_name: llama
+    networks:
+      - appsare
+    ports:
+      - 11435:11434
+
+  ar_artisan:
+    build:
+      context: .
+      dockerfile: php.prod.dockerfile
+    container_name: ar_artisan
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan"]
+    networks:
+      - appsare
+  ar_npm:
+    image: node:current-alpine
+    container_name: ar_npm
+    ports:
+      - 5173:5173
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+    networks:
+      - appsare
+  ar_runtests:
+    build:
+      context: .
+      dockerfile: php.prod.dockerfile
+    container_name: ar_runtests
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan", "test"]
+    networks:
+      - appsare
+  ar_supervisord:
+    build:
+      context: .
+      dockerfile: supervisord.prod.dockerfile
+    container_name: ar_supervisord
+    depends_on:
+      - ar_nginx
+      - ar_php
+    working_dir: /var/www/html
+    networks:
+      - appsare
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
