@@ -7,6 +7,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use App\Models\TrackerEvent;
+use App\Jobs\ServiceDownActions;
 class WebsiteStatusCheck30 implements ShouldQueue
 {
     use Queueable;
@@ -60,6 +61,8 @@ class WebsiteStatusCheck30 implements ShouldQueue
             $tracker_event->http_status_code=$response->status();
             $tracker_event->message=$e->getMessage();
             $tracker_event->save();
+            //dispatch notification job - with tracker id and url
+            ServiceDownActions::dispatch($this->tracker_id, $this->url, $tracker_event->id);
        }
         
 
