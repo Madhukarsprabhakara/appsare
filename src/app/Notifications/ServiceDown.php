@@ -37,6 +37,7 @@ class ServiceDown extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+                    ->subject('Down')
                     ->line('Your website '.$this->url.' is down.')
                     ->line('Please acknowledge receipt of this message by clicking on the link below')
                     ->action('Acknowledge', url('/'));
