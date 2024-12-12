@@ -34,6 +34,11 @@ class ServiceDownActions implements ShouldQueue
         //send notifications (email) with signed urls if not acknowledged max 10 times (default) - queue it up
         $tracker=Tracker::find($this->tracker_id);
         $team=Team::find($tracker->team_id);
-        User::find($team->owner->id)->notify(new ServiceDown($this->url));
+        $all_users=$team->allUsers();
+        foreach ($all_users as $user)
+        {
+           User::find($user->id)->notify(new ServiceDown($this->url));
+        }
+        
     }
 }

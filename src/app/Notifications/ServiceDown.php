@@ -7,18 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ServiceDown extends Notification
+class ServiceDown extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    protected $website_url;
-    public function __construct($website_url)
+    protected $url;
+    public function __construct($url)
     {
         //
-        $this->url=$website_url;
+        $this->url=$url;
     }
 
     /**

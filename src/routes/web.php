@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+use App\Models\Team;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -38,7 +39,12 @@ Route::middleware([
 
     Route::get('/statuscheck', function(){
 
-
+        $team=Team::find(1);
+        $all_users=$team->allUsers();
+        foreach ($all_users as $user)
+        {
+            return $user->id;   
+        }
         $start_time = microtime(true);
         $response = Http::head('https://seasonsurvey.com');
         $end_time = microtime(true);
