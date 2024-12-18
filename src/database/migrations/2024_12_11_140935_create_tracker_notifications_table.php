@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('team_id')->constrained();
             $table->foreignId('tracker_id')->constrained();
-            $table->foreignId('tracker_event_id')->constrained();
+            //$table->foreignId('tracker_event_id')->constrained();
             $table->integer('number_notifications_sent')->nullable();
             $table->foreignId('notification_type_id')->constrained();
             $table->timestamp('acknowledged')->nullable();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tracker_notification_acknowledgements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tracker_notification_id')->constrained();
-            $table->foreignId('tracker_event_id')->constrained();
+            //$table->foreignId('tracker_event_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

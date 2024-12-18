@@ -8,6 +8,7 @@ use App\Notifications\ServiceDown;
 use App\Models\Tracker;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\TrackerNotification;
 class ServiceDownActions implements ShouldQueue
 {
     use Queueable;
@@ -30,7 +31,7 @@ class ServiceDownActions implements ShouldQueue
     public function handle(): void
     {
         //create notifications
-
+        //not acknowledged and not up send max 3 times in
         //send notifications (email) with signed urls if not acknowledged max 10 times (default) - queue it up
         $tracker=Tracker::find($this->tracker_id);
         $team=Team::find($tracker->team_id);
