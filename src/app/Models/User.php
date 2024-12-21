@@ -6,11 +6,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Spark\Billable;
+use Illuminate\Notifications\Slack\SlackRoute;
+use Illuminate\Notifications\Slack\SlackWebhookChannel;
 class User extends Authenticatable
 {
     use HasApiTokens, Billable;
@@ -68,5 +71,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function routeNotificationForSlack(Notification $notification): mixed
+    {
+       // return SlackRoute::make('https://hooks.slack.com/services/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');
+        return '#all-seasonsurvey';
     }
 }
