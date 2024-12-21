@@ -74,7 +74,7 @@ class User extends Authenticatable
     }
     public function routeNotificationForSlack(Notification $notification): mixed
     {
-       // return SlackRoute::make('https://hooks.slack.com/services/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');
+       
         return '#all-seasonsurvey';
     }
 }
