@@ -35,6 +35,7 @@ services:
       - ./data/certbot/www:/var/www/certbot
     depends_on:
       - ar_php
+      - ar_postgres
     networks:
       - appsare
     ports:
@@ -96,6 +97,8 @@ services:
     depends_on:
       - ar_nginx
       - ar_php
+      - ar_postgres
+      - ar_scheduler
     working_dir: /var/www/html
     networks:
       - appsare
