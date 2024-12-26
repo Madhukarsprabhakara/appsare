@@ -12,6 +12,7 @@
         "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
         "laravel/slack-notification-channel": "^3.4",
+        "laravel/socialite": "^5.16",
         "laravel/spark-stripe": "^5.5.0",
         "laravel/tinker": "^2.9",
         "mpociot/vat-calculator": "^3.14",
