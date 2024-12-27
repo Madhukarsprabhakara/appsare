@@ -36,7 +36,13 @@ class SlackConnectController extends Controller
     public function saveSlackToken(SlackService $slackService)
     {
         //
-        return $slackService->saveSlackToken(\Auth::user()->currentTeam->id);
+        try {
+            return $slackService->saveSlackToken(\Auth::user()->currentTeam->id);
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
     public function store(Request $request, EssentialService $essentialService, SlackService $slackService)
     {
