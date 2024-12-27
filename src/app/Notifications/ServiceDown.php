@@ -6,7 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
+use Illuminate\Notifications\Slack\SlackMessage;
+use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
+use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
+use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
 class ServiceDown extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -28,7 +31,7 @@ class ServiceDown extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','slack'];
     }
 
     /**
@@ -42,7 +45,17 @@ class ServiceDown extends Notification implements ShouldQueue
                     ->line('Please acknowledge receipt of this message by clicking on the link below')
                     ->action('Acknowledge', url('/'));
     }
-
+    public function toSlack(object $notifiable): SlackMessage
+    {
+        return (new SlackMessage)
+            ->headerBlock('Down')
+            ->contextBlock(function (ContextBlock $block) {
+                $block->text('Your website '.$this->url.' is down.');
+            });
+            
+            
+           
+    }
     /**
      * Get the array representation of the notification.
      *
