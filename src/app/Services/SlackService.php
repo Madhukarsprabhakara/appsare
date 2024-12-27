@@ -16,11 +16,11 @@ class SlackService {
             ->asBotUser()
             ->setScopes(['chat:write', 'chat:write.public', 'chat:write.customize','channels:read'])
             ->redirectUrl('https://appsare.com/auth/slack/callback')
-            ->redirect();
+            ->redirect();   
         }
         throw new \Exception('No team found for this user. Please create a team first.' ); 
     }
-    public function saveSlack($team_id)
+    public function saveSlackToken($team_id)
     {
         return $slack_user = Socialite::driver('slack')->asBotUser()->user();
         $team=Team::where('id', $team_id)->first();
