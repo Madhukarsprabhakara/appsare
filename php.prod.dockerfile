@@ -15,7 +15,7 @@ RUN apk add libpq-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pdo pdo_pgsql pgsql soap
 
-RUN chown -R  laravel:laravel /var/www/html
+
 
 
 
