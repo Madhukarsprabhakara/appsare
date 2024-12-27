@@ -37,6 +37,9 @@ Route::middleware([
     Route::put('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'update'])->name('trackers.update');
     Route::delete('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'destroy'])->name('trackers.destroy');
 
+    # Slack redirect routes
+    Route::get('/auth/slack/redirect', [App\Http\Controllers\SlackConnectController::class, 'redirect'])->name('slack.redirect');
+    Route::get('/auth/slack/callback', [App\Http\Controllers\SlackConnectController::class, 'saveSlackToken'])->name('slack.save');
     Route::get('/statuscheck', function(){
 
         $team=Team::find(1);

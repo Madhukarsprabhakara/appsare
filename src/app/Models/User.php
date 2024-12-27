@@ -13,6 +13,7 @@ use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Spark\Billable;
 use Illuminate\Notifications\Slack\SlackRoute;
+
 use Illuminate\Notifications\Slack\SlackWebhookChannel;
 class User extends Authenticatable
 {
@@ -75,6 +76,7 @@ class User extends Authenticatable
     public function routeNotificationForSlack(Notification $notification): mixed
     {
        
-        return '#all-seasonsurvey';
+         return SlackRoute::make('#all-seasonsurvey', '8203461021637.8221241927589.95661c06a4b1f26a79ff8f5b5d2fb5c107d7c71e48491c5d245bc349471cfd9f'); 
+        
     }
 }
