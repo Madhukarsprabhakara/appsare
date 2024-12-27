@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('team_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->text('slack_bot_code');
-            $table->text('slack_channel_id');
+            $table->text('slack_bot_code')->nullable();
+            $table->text('slack_channel_id')->nullable();
             $table->timestamps();
         });
     }
