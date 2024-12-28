@@ -31,7 +31,7 @@ return [
     'slack' => [
         'client_id' => env('SLACK_CLIENT_ID'),
         'client_secret' => env('SLACK_CLIENT_SECRET'),
-        'redirect' => '/auth/slack/callback',
+        'redirect' => 'https://appsare.com/auth/slack/callback',
     ],
 
 ];
