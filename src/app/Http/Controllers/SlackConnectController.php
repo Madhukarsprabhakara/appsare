@@ -33,7 +33,7 @@ class SlackConnectController extends Controller
         $team_id=\Auth::user()->currentTeam->id;
         return $slackService->connectSlack($team_id);
     }
-    public function saveSlackToken(SlackService $slackService)
+    public function handleCallback(SlackService $slackService)
     {
         //
         try {

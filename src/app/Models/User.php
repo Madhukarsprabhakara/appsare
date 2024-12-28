@@ -76,7 +76,7 @@ class User extends Authenticatable
     public function routeNotificationForSlack(Notification $notification): mixed
     {
        
-         return SlackRoute::make('#all-seasonsurvey', '8203461021637.8221241927589.95661c06a4b1f26a79ff8f5b5d2fb5c107d7c71e48491c5d245bc349471cfd9f'); 
+         return SlackRoute::make('#all-seasonsurvey', $this->profile_photo_path); 
         
     }
 }
