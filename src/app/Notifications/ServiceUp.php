@@ -10,6 +10,7 @@ use Illuminate\Notifications\Slack\SlackMessage;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
 use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
+use App\Services\SlackService;
 class ServiceUp extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -44,16 +45,21 @@ class ServiceUp extends Notification implements ShouldQueue
                     ->line('Your website '.$this->url.' is up again.')
                     ->line('You can rest easy now!');
     }
-    public function toSlack(object $notifiable): SlackMessage
+    public function toSlack(object $notifiable, SlackService $slackService): SlackMessage
     {
-        return (new SlackMessage)
-            ->headerBlock('Up again')
-            ->contextBlock(function (ContextBlock $block) {
-                $block->text('Your website '.$this->url.' is up again.');
-            });
-            
-            
-           
+        $slack_connect=$slackService->getSlackDetails($notifiable->currentTeam->id);
+        if ($slack_connect)
+        {
+            if ($slack_connect->slack_channel_id)
+            {
+                return (new SlackMessage)
+                ->headerBlock('Up again')
+                ->contextBlock(function (ContextBlock $block) {
+                    $block->text('Your website '.$this->url.' is up again.');
+                });
+            }
+        }
+                 
     }
     /**
      * Get the array representation of the notification.

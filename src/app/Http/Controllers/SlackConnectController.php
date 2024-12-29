@@ -37,29 +37,18 @@ class SlackConnectController extends Controller
     {
         //
         try {
-            return $slackService->saveSlackToken(\Auth::user()->currentTeam->id);
+            $saved=$slackService->saveSlackToken(\Auth::user()->currentTeam->id);
+            if ($saved)
+            {
+                return \Redirect::route('trackers.index');
+            }
         }
         catch (\Exception $e)
         {
             return $e->getMessage();
         }
     }
-    public function store(Request $request, EssentialService $essentialService, SlackService $slackService)
-    {
-        //
-        $data=$request->all();
-        $validated = $request->validate([
-            'channel_id' => 'required|string',
-
-        ]);    
-        $slack_to_save=$essentialService->addUserIdTeamIdToArray($data);
-        $status=$trackerService->storeTracker($tracker_to_save);
-
-        if ($status)
-        {
-            return \Redirect::route('trackers.index');
-        }
-    }
+    
 
     /**
      * Display the specified resource.

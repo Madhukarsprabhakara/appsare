@@ -13,7 +13,7 @@ use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Spark\Billable;
 use Illuminate\Notifications\Slack\SlackRoute;
-
+use App\Services\SlackService;
 use Illuminate\Notifications\Slack\SlackWebhookChannel;
 class User extends Authenticatable
 {
@@ -73,7 +73,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function routeNotificationForSlack(Notification $notification): mixed
+    public function routeNotificationForSlack(Notification $notification, SlackService $slackService): mixed
     {
        
          return SlackRoute::make('#all-seasonsurvey', $this->profile_photo_path); 

@@ -23,16 +23,15 @@ class SlackService {
     public function saveSlackToken($team_id)
     {
         $slack_user = Socialite::driver('slack')->asBotUser()->user();
-        return json_encode($slack_user);
-        $team=Team::where('id', $team_id)->first();
-        if ($team)
+        //return json_encode($slack_user);
+        //$team=Team::where('id', $team_id)->first();
+        if ($team_id)
         {
-            $slack_user = Socialite::driver('slack')->user();
             $slack_connect= new SlackConnect();
             $slack_connect->team_id=$team_id;
             $slack_connect->user_id=\Auth::id();
             $slack_connect->slack_bot_code=$slack_user->token;
-            $slack_connect->slack_channel_id=$slack_user->user['id'];
+            //$slack_connect->slack_channel_id=$slack_user->user['id'];
             $slack_connect->save();
             return true;
         }
