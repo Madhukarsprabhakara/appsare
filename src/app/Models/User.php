@@ -73,10 +73,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function routeNotificationForSlack(Notification $notification, SlackService $slackService): mixed
+    public function routeNotificationForSlack(Notification $notification): mixed
     {
-       
-         return SlackRoute::make('#all-seasonsurvey', $this->profile_photo_path); 
+        $slackService = new SlackService();
+        $slack_connect=$slackService->getSlackDetails($this->current_team_id);
+        return SlackRoute::make($slack_connect->slack_channel_id, $slack_connect->slack_bot_code); 
         
     }
 }

@@ -46,8 +46,9 @@ class ServiceDown extends Notification implements ShouldQueue
                     ->line('Please acknowledge receipt of this message by clicking on the link below')
                     ->action('Acknowledge', url('/'));
     }
-    public function toSlack(object $notifiable, SlackService $slackService): SlackMessage
+    public function toSlack(object $notifiable): SlackMessage
     {
+        $slackService=new SlackService();
         $slack_connect=$slackService->getSlackDetails($notifiable->currentTeam->id);
         if ($slack_connect)
         {

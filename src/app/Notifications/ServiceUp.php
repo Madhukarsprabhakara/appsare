@@ -45,8 +45,9 @@ class ServiceUp extends Notification implements ShouldQueue
                     ->line('Your website '.$this->url.' is up again.')
                     ->line('You can rest easy now!');
     }
-    public function toSlack(object $notifiable, SlackService $slackService): SlackMessage
+    public function toSlack(object $notifiable): SlackMessage
     {
+        $slackService=new SlackService();
         $slack_connect=$slackService->getSlackDetails($notifiable->currentTeam->id);
         if ($slack_connect)
         {
