@@ -16,7 +16,7 @@ class TrackerController extends Controller
     public function index(TrackerService $trackerService, UserService $userService)
     {
         try {
-            //return $userService->getLoggedinUserTeam();
+            
              $trackers=$trackerService->getTrackersOnTeamId($userService->getLoggedinUserTeam());
              return Inertia::render('Dashboard', [
                     'trackers' => $trackers, 
