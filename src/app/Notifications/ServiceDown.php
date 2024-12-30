@@ -18,11 +18,12 @@ class ServiceDown extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    protected $url;
-    public function __construct($url)
+    protected $url, $team_id;
+    public function __construct($url, $team_id)
     {
         //
         $this->url=$url;
+        $this->team_id=$team_id;
     }
 
     /**
@@ -72,6 +73,7 @@ class ServiceDown extends Notification implements ShouldQueue
     {
         return [
             //
+            'team_id'=>$this->team_id,
         ];
     }
 }

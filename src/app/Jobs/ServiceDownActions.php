@@ -38,7 +38,7 @@ class ServiceDownActions implements ShouldQueue
         $all_users=$team->allUsers();
         foreach ($all_users as $user)
         {
-           User::find($user->id)->notify(new ServiceDown($this->url));
+           User::find($user->id)->notify(new ServiceDown($this->url, $tracker->team_id));
         }
         
     }

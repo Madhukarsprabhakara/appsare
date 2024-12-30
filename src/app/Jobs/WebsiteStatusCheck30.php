@@ -68,7 +68,7 @@ class WebsiteStatusCheck30 implements ShouldQueue
                     $all_users=$team->allUsers();
                     foreach ($all_users as $user)
                     {
-                       User::find($user->id)->notify(new ServiceUp($this->url));
+                       User::find($user->id)->notify(new ServiceUp($this->url, $tracker->team_id));
                     }
                 }
             } 

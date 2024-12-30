@@ -75,8 +75,9 @@ class User extends Authenticatable
     }
     public function routeNotificationForSlack(Notification $notification): mixed
     {
+        $team_id = $notification->toArray($this)['team_id'];
         $slackService = new SlackService();
-        $slack_connect=$slackService->getSlackDetails($this->current_team_id);
+        $slack_connect=$slackService->getSlackDetails($team_id);
         return SlackRoute::make($slack_connect->slack_channel_id, $slack_connect->slack_bot_code); 
         
     }
