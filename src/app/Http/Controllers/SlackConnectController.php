@@ -31,7 +31,7 @@ class SlackConnectController extends Controller
     {
         //
         $team_id=\Auth::user()->currentTeam->id;
-        //return $slackService->getSlackPublicChannelList($team_id);
+        return $slackService->getSlackPublicChannelList($team_id);
         
         return $slackService->connectSlack($team_id);
     }
