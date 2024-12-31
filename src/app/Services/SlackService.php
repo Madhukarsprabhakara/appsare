@@ -14,7 +14,8 @@ class SlackService {
         {
             return Socialite::driver('slack')
             ->asBotUser()
-            ->setScopes(['chat:write', 'chat:write.public', 'chat:write.customize','channels:read'])
+            ->setScopes(['chat:write', 'chat:write.public', 'chat:write.customize','channels:read','groups:read','im:read','mpim:read
+'])
             ->redirectUrl('https://appsare.com/auth/slack/callback')
             ->redirect();   
         }
@@ -25,6 +26,7 @@ class SlackService {
         $slack_user = Socialite::driver('slack')->asBotUser()->user();
         //return json_encode($slack_user);
         //$team=Team::where('id', $team_id)->first();
+        
         if ($team_id)
         {
             $slack_connect= new SlackConnect();
@@ -54,5 +56,22 @@ class SlackService {
             return true;
         }
         throw new \Exception('Something went wrong, could not save your slack details. Please try again.' ); 
+    }
+    public function getSlackPublicChannelList($team_id)
+    {
+        $slack_connect=SlackConnect::where('team_id', $team_id)->first();
+        if ($slack_connect)
+        {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', 'https://slack.com/api/conversations.list', [
+                'query' => [
+                    'token' => $slack_connect->slack_bot_code,
+                    'types' => 'public_channel',
+                ]
+            ]);
+            $response = json_decode($response->getBody());
+            return $response;
+        }
+        throw new \Exception('No slack details found for this team. Please connect your slack account.' ); 
     }
 }
