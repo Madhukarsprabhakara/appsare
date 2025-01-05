@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Integration;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Services\SlackService;
+use App\Services\UserService;
 class IntegrationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(SlackService $slackService, UserService $userService)
     {
         //
         try {
-            return Inertia::render('Integrations/Show');
+            $slackConnection=$slackService->getSlackConnection($userService->getLoggedinUserTeam()->id);
+            return Inertia::render('Integrations/Show', [
+                'slackConnection' => $slackConnection
+            ]);
         }
         catch (\Exception $e) {
             return response()->json([

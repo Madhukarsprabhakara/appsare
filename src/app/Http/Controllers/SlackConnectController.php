@@ -71,9 +71,28 @@ class SlackConnectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SlackConnect $slackConnect)
+    public function update(Request $request, SlackConnect $slack_connect)
     {
         //
+        try {
+            $data=$request->all();
+            \Validator::make($data, [
+                'name' => ['required', 'string', 'max:255'],
+            ])->validateWithBag('updateSlackChannelId');
+            $slack_connect->slack_channel_id = $data['name'];
+            $status=$slack_connect->save();
+            if ($status)
+            {
+                return to_route('integrations.index');
+            }
+            
+        }
+        catch (\Exception $e)
+        {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

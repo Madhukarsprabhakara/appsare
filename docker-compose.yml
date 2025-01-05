@@ -72,7 +72,8 @@ services:
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
-    entrypoint: ['npm']
+    restart: unless-stopped
+    entrypoint: ["npm", "run", "dev", "--", "--host"]
     networks:
       - appsare
   ar_runtests:

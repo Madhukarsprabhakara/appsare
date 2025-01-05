@@ -39,14 +39,14 @@ class SlackService {
         }
         throw new \Exception('No team found for this user. Please create a team first.' ); 
     }
-    public function getSlackDetails($team_id)
+    public function getSlackConnection($team_id)
     {
         $slack_connect=SlackConnect::where('team_id', $team_id)->first();
         if ($slack_connect)
         {
             return $slack_connect;
         }
-        throw new \Exception('No slack details found for this team. Please connect your slack account.' ); 
+        return false;
     }
     public function storeSlack(Array $Slack_to_save)
     {
