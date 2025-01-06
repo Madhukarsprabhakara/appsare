@@ -42,7 +42,7 @@ class SlackConnectController extends Controller
             $saved=$slackService->saveSlackToken(\Auth::user()->currentTeam->id);
             if ($saved)
             {
-                return \Redirect::route('trackers.index');
+                return \Redirect::route('integrations.index');
             }
         }
         catch (\Exception $e)
