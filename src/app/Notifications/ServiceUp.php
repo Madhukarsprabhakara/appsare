@@ -49,7 +49,7 @@ class ServiceUp extends Notification implements ShouldQueue
     public function toSlack(object $notifiable): SlackMessage
     {
         $slackService=new SlackService();
-        $slack_connect=$slackService->getSlackDetails($notifiable->currentTeam->id);
+        $slack_connect=$slackService->getSlackConnection($notifiable->currentTeam->id);
         if ($slack_connect)
         {
             if ($slack_connect->slack_channel_id)

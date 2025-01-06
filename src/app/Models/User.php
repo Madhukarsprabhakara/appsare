@@ -77,7 +77,7 @@ class User extends Authenticatable
     {
         $team_id = $notification->toArray($this)['team_id'];
         $slackService = new SlackService();
-        $slack_connect=$slackService->getSlackDetails($team_id);
+        $slack_connect=$slackService->getSlackConnection($team_id);
         return SlackRoute::make($slack_connect->slack_channel_id, $slack_connect->slack_bot_code); 
         
     }
