@@ -98,8 +98,22 @@ class SlackConnectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SlackConnect $slackConnect)
+    public function destroy(SlackConnect $slack_connect)
     {
         //
+        try {
+            $status=$slack_connect->delete();
+            if ($status)
+            {
+                return back(303);
+            }
+        }
+        catch (\Exception $e)
+        {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+        
     }
 }

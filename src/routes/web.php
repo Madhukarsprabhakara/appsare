@@ -45,6 +45,7 @@ Route::middleware([
     Route::get('/auth/slack/callback', [App\Http\Controllers\SlackConnectController::class, 'handleCallback'])->name('slack.callback');
     Route::get('/auth/slack/disconnect', [App\Http\Controllers\SlackConnectController::class, 'disconnect'])->name('slack.disconnect');
     Route::put('/slackconnect/{slack_connect}', [App\Http\Controllers\SlackConnectController::class, 'update'])->name('slack.update');
+    Route::delete('/slackconnect/{slack_connect}', [App\Http\Controllers\SlackConnectController::class, 'destroy'])->name('slack.destroy');
     Route::get('/statuscheck', function(){
 
         $team=Team::find(1);
