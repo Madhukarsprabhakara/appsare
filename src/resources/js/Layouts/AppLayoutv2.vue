@@ -98,7 +98,8 @@
                     <ul role="list" class="flex flex-1 flex-col gap-y-7">
                         <li>
                             <ul role="list" class="-mx-2 space-y-1">
-                                <li v-for="item in navigation" :key="item.name">
+                                <li v-for="item in navigation" :key="item.name" >
+                                   
                                     <NavLink :href="item.href" 
                                         :class="[route().current(item.href) ? ' text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold']">
                                         <component :is="item.icon"
@@ -238,7 +239,7 @@
                                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                         alt="" /> -->
                                     <span class="hidden lg:flex lg:items-center">
-                                        <span class="ml-4 text-sm/6 font-semibold text-gray-900" aria-hidden="true">{{ $page.props.auth.user.name }}</span>
+                                        <span class="ml-4 text-sm/6 font-medium text-gray-500" aria-hidden="true">{{ $page.props.auth.user.name }}</span>
                                         <ChevronDownIcon class="ml-2 size-5 text-gray-400" aria-hidden="true" />
                                     </span>
                                 </MenuButton>
@@ -290,7 +291,7 @@
                 </div>
             </div>
 
-            <main class="py-10 bg-gray-100 h-screen px-10">
+            <main class="py-10 bg-gray-100 max-h-fit px-10">
                 <!-- Page Heading -->
                 <header v-if="$slots.header" class=" ">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

@@ -3,13 +3,13 @@
     <div class="bg-white px-4 py-5 sm:px-6">
       <div class="flex space-x-3">
         <div class="shrink-0">
-          <img class="size-10 rounded-full"
+          <!-- <img class="size-10 rounded-full"
             src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt="" />
+            alt="" /> -->
         </div>
         <div class="min-w-0 flex-1">
           <p class="text-md font-semibold text-gray-900">
-            <a href="#" class="hover:underline">Chelsea Hagon</a>
+            <a :href="tracker.url" class="hover:underline">{{ tracker.url }}</a>
           </p>
           <p class="text-sm text-gray-500">
             <a href="#" class="hover:underline">December 9 at 11:43 AM</a>
@@ -64,6 +64,9 @@
 </template>
 
 <script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { CodeBracketIcon, EllipsisVerticalIcon, FlagIcon, StarIcon } from '@heroicons/vue/20/solid'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { CodeBracketIcon, EllipsisVerticalIcon, FlagIcon, StarIcon } from '@heroicons/vue/20/solid';
+const props = defineProps({
+    tracker: Object,
+});
 </script>

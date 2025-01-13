@@ -8,21 +8,9 @@
         <div class="">
             <div class="max-w-full mx-auto ">
                 
-                    
-                        <Tracker/>
-                    
-                    
-                    
-                    
-              
-                
-                   
-                        <Tracker/>
-                    
-                    
-                    
-                    
-                
+                    <div>
+                        <Tracker v-for="tracker in trackers" :key="tracker.id" :tracker="tracker"/>
+                    </div>
             </div>
         </div>
     </AppLayoutv2>
@@ -31,4 +19,6 @@
 <script setup>
 import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import Tracker from './Partials/Tracker.vue';
+import { usePage } from '@inertiajs/vue3'
+const trackers = usePage().props.trackers;
 </script>
