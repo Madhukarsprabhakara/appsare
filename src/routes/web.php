@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use App\Models\Team;
 Route::get('/', function () {
+    if (\Auth::check())
+    {
+        return to_route('trackers.index');
+    }
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -17,6 +21,9 @@ Route::get('/', function () {
 Route::get('/phpinfo', function() {
     // dd(extension_loaded('soap'));
     return phpinfo();
+});
+Route::get('/layout', function() {
+    return Inertia::render('Landingv2');
 });
 
 Route::middleware([

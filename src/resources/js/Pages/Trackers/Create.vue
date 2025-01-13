@@ -2,7 +2,7 @@
 <AppLayout title="Create Tracker">
 	<DashboardLayout>
 	<template #left>
-			<p>left</p>
+			<p>left 11</p>
 			
 		</template>
 		<template #main>

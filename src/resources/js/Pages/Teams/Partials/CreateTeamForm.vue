@@ -19,6 +19,7 @@ const createTeam = () => {
 </script>
 
 <template>
+    
     <FormSection @submitted="createTeam">
         <template #title>
             Team Details
@@ -27,13 +28,13 @@ const createTeam = () => {
         <template #description>
             Create a new team to collaborate with others on projects.
         </template>
-
+        
         <template #form>
-            <div class="col-span-6">
+            <div class="col-span-6 ">
                 <InputLabel value="Team Owner" />
 
                 <div class="flex items-center mt-2">
-                    <img class="object-cover size-12 rounded-full" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
+                    <!-- <img class="object-cover size-12 rounded-full" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name"> -->
 
                     <div class="ms-4 leading-tight">
                         <div class="text-gray-900">{{ $page.props.auth.user.name }}</div>
@@ -63,4 +64,5 @@ const createTeam = () => {
             </PrimaryButton>
         </template>
     </FormSection>
+
 </template>
