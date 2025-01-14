@@ -1,23 +1,23 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import Welcome from '@/Components/Welcome.vue';
-import Show from '@/Pages/Dashboard/Show.vue';
+import Show from '@/Pages/Trackers/Show.vue';
 </script>
 
 <template>
-    <AppLayout title="Dashboard">
-        <!-- <template #header>
+    <AppLayoutv2 title="Dashboard">
+        <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard
+                Trackers
             </h2>
-        </template> -->
+        </template>
 
         <div class="">
             <div class="max-w-full mx-auto ">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white overflow-hidden  sm:rounded-lg">
                     <Show/>
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </AppLayoutv2>
 </template>

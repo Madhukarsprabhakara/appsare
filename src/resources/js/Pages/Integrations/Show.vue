@@ -1,5 +1,5 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import UpdateChannelId from '@/Pages/Integrations/Slack/UpdateChannelId.vue';  
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <AppLayoutv2 title="Profile">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Integrations
@@ -27,6 +27,7 @@ defineProps({
                     <UpdateChannelId />
                     
                     <SectionBorder />
+
                 </div>
                 <!--<div v-if="$page.props.jetstream.canUpdateProfileInformation">
                     <UpdateProfileInformationForm :user="$page.props.auth.user" />
@@ -58,5 +59,5 @@ defineProps({
                 </template>-->
             </div>
         </div>
-    </AppLayout>
+    </AppLayoutv2>
 </template>

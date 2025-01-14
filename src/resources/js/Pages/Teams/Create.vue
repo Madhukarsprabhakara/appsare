@@ -1,10 +1,10 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm.vue';
 </script>
 
 <template>
-    <AppLayout title="Create Team">
+    <AppLayoutv2 title="Create Team">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Create Team
@@ -12,9 +12,9 @@ import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm.vue';
         </template>
 
         <div>
-            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto py-10 sm:px-6  lg:px-8">
                 <CreateTeamForm />
             </div>
         </div>
-    </AppLayout>
+    </AppLayoutv2>
 </template>
