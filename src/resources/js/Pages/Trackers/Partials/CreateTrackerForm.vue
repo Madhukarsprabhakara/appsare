@@ -54,7 +54,7 @@
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
       
-      <NavLink  :href="route('dashboard')"  preserve-scroll> 
+      <NavLink  :href="route('trackers.index')"  preserve-scroll> 
           <button type="button" class="text-sm font-semibold leading-6 text-gray-900  ">
             <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
             Cancel

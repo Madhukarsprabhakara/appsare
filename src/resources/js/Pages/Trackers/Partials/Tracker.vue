@@ -11,11 +11,17 @@
           <p class="text-md font-semibold text-gray-900">
             <a :href="tracker.url" class="hover:underline">{{ tracker.url }}</a>
           </p>
-          <p class="text-sm text-gray-500">
-            <a href="#" class="hover:underline">December 9 at 11:43 AM</a>
-          </p>
+          <!-- <p class="text-sm text-gray-500">
+            <a href="#" class="hover:underline">HTTP | Up 1day and 5 hours</a>
+          </p> -->
         </div>
         <div class="flex shrink-0 self-center">
+          <div class="mr-8">
+            <UptimeIndicator />
+            <p class="text-sm mt-2 text-gray-500">
+            <a href="#" class="hover:underline">HTTP | Up every hour for past 24 hours</a>
+          </p>
+          </div>
           <Menu as="div" class="relative inline-block text-left">
             <div>
               <MenuButton class="-m-2 flex items-center rounded-full p-2 text-gray-400 hover:text-gray-600">
@@ -58,6 +64,8 @@
           </Menu>
         </div>
       </div>
+
+
     </div>
   </div>
 
@@ -66,7 +74,8 @@
 <script setup>
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { CodeBracketIcon, EllipsisVerticalIcon, FlagIcon, StarIcon } from '@heroicons/vue/20/solid';
+import UptimeIndicator from '@/Components/UptimeIndicator.vue';
 const props = defineProps({
-    tracker: Object,
+  tracker: Object,
 });
 </script>
