@@ -44,6 +44,11 @@ Route::middleware([
     Route::put('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'update'])->name('trackers.update');
     Route::delete('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'destroy'])->name('trackers.destroy');
 
+    #Notifications route
+    Route::get('/notifications',function() {
+        return Inertia::render('Notifications/Show');
+    })->name('notifications.index');
+
     # Integrations routes
     Route::get('/integrations', [App\Http\Controllers\IntegrationController::class, 'index'])->name('integrations.index');
 
