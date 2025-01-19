@@ -30,7 +30,7 @@ class PushoverConnectController extends Controller
         //
         try {
             $data=$request->all();
-            $pushover_user_key=$data['pushover_user_key']
+            $pushover_user_key=$data['pushover_user_key'];
             $saved=$pushoverService->savePushoverToken(\Auth::user()->currentTeam->id, $pushover_user_key);
             if ($saved)
             {
