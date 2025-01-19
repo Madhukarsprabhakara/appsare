@@ -98,14 +98,14 @@
                     <ul role="list" class="flex flex-1 flex-col gap-y-7">
                         <li>
                             <ul role="list" class="-mx-2 space-y-1">
-                                <li v-for="item in navigation" :key="item.name" >
-                                   
-                                    <NavLink :href="item.href" 
+                                <li v-for="item in navigation" :key="item.name">
+
+                                    <NavLink :href="item.href"
                                         :class="[route().current(item.href) ? ' text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold']">
                                         <component :is="item.icon"
                                             :class="[route().current(item.href) ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'size-6 shrink-0']"
                                             aria-hidden="true" />
-                                        {{ item.name  }}
+                                        {{ item.name }}
                                     </NavLink>
                                 </li>
                             </ul>
@@ -223,10 +223,13 @@
                                     </template>
                                 </Dropdown>
                             </div>
-                            <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                                <span class="sr-only">View notifications</span>
-                                <BellIcon class="size-6" aria-hidden="true" />
-                            </button>
+                            <NavLink :href="route('notifications.index')">
+                                <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                                    <span class="sr-only">View notifications</span>
+                                    <BellIcon class="size-6" aria-hidden="true" />
+                                </button>
+                            </NavLink>
+
 
                             <!-- Separator -->
                             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
@@ -239,7 +242,9 @@
                                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                         alt="" /> -->
                                     <span class="hidden lg:flex lg:items-center">
-                                        <span class="ml-4 text-sm/6 font-medium text-gray-500" aria-hidden="true">{{ $page.props.auth.user.name }}</span>
+                                        <span class="ml-4 text-sm/6 font-medium text-gray-500" aria-hidden="true">{{
+                                            $page.props.auth.user.name
+                                            }}</span>
                                         <ChevronDownIcon class="ml-2 size-5 text-gray-400" aria-hidden="true" />
                                     </span>
                                 </MenuButton>
@@ -268,7 +273,8 @@
                                             Integrations
                                         </DropdownLink>
 
-                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
+                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"
+                                            :href="route('api-tokens.index')">
                                             API Tokens
                                         </DropdownLink>
 
@@ -291,7 +297,7 @@
                 </div>
             </div>
 
-            <main class="py-10 bg-gray-100 max-h-fit px-10">
+            <main class="bg-gray-100 max-h-fit pb-5 px-10">
                 <!-- Page Heading -->
                 <header v-if="$slots.header" class=" ">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

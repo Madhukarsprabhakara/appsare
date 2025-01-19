@@ -1,5 +1,5 @@
 <template>
-    <div class="border-b border-gray-200  px-4 py-5 sm:px-6">
+    <div class="border-b border-gray-200  px-4 pb-5 sm:px-6">
       <div class="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
         <div class="ml-4 mt-2">
           <h3 class="font-semibold text-xl text-gray-800 leading-tight">Trackers</h3>

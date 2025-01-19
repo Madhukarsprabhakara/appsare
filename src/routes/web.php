@@ -44,6 +44,11 @@ Route::middleware([
     Route::put('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'update'])->name('trackers.update');
     Route::delete('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'destroy'])->name('trackers.destroy');
 
+    #Notifications route
+    Route::get('/notifications',function() {
+        return Inertia::render('Notifications/Show');
+    })->name('notifications.index');
+
     # Integrations routes
     Route::get('/integrations', [App\Http\Controllers\IntegrationController::class, 'index'])->name('integrations.index');
 
@@ -53,6 +58,13 @@ Route::middleware([
     Route::get('/auth/slack/disconnect', [App\Http\Controllers\SlackConnectController::class, 'disconnect'])->name('slack.disconnect');
     Route::put('/slackconnect/{slack_connect}', [App\Http\Controllers\SlackConnectController::class, 'update'])->name('slack.update');
     Route::delete('/slackconnect/{slack_connect}', [App\Http\Controllers\SlackConnectController::class, 'destroy'])->name('slack.destroy');
+
+    #Pushover redirect routes
+    Route::get('/auth/pushover/redirect', [App\Http\Controllers\PushoverConnectController::class, 'redirect'])->name('pushover.redirect');
+    Route::get('/auth/pushover/callback', [App\Http\Controllers\PushoverConnectController::class, 'handleCallback'])->name('pushover.callback');
+    Route::get('/auth/pushover/disconnect', [App\Http\Controllers\PushoverConnectController::class, 'disconnect'])->name('pushover.disconnect');
+    Route::put('/pushoverconnect/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'update'])->name('pushover.update');
+    Route::delete('/pushoverconnect/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'destroy'])->name('pushover.destroy');
     Route::get('/statuscheck', function(){
 
         $team=Team::find(1);

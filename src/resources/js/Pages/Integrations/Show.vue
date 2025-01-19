@@ -1,6 +1,7 @@
 <script setup>
 import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import UpdateChannelId from '@/Pages/Integrations/Slack/UpdateChannelId.vue';  
+import ConnectPushover from '@/Pages/Integrations/Pushover/ConnectPushover.vue';
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue';
@@ -27,6 +28,7 @@ defineProps({
                     <UpdateChannelId />
                     
                     <SectionBorder />
+                    <ConnectPushover />
 
                 </div>
                 <!--<div v-if="$page.props.jetstream.canUpdateProfileInformation">
