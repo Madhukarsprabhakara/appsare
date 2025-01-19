@@ -79,7 +79,7 @@ const updateSlackChannelId = () => {
 
                 <div v-if="!$page.props.slackConnection" class="flex items-center mt-2">
                     
-                    <a class="pushover_button" href="/auth/slack/redirect">Connect your Pushover device</a>
+                    <a class="pushover_button" href="/auth/pushover/redirect">Connect your Pushover account</a>
                 </div>
                 <div v-else class="flex items-center mt-2">
 

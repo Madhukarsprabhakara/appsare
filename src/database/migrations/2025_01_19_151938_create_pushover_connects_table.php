@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('integrations', function (Blueprint $table) {
+        Schema::create('pushover_connects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('team_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->text('pushover_code')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('integrations');
+        Schema::dropIfExists('pushover_connects');
     }
 };
