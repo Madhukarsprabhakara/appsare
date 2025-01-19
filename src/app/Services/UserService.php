@@ -10,4 +10,11 @@ class UserService {
         //throw new \Exception('Survey is no longer active'); 
         
     }
+    public function getLoggedinUserId() {
+       	
+       	return \Auth::user()->id;
+       	
+        //throw new \Exception('Survey is no longer active'); 
+        
+    }
 }

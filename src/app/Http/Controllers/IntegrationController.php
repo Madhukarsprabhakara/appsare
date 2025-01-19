@@ -7,18 +7,22 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\SlackService;
 use App\Services\UserService;
+use App\Services\PushoverService;
 class IntegrationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(SlackService $slackService, UserService $userService)
+
+public function index(SlackService $slackService, UserService $userService, PushoverService $pushoverService)
     {
         //
         try {
             $slackConnection=$slackService->getSlackConnection($userService->getLoggedinUserTeam()->id);
+            $pushoverConnection=$pushoverService->getPushoverConnection($userService->getLoggedinUserId());
             return Inertia::render('Integrations/Show', [
-                'slackConnection' => $slackConnection
+                'slackConnection' => $slackConnection,
+                'pushoverConnection' => $pushoverConnection
             ]);
         }
         catch (\Exception $e) {

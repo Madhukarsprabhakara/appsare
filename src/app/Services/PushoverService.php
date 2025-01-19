@@ -31,5 +31,14 @@ class PushoverService {
         }
         throw new \Exception('No team found for this user. Please create a team first.' ); 
     }
+    public function getPushoverConnection($user_id)
+    {
+        $pushover_connect=PushoverConnect::where('user_id', $user_id)->first();
+        if ($pushover_connect)
+        {
+            return $pushover_connect;
+        }
+        return false;
+    }
     
 }
