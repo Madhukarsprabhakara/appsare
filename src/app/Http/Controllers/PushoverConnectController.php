@@ -29,8 +29,9 @@ class PushoverConnectController extends Controller
     {
         //
         try {
-            return $request->all();
-            $saved=$pushoverService->savePushoverToken(\Auth::user()->currentTeam->id);
+            $data=$request->all();
+            $pushover_user_key=$data['pushover_user_key']
+            $saved=$pushoverService->savePushoverToken(\Auth::user()->currentTeam->id, $pushover_user_key);
             if ($saved)
             {
                 return \Redirect::route('integrations.index');

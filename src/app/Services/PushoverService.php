@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Models\Language;
+use Illuminate\Support\Facades\Crypt;
 class PushoverService {
 	public function connectPushover($team_id)
     {
@@ -14,7 +15,7 @@ class PushoverService {
 
         return $fullUrl;
     }
-    public function savePushoverToken($team_id)
+    public function savePushoverToken($team_id, $pushover_user_key)
     {
         
         
@@ -23,7 +24,7 @@ class PushoverService {
             $pushover_connect= new PushoverConnect();
             $pushover_connect->team_id=$team_id;
             $pushover_connect->user_id=\Auth::id();
-            $pushover_connect->pushover_code=\Request::get('code');
+            $pushover_connect->pushover_code=Crypt::encryptString($pushover_user_key);
             $pushover_connect->save();
             return true;
         }
