@@ -85,6 +85,7 @@ const updatePushoverChannelId = () => {
 
                     <button type="button"
                         @click.prevent="confirmPushoverConnectionDeletion($page.props.pushoverConnection.id)"
+                        :disabled="deletePushoverConnectionForm.processing"
                         class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white  hover:bg-red-500 ">
                         <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
                         Disconnect Pushover account
