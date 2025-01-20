@@ -87,7 +87,8 @@ class PushoverConnectController extends Controller
         //
         try {
             $team_id=\Auth::user()->currentTeam->id;
-            return \Redirect::to($pushoverService->connectPushover($team_id));
+            return response()->json(['redirect_url' => $pushoverService->connectPushover($team_id)]);
+            
         }
         catch (\Exception $e)
         {

@@ -29,7 +29,12 @@ const deletePushoverConnection = () => {
     deletePushoverConnectionForm.delete(route('pushover.destroy', { 'pushover_connect': PushoverConnectionBeingDeleted.value }), {
         preserveScroll: true,
         preserveState: true,
-        onSuccess: () => (PushoverConnectionBeingDeleted.value = null),
+        onSuccess: (response) => {
+            PushoverConnectionBeingDeleted.value = null;
+            if (response.redirect_url) {
+                window.location.href = response.redirect_url;
+            }
+        },
     });
 };
 
