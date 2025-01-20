@@ -63,8 +63,8 @@ Route::middleware([
     Route::get('/auth/pushover/redirect', [App\Http\Controllers\PushoverConnectController::class, 'redirect'])->name('pushover.redirect');
     Route::get('/auth/pushover/callback', [App\Http\Controllers\PushoverConnectController::class, 'handleCallback'])->name('pushover.callback');
     Route::get('/auth/pushover/disconnect', [App\Http\Controllers\PushoverConnectController::class, 'disconnect'])->name('pushover.disconnect');
-    Route::put('/pushoverconnect/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'update'])->name('pushover.update');
-    Route::delete('/pushoverconnect/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'destroy'])->name('pushover.destroy');
+    Route::put('/pushover/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'update'])->name('pushover.update');
+    Route::delete('/pushover/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'destroy'])->name('pushover.destroy');
     Route::get('/statuscheck', function(){
 
         $team=Team::find(1);

@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Notifications\Channels\PushoverChannel;
+use App\Notifications\Messages\PushoverMessage;
 use Illuminate\Notifications\Slack\SlackMessage;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
@@ -33,7 +35,7 @@ class ServiceDown extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail','slack'];
+        return ['mail','slack', PushoverChannel::class];
     }
 
     /**
@@ -63,6 +65,15 @@ class ServiceDown extends Notification implements ShouldQueue
             }
         }
                
+    }
+    /**
+     * Get the Pushover representation of the notification.
+     */
+    public function toPushover(object $notifiable): PushoverMessage
+    {
+        return (new PushoverMessage('Your website '.$this->url.' is down.'))
+            ->title('Down')
+            ->priority(1);
     }
     /**
      * Get the array representation of the notification.

@@ -10,6 +10,8 @@ use Illuminate\Notifications\Slack\SlackMessage;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
 use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
+use App\Notifications\Channels\PushoverChannel;
+use App\Notifications\Messages\PushoverMessage;
 use App\Services\SlackService;
 class ServiceUp extends Notification implements ShouldQueue
 {
@@ -33,7 +35,7 @@ class ServiceUp extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail','slack'];
+        return ['mail','slack', PushoverChannel::class];
     }
 
     /**
@@ -62,6 +64,13 @@ class ServiceUp extends Notification implements ShouldQueue
             }
         }
                  
+    }
+    public function toPushover(object $notifiable): PushoverMessage
+    {
+        return (new PushoverMessage('Your website '.$this->url.' is up again.'))
+            ->title('Up')
+            ->priority(0);
+        
     }
     /**
      * Get the array representation of the notification.

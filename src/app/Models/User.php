@@ -14,7 +14,10 @@ use Laravel\Sanctum\HasApiTokens;
 use Spark\Billable;
 use Illuminate\Notifications\Slack\SlackRoute;
 use App\Services\SlackService;
+use App\Services\PushoverService;
 use Illuminate\Notifications\Slack\SlackWebhookChannel;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
 class User extends Authenticatable
 {
     use HasApiTokens, Billable;
@@ -80,5 +83,12 @@ class User extends Authenticatable
         $slack_connect=$slackService->getSlackConnection($team_id);
         return SlackRoute::make($slack_connect->slack_channel_id, $slack_connect->slack_bot_code); 
         
+    }
+    public function routeNotificationForPushover()
+    {
+        $pushoverService = new PushoverService();
+        $pushover_connect=$pushoverService->getPushoverConnection($this->id);
+        $encryptedValue=$pushover_connect->makeVisible('pushover_code')->toArray();
+        return Crypt::decryptString($encryptedValue['pushover_code']);
     }
 }

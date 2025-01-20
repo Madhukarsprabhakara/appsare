@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PushoverConnect;
 use Illuminate\Http\Request;
 use App\Services\PushoverService;
-
+use Inertia\Inertia;
 class PushoverConnectController extends Controller
 {
     /**
@@ -29,8 +29,9 @@ class PushoverConnectController extends Controller
     {
         //
         try {
-            return $request->all();
-            $saved=$pushoverService->savePushoverToken(\Auth::user()->currentTeam->id);
+            $data=$request->all();
+            $pushover_user_key=$data['pushover_user_key'];
+            $saved=$pushoverService->savePushoverToken(\Auth::user()->currentTeam->id, $pushover_user_key);
             if ($saved)
             {
                 return \Redirect::route('integrations.index');
@@ -81,8 +82,18 @@ class PushoverConnectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PushoverConnect $pushoverConnect)
+    public function destroy(PushoverService $pushoverService)
     {
         //
+        try {
+            $team_id=\Auth::user()->currentTeam->id;
+            return Inertia::location($pushoverService->connectPushover($team_id));
+            //return response()->json(['redirect_url' => $pushoverService->connectPushover($team_id)]);
+            
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 }
