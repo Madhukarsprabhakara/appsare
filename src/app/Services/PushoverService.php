@@ -20,7 +20,7 @@ class PushoverService {
     {
         
         
-        if ($team_id)
+        if ($pushover_user_key)
         {
             $pushover_connect= new PushoverConnect();
             $pushover_connect->team_id=$team_id;
@@ -28,6 +28,15 @@ class PushoverService {
             $pushover_connect->pushover_code=Crypt::encryptString($pushover_user_key);
             $pushover_connect->save();
             return true;
+        }
+        else
+        {
+            $pushoverConnect=$this->getPushoverConnection(\Auth::id());
+            $deleted=$pushoverConnect->delete();
+            if ($deleted)
+            {
+                return true;
+            }
         }
         throw new \Exception('No team found for this user. Please create a team first.' ); 
     }

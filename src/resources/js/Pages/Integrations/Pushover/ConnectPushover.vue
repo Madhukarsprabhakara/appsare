@@ -13,29 +13,29 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 const form = useForm({
     _method: 'PUT',
-    name: usePage().props.slackConnection ? usePage().props.slackConnection.slack_channel_id : '',
-    id: usePage().props.slackConnection ? usePage().props.slackConnection.id : '',
+    name: usePage().props.pushoverConnection ? usePage().props.pushoverConnection.Pushover_channel_id : '',
+    id: usePage().props.pushoverConnection ? usePage().props.pushoverConnection.id : '',
 });
-const slackConnectionBeingDeleted = ref(null);
-const deleteSlackConnectionForm = useForm({});
+const PushoverConnectionBeingDeleted = ref(null);
+const deletePushoverConnectionForm = useForm({});
 
-const confirmSlackConnectionDeletion = (slack_connection_id) => {
+const confirmPushoverConnectionDeletion = (Pushover_connection_id) => {
 
-    slackConnectionBeingDeleted.value = slack_connection_id;
+    PushoverConnectionBeingDeleted.value = Pushover_connection_id;
 
 };
 
-const deleteSlackConnection = () => {
-    deleteSlackConnectionForm.delete(route('slack.destroy', { 'slack_connect': slackConnectionBeingDeleted.value }), {
+const deletePushoverConnection = () => {
+    deletePushoverConnectionForm.delete(route('pushover.destroy', { 'pushover_connect': PushoverConnectionBeingDeleted.value }), {
         preserveScroll: true,
         preserveState: true,
-        onSuccess: () => (slackConnectionBeingDeleted.value = null),
+        onSuccess: () => (PushoverConnectionBeingDeleted.value = null),
     });
 };
 
-const updateSlackChannelId = () => {
-    form.post(route('slack.update', { 'slack_connect': usePage().props.slackConnection.id }), {
-        errorBag: 'updateSlackChannelId',
+const updatePushoverChannelId = () => {
+    form.post(route('Pushover.update', { 'Pushover_connect': usePage().props.pushoverConnection.id }), {
+        errorBag: 'updatePushoverChannelId',
         preserveScroll: true,
     });
 };
@@ -65,7 +65,7 @@ const updateSlackChannelId = () => {
                         }
                     </style>
 <template>
-    <FormSection @submitted="updateSlackChannelId">
+    <FormSection @submitted="updatePushoverChannelId">
         <template #title>
             Pushover
         </template>
@@ -84,7 +84,7 @@ const updateSlackChannelId = () => {
                 <div v-else class="flex items-center mt-2">
 
                     <button type="button"
-                        @click.prevent="confirmSlackConnectionDeletion($page.props.slackConnection.id)"
+                        @click.prevent="confirmPushoverConnectionDeletion($page.props.pushoverConnection.id)"
                         class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white  hover:bg-red-500 ">
                         <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
                         Disconnect Pushover account
@@ -97,7 +97,7 @@ const updateSlackChannelId = () => {
             
         </template>
 
-        <template v-if="$page.props.slackConnection" #actions>
+        <template v-if="$page.props.pushoverConnection" #actions>
             <ActionMessage :on="form.recentlySuccessful" class="me-3">
                 Saved.
             </ActionMessage>
@@ -108,23 +108,23 @@ const updateSlackChannelId = () => {
     </FormSection>
 
     <!-- Delete Token Confirmation Modal -->
-    <ConfirmationModal :show="slackConnectionBeingDeleted != null" @close="slackConnectionBeingDeleted = null">
+    <ConfirmationModal :show="PushoverConnectionBeingDeleted != null" @close="PushoverConnectionBeingDeleted = null">
         <template #title>
-            Delete Slack Connection
+            Delete Pushover Connection
         </template>
 
         <template #content>
-            Are you sure you would like to disconnect from this Slack account? This will delete the token and
+            Are you sure you would like to disconnect from this Pushover account? This will delete the token and
             notifications will no longer be sent. You may reconnect at any time.
         </template>
 
         <template #footer>
-            <SecondaryButton @click="slackConnectionBeingDeleted = null">
+            <SecondaryButton @click="PushoverConnectionBeingDeleted = null">
                 Cancel
             </SecondaryButton>
 
-            <DangerButton class="ms-3" :class="{ 'opacity-25': deleteSlackConnectionForm.processing }"
-                :disabled="deleteSlackConnectionForm.processing" @click="deleteSlackConnection">
+            <DangerButton class="ms-3" :class="{ 'opacity-25': deletePushoverConnectionForm.processing }"
+                :disabled="deletePushoverConnectionForm.processing" @click="deletePushoverConnection">
                 Delete
             </DangerButton>
         </template>

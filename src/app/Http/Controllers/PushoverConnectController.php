@@ -82,8 +82,16 @@ class PushoverConnectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PushoverConnect $pushoverConnect)
+    public function destroy(PushoverService $pushoverService)
     {
         //
+        try {
+            $team_id=\Auth::user()->currentTeam->id;
+            return \Redirect::to($pushoverService->connectPushover($team_id));
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 }
