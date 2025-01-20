@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PushoverConnect;
 use Illuminate\Http\Request;
 use App\Services\PushoverService;
-
+use Inertia\Inertia;
 class PushoverConnectController extends Controller
 {
     /**
@@ -87,7 +87,7 @@ class PushoverConnectController extends Controller
         //
         try {
             $team_id=\Auth::user()->currentTeam->id;
-            return \Inertia::location($pushoverService->connectPushover($team_id));
+            return Inertia::location($pushoverService->connectPushover($team_id));
             //return response()->json(['redirect_url' => $pushoverService->connectPushover($team_id)]);
             
         }
