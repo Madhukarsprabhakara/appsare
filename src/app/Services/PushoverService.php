@@ -49,5 +49,14 @@ class PushoverService {
         }
         return false;
     }
+    public function getPushoverToken($user_id)
+    {
+        $pushover_connect=$this->getPushoverConnection($user_id);
+        if ($pushover_connect)
+        {
+            return Crypt::decryptString($pushover_connect->pushover_code);
+        }
+        return false;
+    }
     
 }
