@@ -13,6 +13,7 @@ use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
 use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
 use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
 use App\Services\SlackService;
+use App\Services\PushoverService;
 class ServiceDown extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -38,6 +39,34 @@ class ServiceDown extends Notification implements ShouldQueue
         return ['mail','slack', PushoverChannel::class];
     }
 
+    public function shouldSend(object $notifiable, string $channel): bool
+    {
+        if ($channel === 'slack') {
+            $slackService=new SlackService();
+            $slack_connect=$slackService->getSlackConnection($notifiable->currentTeam->id);
+            if ($slack_connect)
+            {
+                if ($slack_connect->slack_channel_id)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        if ($channel === PushoverChannel::class) {
+            $pushoverService = new PushoverService();
+            $pushover_connect=$pushoverService->getPushoverConnection($notifiable->id);
+            if ($pushover_connect)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Get the mail representation of the notification.
      */
