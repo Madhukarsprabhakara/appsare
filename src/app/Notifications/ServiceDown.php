@@ -43,7 +43,7 @@ class ServiceDown extends Notification implements ShouldQueue
     {
         if ($channel === 'slack') {
             $slackService=new SlackService();
-            $slack_connect=$slackService->getSlackConnection($notifiable->currentTeam->id);
+            $slack_connect=$slackService->getSlackConnection($this->team_id);
             if ($slack_connect)
             {
                 if ($slack_connect->slack_channel_id)
@@ -81,7 +81,7 @@ class ServiceDown extends Notification implements ShouldQueue
     public function toSlack(object $notifiable): SlackMessage
     {
         $slackService=new SlackService();
-        $slack_connect=$slackService->getSlackConnection($notifiable->currentTeam->id);
+        $slack_connect=$slackService->getSlackConnection($this->team_id);
         if ($slack_connect)
         {
             if ($slack_connect->slack_channel_id)
