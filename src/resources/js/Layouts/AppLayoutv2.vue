@@ -370,6 +370,8 @@ const navigation = [
     { name: 'Status Pages', href: '#', icon: PresentationChartLineIcon, current: false },
     { name: 'Team Members', href: route('teams.show', usePage().props.auth.user.current_team), icon: UsersIcon, current: false },
     { name: 'Integrations', href: route('integrations.index'), icon: LinkIcon, current: false },
+    { name: 'Notification Settings', href: route('notification_settings.index'), icon: BellIcon, current: false },
+
 
 ]
 const teams = [

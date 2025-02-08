@@ -41,6 +41,7 @@ class ServiceDown extends Notification implements ShouldQueue
 
     public function shouldSend(object $notifiable, string $channel): bool
     {
+        
         if ($channel === 'slack') {
             $slackService=new SlackService();
             $slack_connect=$slackService->getSlackConnection($this->team_id);

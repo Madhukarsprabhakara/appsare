@@ -49,6 +49,9 @@ Route::middleware([
         return Inertia::render('Notifications/Show');
     })->name('notifications.index');
 
+
+    Route::get('/notification_settings', [App\Http\Controllers\NotificationSettingController::class, 'index'])->name('notification_settings.index');
+    Route::put('/notification_settings/{notification_setting}', [App\Http\Controllers\NotificationSettingController::class, 'update'])->name('notification_settings.update');
     # Integrations routes
     Route::get('/integrations', [App\Http\Controllers\IntegrationController::class, 'index'])->name('integrations.index');
 
