@@ -14,6 +14,8 @@ use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
 use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
 use App\Services\SlackService;
 use App\Services\PushoverService;
+use App\Services\NotificationSettingsService;
+use App\Models\Team;
 class ServiceDown extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -41,7 +43,12 @@ class ServiceDown extends Notification implements ShouldQueue
 
     public function shouldSend(object $notifiable, string $channel): bool
     {
-        
+        $notificationSettingsService = new NotificationSettingsService();
+        $notificationSettings = $notificationSettingsService->getNotificationSettingsOnTeam(Team::find($this->team_id));
+        if (!$notificationSettings[0]->notificatons_enabled)
+        {
+            return false;
+        }
         if ($channel === 'slack') {
             $slackService=new SlackService();
             $slack_connect=$slackService->getSlackConnection($this->team_id);
