@@ -68,6 +68,7 @@ class WebsiteStatusCheck30 implements ShouldQueue
                     $all_users=$team->allUsers();
                     foreach ($all_users as $user)
                     {
+                       //check for disabled notificatons here 
                        User::find($user->id)->notify(new ServiceUp($this->url, $tracker->team_id));
                     }
                 }
@@ -98,6 +99,7 @@ class WebsiteStatusCheck30 implements ShouldQueue
                 $tracker_event->message=$e->getMessage();
                 $tracker_event->save();
                 //dispatch notification job - with tracker id and url
+                //check for disabled notificatons here
                 ServiceDownActions::dispatch($this->tracker_id, $this->url, $tracker_event->id);  
             }
             else
