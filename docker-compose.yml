@@ -128,5 +128,18 @@ services:
       - ./pgadmin-data:/var/lib/pgadmin
     networks:
       - appsare
+  ar_go:
+    build:
+      context: .
+      dockerfile: go.dockerfile
+    container_name: ar_go
+    entrypoint: ["go", "run","main.go"]
+    ports:
+      - 3000:3000
+    volumes:
+      - ./go:/var/www/go
+    working_dir: /var/www/go
+    networks:
+      - appsare
     
   
