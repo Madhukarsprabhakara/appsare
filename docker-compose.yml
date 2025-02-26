@@ -137,8 +137,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./go:/var/www/go
-    working_dir: /var/www/go
+      - ./go_src:/var/www/go_src
+    working_dir: /var/www/go_src
     networks:
       - appsare
     
