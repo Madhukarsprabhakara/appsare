@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"runtime"
+	"strconv"
 	"sync"
 	"time"
 
@@ -17,7 +19,7 @@ func handlerFunc(w http.ResponseWriter, r *http.Request) {
 
 func performTask(db *sql.DB) {
 	// Your specific task goes here
-	fmt.Println("Performing the task at", time.Now())
+	fmt.Println("Performing the task at", time.Now().Format("2006-01-02 15:04:05"))
 	start := time.Now()
 	// Example list of URLs to check
 	rows, err := db.Query("SELECT id, url, team_id FROM public.trackers where is_active != false and is_archived = false")
@@ -42,14 +44,35 @@ func performTask(db *sql.DB) {
 		wg.Add(1)
 		go func(url string) {
 			defer wg.Done()
+			startTimeWTz := time.Now().Format("2006-01-02 15:04:05")
+			startTime := time.Now()
+			startTimeEpoch := startTime.Unix()
 			resp, err := http.Head(url)
+			endTime := time.Now()
+			endTimeEpoch := endTime.Unix()
+			responseTime := time.Since(startTime).Seconds()
+			endTimeWTz := time.Now().Format("2006-01-02 15:04:05")
 			if err != nil {
 				fmt.Printf("Error checking %s: %v\n", url, err)
+				// Insert the event into tracker_events table
+				_, err := db.Exec("INSERT INTO tracker_events (tracker_id, response_time, http_status_code, message, start_time, end_time,epoch_start_time, epoch_end_time, exception, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+					id, responseTime, "500", err.Error(), startTimeWTz, endTimeWTz, startTimeEpoch, endTimeEpoch, err.Error(), startTimeWTz, startTimeWTz)
+				if err != nil {
+
+					log.Printf("Error inserting event for %s: %v\n", url, err)
+				}
 			} else {
-				fmt.Printf("Checked %s: %d at %s\n", url, resp.StatusCode, time.Now())
+				timestamp := time.Now().Format("2006-01-02 15:04:05")
+				statusCodeStr := strconv.Itoa(resp.StatusCode)
+				_, err := db.Exec("INSERT INTO tracker_events (tracker_id, response_time, http_status_code, message, start_time, end_time,epoch_start_time, epoch_end_time, exception, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+					id, responseTime, statusCodeStr, "Success", startTimeWTz, endTimeWTz, startTimeEpoch, endTimeEpoch, "", startTimeWTz, startTimeWTz)
+				if err != nil {
+					log.Printf("Error inserting event for %s: %v\n", url, err)
+				}
+				fmt.Printf("Checked %s: %d at %s\n", url, resp.StatusCode, timestamp)
 				resp.Body.Close()
 			}
-
+			fmt.Printf("Goroutine ended at: %s, Number of goroutines: %d\n", endTimeWTz, runtime.NumGoroutine())
 		}(url)
 	}
 
@@ -61,7 +84,7 @@ func performTask(db *sql.DB) {
 
 	// Wait for all goroutines to complete
 	wg.Wait()
-	fmt.Println("Done with everything", time.Now())
+	fmt.Println("Done with everything", time.Now().Format("2006-01-02 15:04:05"))
 	duration := time.Since(start)
 	fmt.Println("Duration:", duration)
 }
