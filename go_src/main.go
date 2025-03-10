@@ -118,7 +118,7 @@ func performTask(db *sql.DB) {
 					go func(url string, team_id int) {
 						//send notifications
 						fmt.Println("Sending notifications at", time.Now().Format("2006-01-02 15:04:05"))
-						sendNotifications(url, id, "J1eLq9zVzVl23Q7NuEWRx1qfD7cKE4e3en5DPz4p6049864a", 0)
+						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 0)
 					}(url, team_id)
 				}
 				fmt.Printf("Error checking %s: %v\n", url, err)
@@ -137,7 +137,7 @@ func performTask(db *sql.DB) {
 					go func(url string, team_id int) {
 						//send notifications
 						fmt.Println("Sending notifications at", time.Now().Format("2006-01-02 15:04:05"))
-						sendNotifications(url, id, "J1eLq9zVzVl23Q7NuEWRx1qfD7cKE4e3en5DPz4p6049864a", 1)
+						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 1)
 					}(url, team_id)
 				}
 
