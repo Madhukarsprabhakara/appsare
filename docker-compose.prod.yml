@@ -98,7 +98,7 @@ services:
       - ar_nginx
       - ar_php
       - ar_postgres
-      - ar_scheduler
+      - ar_go
     working_dir: /var/www/html
     networks:
       - appsare

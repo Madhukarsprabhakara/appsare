@@ -48,7 +48,7 @@ func sendNotifications(url string, tracker_id int, token string, service_type in
 	}
 
 	// Create the POST request
-	req, err := http.NewRequest("POST", "http://host.docker.internal/snotifications", bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", "https://appsare.com/snotifications", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Printf("Error creating request: %v\n", err)
 		return
