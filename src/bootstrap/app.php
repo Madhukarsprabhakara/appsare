@@ -25,6 +25,14 @@ return Application::configure(basePath: dirname(__DIR__))
             '*',
         ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            
+            'http://localhost/snotifications',
+            '/snotifications',
+            'https://appsare.com/snotifications',
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

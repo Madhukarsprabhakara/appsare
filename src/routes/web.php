@@ -48,7 +48,9 @@ Route::middleware([
     Route::get('/notifications',function() {
         return Inertia::render('Notifications/Show');
     })->name('notifications.index');
+    #Trigger notifictaions from Go service
 
+    Route::post('/snotifications', [App\Http\Controllers\ApiNotificationController::class, 'create'])->name('apinotifications.create');
 
     Route::get('/notification_settings', [App\Http\Controllers\NotificationSettingController::class, 'index'])->name('notification_settings.index');
     Route::put('/notification_settings/{notification_setting}', [App\Http\Controllers\NotificationSettingController::class, 'update'])->name('notification_settings.update');
