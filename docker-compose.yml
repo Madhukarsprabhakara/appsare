@@ -109,7 +109,8 @@ services:
       - ar_nginx
       - ar_php
       - ar_postgres
-      - ar_scheduler
+      - ar_go
+
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html

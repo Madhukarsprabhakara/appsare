@@ -88,6 +88,11 @@ func performTask(db *sql.DB) {
 	// Create a WaitGroup to synchronize the completion of all goroutines
 	var wg sync.WaitGroup
 
+	// Create a custom HTTP client with a timeout
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
 	// Iterate over the rows and print the results
 	for rows.Next() {
 		var id int
@@ -104,7 +109,7 @@ func performTask(db *sql.DB) {
 			startTimeWTz := time.Now().Format("2006-01-02 15:04:05")
 			startTime := time.Now()
 			startTimeEpoch := startTime.Unix()
-			resp, err := http.Head(url)
+			resp, err := client.Head(url)
 			endTime := time.Now()
 			endTimeEpoch := endTime.Unix()
 			responseTime := time.Since(startTime).Seconds()
@@ -115,11 +120,11 @@ func performTask(db *sql.DB) {
 				fmt.Printf("Previous status for %d: %s\n", id, previous_status)
 				//compare previous status with current status and send an alert if there is a change
 				if previous_status != "Failed" {
-					go func(url string, team_id int) {
-						//send notifications
-						fmt.Println("Sending notifications at", time.Now().Format("2006-01-02 15:04:05"))
-						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 0)
-					}(url, team_id)
+
+					//send notifications
+					fmt.Printf("Sending failed notifications at %s for tracker %d at %s\n", url, id, time.Now().Format("2006-01-02 15:04:05"))
+					sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 0)
+
 				}
 				fmt.Printf("Error checking %s: %v\n", url, err)
 				// Insert the event into tracker_events table
@@ -134,11 +139,11 @@ func performTask(db *sql.DB) {
 				previous_status = getPreviousStatus(db, id)
 				fmt.Printf("Previous status for %d: %s\n", id, previous_status)
 				if previous_status != "Success" {
-					go func(url string, team_id int) {
-						//send notifications
-						fmt.Println("Sending notifications at", time.Now().Format("2006-01-02 15:04:05"))
-						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 1)
-					}(url, team_id)
+
+					//send notifications
+					fmt.Printf("Sending success notifications at %s for tracker %d at %s\n", url, id, time.Now().Format("2006-01-02 15:04:05"))
+					sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 1)
+
 				}
 
 				//compare previous status with current status and send an alert if there is a change
