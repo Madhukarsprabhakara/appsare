@@ -148,12 +148,22 @@ func performTask(db *sql.DB) {
 
 				//compare previous status with current status and send an alert if there is a change
 				timestamp := time.Now().Format("2006-01-02 15:04:05")
-				statusCodeStr := strconv.Itoa(resp.StatusCode)
-				_, err := db.Exec("INSERT INTO tracker_events (tracker_id, response_time, http_status_code, message, start_time, end_time,epoch_start_time, epoch_end_time, exception, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-					id, responseTime, statusCodeStr, "Success", startTimeWTz, endTimeWTz, startTimeEpoch, endTimeEpoch, "", startTimeWTz, startTimeWTz)
-				if err != nil {
-					log.Printf("Error inserting event for %s: %v\n", url, err)
+				if (resp.StatusCode >= 200 && resp.StatusCode <= 299) || (resp.StatusCode >= 300 && resp.StatusCode <= 399) {
+					statusCodeStr := strconv.Itoa(resp.StatusCode)
+					_, err := db.Exec("INSERT INTO tracker_events (tracker_id, response_time, http_status_code, message, start_time, end_time, epoch_start_time, epoch_end_time, exception, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+						id, responseTime, statusCodeStr, "Success", startTimeWTz, endTimeWTz, startTimeEpoch, endTimeEpoch, "", startTimeWTz, startTimeWTz)
+					if err != nil {
+						log.Printf("Error inserting event for %s: %v\n", url, err)
+					}
+				} else {
+					statusCodeStr := strconv.Itoa(resp.StatusCode)
+					_, err := db.Exec("INSERT INTO tracker_events (tracker_id, response_time, http_status_code, message, start_time, end_time, epoch_start_time, epoch_end_time, exception, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+						id, responseTime, statusCodeStr, "Failed", startTimeWTz, endTimeWTz, startTimeEpoch, endTimeEpoch, "", startTimeWTz, startTimeWTz)
+					if err != nil {
+						log.Printf("Error inserting event for %s: %v\n", url, err)
+					}
 				}
+
 				fmt.Printf("Checked %s: %d at %s %d\n", url, resp.StatusCode, timestamp, runtime.NumGoroutine())
 				resp.Body.Close()
 			}
