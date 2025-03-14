@@ -159,7 +159,7 @@ func performTask(db *sql.DB) {
 					if previous_status != "Failed" {
 
 						//send notifications
-						fmt.Printf("Sending success notifications at %s for tracker %d at %s\n", url, id, time.Now().Format("2006-01-02 15:04:05"))
+						fmt.Printf("Sending failed notifications at %s for tracker %d at %s\n", url, id, time.Now().Format("2006-01-02 15:04:05"))
 						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 0)
 
 					}
