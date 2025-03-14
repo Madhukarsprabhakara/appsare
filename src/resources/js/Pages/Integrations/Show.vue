@@ -15,7 +15,7 @@ defineProps({
 </script>
 
 <template>
-    <AppLayoutv2 title="Profile">
+    <AppLayoutv2 title="Integrations">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Integrations

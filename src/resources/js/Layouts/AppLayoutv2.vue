@@ -8,6 +8,7 @@
       ```
     -->
     <div>
+        <Head :title="title" />
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
                 <TransitionChild as="template" enter="transition-opacity ease-linear duration-300"

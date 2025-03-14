@@ -33,6 +33,14 @@ class StatusPageController extends Controller
     public function create()
     {
         //
+        try {
+            return Inertia::render('StatusPages/Create');
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

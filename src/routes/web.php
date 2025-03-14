@@ -46,7 +46,7 @@ Route::middleware([
 
     #Status pages routes
     Route::get('/statuspages', [App\Http\Controllers\StatusPageController::class, 'index'])->name('statuspages.index');
-
+    Route::get('/statuspages/create', [App\Http\Controllers\StatusPageController::class, 'create'])->name('statuspages.create');
     #Notifications route
     Route::get('/notifications',function() {
         return Inertia::render('Notifications/Show');
