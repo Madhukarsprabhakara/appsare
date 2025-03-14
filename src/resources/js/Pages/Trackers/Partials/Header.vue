@@ -6,7 +6,7 @@
         </div>
         <div class="ml-4 mt-2 shrink-0">
             <NavLink  :href="route('trackers.create')" :active="route().current('trackers.create')" preserve-scroll> 
-          <button type="button" class="relative inline-flex items-center rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">New Tracker</button>
+          <PrimaryButton type="button" class="relative inline-flex items-center rounded-md bg-teal-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">New Tracker</PrimaryButton>
             </NavLink>
         </div>
       </div>
@@ -14,4 +14,5 @@
   </template>
   <script setup>
   import NavLink from '@/Components/NavLink.vue';
+  import PrimaryButton from '@/Components/PrimaryButton.vue';
   </script>
