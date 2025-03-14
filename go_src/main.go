@@ -160,7 +160,7 @@ func performTask(db *sql.DB) {
 
 						//send notifications
 						fmt.Printf("Sending success notifications at %s for tracker %d at %s\n", url, id, time.Now().Format("2006-01-02 15:04:05"))
-						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 1)
+						sendNotifications(url, id, "FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059", 0)
 
 					}
 					statusCodeStr := strconv.Itoa(resp.StatusCode)
