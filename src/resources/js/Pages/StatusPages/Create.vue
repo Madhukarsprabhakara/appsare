@@ -4,7 +4,7 @@ import CreateStatusPageForm from '@/Pages/StatusPages/Partials/CreateStatusPageF
 </script>
 
 <template>
-    <AppLayoutv2 title="Create Team">
+    <AppLayoutv2 title="Create Status Page">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Create Status Page

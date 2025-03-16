@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\StatusPage;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\StatusPageTracker;
+use App\Services\TrackerService;
 
 class StatusPageController extends Controller
 {
@@ -19,8 +21,7 @@ class StatusPageController extends Controller
             return Inertia::render('StatusPages/Show', [
                 'statusPages' => $statusPages
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
@@ -30,13 +31,15 @@ class StatusPageController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(TrackerService $trackerService)
     {
         //
         try {
-            return Inertia::render('StatusPages/Create');
-        }
-        catch (\Exception $e) {
+            $trackers = $trackerService->getTrackersOnTeamId(auth()->user()->currentTeam);
+            return Inertia::render('StatusPages/Create', [
+                'trackers' => $trackers
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
@@ -49,6 +52,34 @@ class StatusPageController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            
+            // Validate the incoming request
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'url_slug' => 'required|string|max:255|unique:status_pages,url_slug',
+                'selectedOptions' => 'required|array',
+            
+            ]);
+            
+            // Create the new status page
+             $statusPage = StatusPage::create([
+                'name' => $validated['name'],
+                'url_slug' => $validated['url_slug'],
+                'team_id' => auth()->user()->currentTeam->id, // Assuming the team ID is associated with the authenticated user
+                'user_id' => auth()->id(), // Assuming the user ID is associated with the authenticated user
+                'uuid' => \Str::uuid(),
+            ]);
+            
+            // Attach the selected trackers to the status page
+            $trackerIds = collect($validated['selectedOptions'])->pluck('value')->toArray();
+            $statusPage->trackers()->attach($trackerIds);
+
+            return redirect()->route('statuspages.index')->with('success', 'Status page created successfully.');
+        } 
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

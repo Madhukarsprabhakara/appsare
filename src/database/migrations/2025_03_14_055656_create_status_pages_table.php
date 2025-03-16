@@ -17,7 +17,9 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('name');
-            $table->string('url_slug')->nullable();
+            $table->string('url_slug')->nullable()->unique();
+            $table->boolean('is_published')->default(0);
+            $table->boolean('is_archived')->default(0);
             $table->timestamps();
         });
     }
