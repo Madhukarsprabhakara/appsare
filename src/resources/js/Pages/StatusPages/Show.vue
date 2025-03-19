@@ -10,7 +10,7 @@
             <div class="max-w-full mx-auto ">
                 
                     <div>
-                        
+                        <StatusPageList :people="$page.props.statusPages" />
                     </div>
             </div>
         </div>
@@ -21,6 +21,7 @@
 import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import Header from './Partials/Header.vue';
 import { usePage } from '@inertiajs/vue3';
+import StatusPageList from './Partials/StatusPageList.vue';
 
 const trackers = usePage().props.trackers;
 </script>

@@ -17,7 +17,7 @@ class StatusPageController extends Controller
     {
         //
         try {
-            $statusPages = StatusPage::all();
+            $statusPages = StatusPage::where('team_id', auth()->user()->currentTeam->id)->get();
             return Inertia::render('StatusPages/Show', [
                 'statusPages' => $statusPages
             ]);
@@ -85,9 +85,26 @@ class StatusPageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(StatusPage $statusPage)
+    public function show(String $url_slug)
     {
         //
+        try {
+            $statusPage = StatusPage::where('url_slug', $url_slug)->first();
+            if (!$statusPage) {
+                abort(404,'Not Found');
+            }
+            $trackers = $statusPage->trackers;
+
+            return Inertia::render('StatusPages/Publicv2', [
+                'statusPage' => $statusPage,
+                'trackers' => $trackers
+            ]);
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
