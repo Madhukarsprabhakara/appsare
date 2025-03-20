@@ -103,14 +103,14 @@
             <div class="grid grid-cols-1 gap-4 lg:col-span-2">
               <!-- Welcome panel -->
               <section aria-labelledby="profile-overview-title">
-                <div class="overflow-hidden rounded-lg bg-white shadow">
+                <div class="rounded-lg bg-white shadow">
                   <h2 class="sr-only" id="profile-overview-title">Profile Overview</h2>
                   <div class="bg-white p-6">
                     <div class="sm:flex sm:items-center sm:justify-between">
                       <div class="sm:flex sm:space-x-5">
                         
                         <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                          <!-- <p class="text-sm font-medium text-gray-600">Welcome back,</p> -->
+                          <p class="text-sm font-medium text-gray-600">Status page</p>
                           <p class="text-3xl font-bold text-gray-900 sm:text-3xl">{{ statusPage.name }}</p>
                           
                           <!-- <p class="text-sm font-medium text-gray-600">{{ user.role }}</p> -->
@@ -132,7 +132,7 @@
   
               <!-- Actions panel -->
               <section aria-labelledby="quick-links-title">
-                <div class="divide-y divide-gray-200 overflow-hidden rounded-lg  shadow pb-4 sm:gap-px  sm:divide-y-0">
+                <div class="divide-y divide-gray-200  rounded-lg  shadow pb-4 sm:gap-px  sm:divide-y-0">
                   
                   <div v-for="action in actions" :key="action.name" class="bg-white flex justify-center items-center">
                     <div>
@@ -145,7 +145,7 @@
                       <h3 class="text-md mb-2 font-medium">
                         <a :href="action.href" class="focus:outline-none">
                           <!-- Extend touch target to entire panel -->
-                          <span class="absolute inset-0" aria-hidden="true" />
+                          
                           {{ action.url }}
                         </a>
                       </h3>
@@ -167,7 +167,7 @@
             <div class="grid grid-cols-1 gap-4">
               <!-- Announcements -->
               <section aria-labelledby="announcements-title">
-                <div class="overflow-hidden rounded-lg bg-white shadow">
+                <div class=" rounded-lg bg-white shadow">
                   <div class="p-6">
                     <h2 class="text-base font-medium text-gray-900" id="announcements-title">Announcements</h2>
                     <div class="mt-6 flow-root">
@@ -195,7 +195,7 @@
   
               <!-- Recent Hires -->
               <section aria-labelledby="recent-hires-title">
-                <div class="overflow-hidden rounded-lg bg-white shadow">
+                <div class=" rounded-lg bg-white shadow">
                   <div class="p-6">
                     <h2 class="text-base font-medium text-gray-900" id="recent-hires-title">Recent Hires</h2>
                     <div class="mt-6 flow-root">
