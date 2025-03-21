@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use App\Services\TrackerService;
 use App\Services\EssentialService;
 use App\Services\UserService;
+use App\Models\TrackerEvent;
+use Illuminate\Support\Facades\DB;
 class TrackerController extends Controller
 {
     /**
@@ -18,8 +20,30 @@ class TrackerController extends Controller
         try {
             
              $trackers=$trackerService->getTrackersOnTeamId($userService->getLoggedinUserTeam());
+             $trackersWithUptime = $trackers->map(function ($tracker) {
+                $uptimeData = TrackerEvent::select(
+                    DB::raw("DATE_TRUNC('day', start_time) as day"),
+                    DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
+                    DB::raw("COUNT(*) as total_requests")
+                )
+                    ->where('tracker_id', $tracker->id)
+                    ->groupBy(DB::raw("DATE_TRUNC('day', start_time)"))
+                    ->get()
+                    ->map(function ($item) {
+                        return [
+                            'day' => $item->day,
+                            'uptime_percentage' => round(($item->successful_requests / $item->total_requests) * 100, 2),
+                        ];
+                    });
+
+                // Add uptime data to the tracker
+                $tracker->uptime = $uptimeData;
+                return $tracker;
+            });
+            
              return Inertia::render('Trackers/Show', [
-                    'trackers' => $trackers, 
+                    'trackers' => $trackersWithUptime,
+                    
 
                     
             ]);
