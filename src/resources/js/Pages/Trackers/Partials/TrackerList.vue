@@ -15,7 +15,7 @@
       </div>
       <div class="flex shrink-0 items-center gap-x-6">
         <div class="hidden sm:flex sm:flex-col sm:items-end">
-          <UptimeIndicator />
+          <!-- <UptimeIndicator :uptime_data="tracker.uptime" /> -->
           <p v-if="tracker.created_at" class="mt-1 text-xs/5 text-gray-500">
             Last seen <time :datetime="tracker.created_at">{{ tracker.created_at }}</time>
           </p>

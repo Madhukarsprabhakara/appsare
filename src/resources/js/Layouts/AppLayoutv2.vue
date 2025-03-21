@@ -8,6 +8,7 @@
       ```
     -->
     <div>
+        <Head :title="title" />
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
                 <TransitionChild as="template" enter="transition-opacity ease-linear duration-300"
@@ -364,7 +365,7 @@ const logout = () => {
 };
 const navigation = [
     { name: 'Trackers', href: route('trackers.index'), icon: HomeIcon, current: false },
-    { name: 'Status Pages', href: '#', icon: PresentationChartLineIcon, current: false },
+    { name: 'Status Pages', href: route('statuspages.index'), icon: PresentationChartLineIcon, current: false },
     { name: 'Team Members', href: route('teams.show', usePage().props.auth.user.current_team), icon: UsersIcon, current: false },
     { name: 'Integrations', href: route('integrations.index'), icon: LinkIcon, current: false },
     { name: 'Notification Settings', href: route('notification_settings.index'), icon: BellIcon, current: false },

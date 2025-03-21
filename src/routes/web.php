@@ -32,7 +32,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return to_route('trackers.index');
     })->name('dashboard');
     // Route::get('/dashboard', [App\Http\Controllers\TrackerController::class, 'index'])->name('dashboard');
     #Trackers route
@@ -44,6 +44,15 @@ Route::middleware([
     Route::put('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'update'])->name('trackers.update');
     Route::delete('/trackers/{tracker}', [App\Http\Controllers\TrackerController::class, 'destroy'])->name('trackers.destroy');
 
+    #Status pages routes
+    Route::get('/statuspages', [App\Http\Controllers\StatusPageController::class, 'index'])->name('statuspages.index');
+    Route::get('/statuspages/create', [App\Http\Controllers\StatusPageController::class, 'create'])->name('statuspages.create');
+    Route::post('/statuspages', [App\Http\Controllers\StatusPageController::class, 'store'])->name('statuspages.store');
+    
+    Route::get('/statuspages/{status_page}/edit', [App\Http\Controllers\StatusPageController::class, 'edit'])->name('statuspages.edit');
+    Route::put('/statuspages/{status_page}', [App\Http\Controllers\StatusPageController::class, 'update'])->name('statuspages.update');
+    Route::delete('/statuspages/{status_page}', [App\Http\Controllers\StatusPageController::class, 'destroy'])->name('statuspages.destroy');
+    
     #Notifications route
     Route::get('/notifications',function() {
         return Inertia::render('Notifications/Show');
@@ -115,3 +124,5 @@ return [
 ];
     });
 });
+
+Route::get('/status-page/{url_slug}', [App\Http\Controllers\StatusPageController::class, 'show'])->name('statuspages.show');

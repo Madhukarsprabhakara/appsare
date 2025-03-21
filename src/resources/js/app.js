@@ -1,6 +1,8 @@
 import './bootstrap';
 import '../css/app.css';
-
+import "vue-select/dist/vue-select.css";
+import FloatingVue from 'floating-vue';
+import 'floating-vue/dist/style.css';
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -15,6 +17,14 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(FloatingVue, {
+                themes: {
+                  tooltip: {
+                    placement: 'top', // Default placement
+                    
+                  },
+                },
+              })
             .mount(el);
     },
     progress: {
