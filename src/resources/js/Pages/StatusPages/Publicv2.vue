@@ -168,6 +168,13 @@
                           </svg>
                           Operational
                         </span>
+                        <span v-if="action.state === 'Down'"
+                          class="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
+                          <svg class="size-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
+                            <circle cx="3" cy="3" r="3" />
+                          </svg>
+                          Down
+                        </span>
                         <!-- <button type="button"
                           class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create
                           new job</button> -->

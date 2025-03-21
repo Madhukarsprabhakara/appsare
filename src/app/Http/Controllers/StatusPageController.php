@@ -121,6 +121,7 @@ class StatusPageController extends Controller
                     DB::raw("COUNT(*) as total_requests")
                 )
                     ->where('tracker_id', $tracker->id)
+                    ->whereNotNull('start_time')
                     ->groupBy(DB::raw("DATE_TRUNC('day', start_time)"))
                     ->get()
                     ->map(function ($item) {
