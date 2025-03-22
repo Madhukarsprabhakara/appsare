@@ -157,6 +157,7 @@
                         <component :is="action.icon" class="size-6" aria-hidden="true" />
                       </span> -->
                   </div>
+                  
                   <div class="mt-8 border-b-2 pb-4 border-gray-100">
                     <div class=" pb-3 sm:flex sm:items-center sm:justify-between">
                       <h3 class="text-base font-semibold text-gray-900">{{ action.url }}</h3>

@@ -6,19 +6,19 @@
             <div class="flex min-w-0 gap-x-4">
                 <div class="min-w-0 flex-auto">
                     <p class="text-sm/6 font-semibold text-gray-900">
-                        <a :href="`/status-page/${statusPage.url_slug}`">
+                        <a :href="route('statuspages.show', statusPage.url_slug)" target="_blank">
                             <span class="absolute inset-x-0 -top-px bottom-0" />
                             {{ statusPage.name }}
                         </a>
                     </p>
                     <p class="mt-1 flex text-xs/5 text-gray-500">
-                        <span class="relative truncate">Slug: {{ statusPage.url_slug }}</span>
+                        <span class="relative truncate">URL: {{route('statuspages.show', statusPage.url_slug)}}</span>
                     </p>
                 </div>
             </div>
             
             <div class="flex flex-none items-center gap-x-4">
-                <a :href="`/status-page/${statusPage.url_slug}`"
+                <a :href="route('statuspages.show', statusPage.url_slug)"
                     class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">View
                     Status Page<span class="sr-only">, {{ statusPage.name }}</span></a>
                 <Menu as="div" class="relative flex-none">
@@ -61,6 +61,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
 import { usePage } from '@inertiajs/vue3';
+
 
 // Access the statusPages prop from Inertia's usePage
 const { props } = usePage();
