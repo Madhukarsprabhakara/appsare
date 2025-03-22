@@ -91,4 +91,8 @@ class User extends Authenticatable
         $encryptedValue=$pushover_connect->makeVisible('pushover_code')->toArray();
         return Crypt::decryptString($encryptedValue['pushover_code']);
     }
+    public function isAdmin(): bool
+    {
+        return $this->id === 1;
+    }
 }

@@ -113,50 +113,57 @@ class StatusPageController extends Controller
             }
             $trackers = $statusPage->trackers;
 
-            // Calculate uptime percentages for each tracker
-            $trackersWithUptime = $trackers->map(function ($tracker) {
-                $uptimeData = TrackerEvent::select(
-                    DB::raw("DATE_TRUNC('day', start_time) as day"),
-                    DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
-                    DB::raw("COUNT(*) as total_requests")
-                )
-                    ->where('tracker_id', $tracker->id)
-                    ->whereNotNull('start_time')
-                    ->groupBy(DB::raw("DATE_TRUNC('day', start_time)"))
-                    ->get()
-                    ->map(function ($item) {
-                        return [
-                            'day' => $item->day,
-                            'uptime_percentage' => round(($item->successful_requests / $item->total_requests) * 100, 2),
-                        ];
-                    });
+            // Fetch all tracker events for the trackers in one query
+            $trackerIds = $trackers->pluck('id');
+            $trackerEvents = TrackerEvent::select(
+                DB::raw("DATE_TRUNC('day', start_time) as day"),
+                DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
+                DB::raw("COUNT(*) as total_requests"),
+                'tracker_id'
+            )
+                ->whereIn('tracker_id', $trackerIds) // Fetch events for all trackers in one query
+                ->whereNotNull('start_time') // Exclude null start_time
+                ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
+                ->get();
 
-                // Add uptime data to the tracker
+            // Group tracker events by tracker_id
+            $eventsByTracker = $trackerEvents->groupBy('tracker_id');
+
+            // Fetch the latest event for all trackers in one query
+            $latestEvents = TrackerEvent::whereIn('tracker_id', $trackerIds)
+                ->whereNotNull('start_time')
+                ->orderBy('start_time', 'desc')
+                ->get()
+                ->groupBy('tracker_id')
+                ->map(function ($events) {
+                    return $events->first(); // Get the latest event for each tracker
+                });
+
+            // Map trackers and attach uptime data and latest state
+            $trackersWithData = $trackers->map(function ($tracker) use ($eventsByTracker, $latestEvents) {
+                // Attach uptime data
+                $uptimeData = $eventsByTracker->get($tracker->id, collect())->map(function ($item) {
+                    return [
+                        'day' => $item->day,
+                        'uptime_percentage' => round(($item->successful_requests / $item->total_requests) * 100, 2),
+                    ];
+                });
+
                 $tracker->uptime = $uptimeData;
-                return $tracker;
-            });
 
-           $trackersWithLatestState = $trackers->map(function ($tracker) {
-                // Fetch the latest event for the tracker
-                $latestEvent = TrackerEvent::where('tracker_id', $tracker->id)
-                    ->orderBy('start_time', 'desc')
-                    ->first();
-    
-                // Add the latest event message to the tracker
+                // Attach latest event data
+                $latestEvent = $latestEvents->get($tracker->id);
                 $tracker->latest_message = $latestEvent ? $latestEvent->message : null;
-    
-                // Set the state based on the latest message
                 $tracker->state = $latestEvent && $latestEvent->message === 'Success'
                     ? 'Operational'
                     : 'Down';
-    
+
                 return $tracker;
             });
             
             return Inertia::render('StatusPages/Publicv2', [
                 'statusPage' => $statusPage,
-                'trackers' => $trackersWithUptime,
-                'trackersWithLatestState' => $trackersWithLatestState,
+                'trackers' => $trackersWithData,
             ]);
         } catch (\Exception $e) {
             return response()->json([
