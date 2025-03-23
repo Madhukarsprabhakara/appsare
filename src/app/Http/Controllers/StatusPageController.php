@@ -91,6 +91,7 @@ class StatusPageController extends Controller
     public function show(String $url_slug)
     {
         //
+
         try {
             // return $uptimePercentages = TrackerEvent::select(
             //     'tracker_id',
@@ -130,14 +131,20 @@ class StatusPageController extends Controller
             $eventsByTracker = $trackerEvents->groupBy('tracker_id');
 
             // Fetch the latest event for all trackers in one query
-            $latestEvents = TrackerEvent::whereIn('tracker_id', $trackerIds)
-                ->whereNotNull('start_time')
-                ->orderBy('start_time', 'desc')
-                ->get()
-                ->groupBy('tracker_id')
-                ->map(function ($events) {
-                    return $events->first(); // Get the latest event for each tracker
-                });
+
+            $latestEvents = TrackerEvent::select('tracker_events.*')
+                ->join(
+                    DB::raw('(SELECT tracker_id, MAX(start_time) as latest_start_time FROM tracker_events GROUP BY tracker_id) as latest_events'),
+                    function ($join) {
+                        $join->on('tracker_events.tracker_id', '=', 'latest_events.tracker_id')
+                            ->on('tracker_events.start_time', '=', 'latest_events.latest_start_time');
+                    }
+                )
+                ->whereIn('tracker_events.tracker_id', $trackerIds)
+                ->get();
+
+                // return $latestEvent = $latestEvents->firstWhere('tracker_id',18);
+
 
             // Map trackers and attach uptime data and latest state
             $trackersWithData = $trackers->map(function ($tracker) use ($eventsByTracker, $latestEvents) {
@@ -152,7 +159,7 @@ class StatusPageController extends Controller
                 $tracker->uptime = $uptimeData;
 
                 // Attach latest event data
-                $latestEvent = $latestEvents->get($tracker->id);
+                $latestEvent = $latestEvents->firstWhere('tracker_id', $tracker->id);
                 $tracker->latest_message = $latestEvent ? $latestEvent->message : null;
                 $tracker->state = $latestEvent && $latestEvent->message === 'Success'
                     ? 'Operational'
@@ -166,9 +173,7 @@ class StatusPageController extends Controller
                 'trackers' => $trackersWithData,
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
+            return $e->getMessage();
         }
     }
 

@@ -38,16 +38,16 @@ const last60Days = computed(() => {
   // console.log('Generated last60Days:', days);
   
   
-  console.log(dayjs.utc('2025-03-07 00:00:00+00', 'YYYY-MM-DD')); // This is the day object); 
+ 
   // Merge uptime_data into the last 60 days
   // Merge uptime_data into the last 60 days
   return days.map((day) => {
     const matchingData = props.uptime_data.find((data) => {
       const daym = dayjs(data.day);
-      const utcoff=daym.utcOffset();
-      console.log(daym.utcOffset(420).format('YYYY-MM-DD'));
+      
+      
       const normalizedDay = daym.utcOffset(420).format('YYYY-MM-DD'); // Normalize the day format
-      console.log(`Checking ${normalizedDay} against ${day.dayo}`);
+      
       return normalizedDay === day.dayo;
     });
 

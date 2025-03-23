@@ -231,7 +231,7 @@
             </section>
 
             <!-- Recent Hires -->
-            <section aria-labelledby="recent-hires-title">
+            <!-- <section aria-labelledby="recent-hires-title">
               <div class=" rounded-lg bg-white shadow">
                 <div class="p-6">
                   <h2 class="text-base font-medium text-gray-900" id="recent-hires-title">Recent Hires</h2>
@@ -261,7 +261,7 @@
                   </div>
                 </div>
               </div>
-            </section>
+            </section> -->
           </div>
         </div>
       </div>
@@ -282,7 +282,7 @@ import UptimeIndicator from '@/Components/UptimeIndicator.vue';
 // Access the props passed from the backend
 const { props } = usePage();
 const statusPage = props.statusPage;
-const trackers = props.trackers;
+
 
 import {
   Menu,
@@ -333,36 +333,36 @@ const stats = [
 
 ]
 const actions = props.trackers
-const recentHires = [
-  {
-    name: 'Leonard Krasner',
-    handle: 'leonardkrasner',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-  },
-  {
-    name: 'Floyd Miles',
-    handle: 'floydmiles',
-    imageUrl:
-      'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-  },
-  {
-    name: 'Emily Selman',
-    handle: 'emilyselman',
-    imageUrl:
-      'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-  },
-  {
-    name: 'Kristin Watson',
-    handle: 'kristinwatson',
-    imageUrl:
-      'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-  },
-]
+// const recentHires = [
+//   {
+//     name: 'Leonard Krasner',
+//     handle: 'leonardkrasner',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//     href: '#',
+//   },
+//   {
+//     name: 'Floyd Miles',
+//     handle: 'floydmiles',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//     href: '#',
+//   },
+//   {
+//     name: 'Emily Selman',
+//     handle: 'emilyselman',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//     href: '#',
+//   },
+//   {
+//     name: 'Kristin Watson',
+//     handle: 'kristinwatson',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//     href: '#',
+//   },
+// ]
 const announcements = [
   {
     id: 1,
