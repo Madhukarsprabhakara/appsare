@@ -116,32 +116,49 @@ class StatusPageController extends Controller
 
             // Fetch all tracker events for the trackers in one query
             $trackerIds = $trackers->pluck('id');
-            $trackerEvents = TrackerEvent::select(
-                DB::raw("DATE_TRUNC('day', start_time) as day"),
-                DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
-                DB::raw("COUNT(*) as total_requests"),
-                'tracker_id'
-            )
-                ->whereIn('tracker_id', $trackerIds) // Fetch events for all trackers in one query
-                ->whereNotNull('start_time') // Exclude null start_time
-                ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
-                ->get();
+        $trackerEvents = TrackerEvent::selectRaw("
+            DATE_TRUNC('day', start_time) AS day,
+            COUNT(CASE WHEN message = 'Success' THEN 1 END) AS successful_requests,
+            COUNT(*) AS total_requests,
+            tracker_id
+        ")
+        ->whereIn('tracker_id', $trackerIds)
+        ->whereNotNull('start_time')
+        ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
+        ->get();
+            // $trackerEvents = TrackerEvent::select(
+            //     DB::raw("DATE_TRUNC('day', start_time) as day"),
+            //     DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
+            //     DB::raw("COUNT(*) as total_requests"),
+            //     'tracker_id'
+            // )
+            //     ->whereIn('tracker_id', $trackerIds) // Fetch events for all trackers in one query
+            //     ->whereNotNull('start_time') // Exclude null start_time
+            //     ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
+            //     ->get();
 
             // Group tracker events by tracker_id
             $eventsByTracker = $trackerEvents->groupBy('tracker_id');
 
             // Fetch the latest event for all trackers in one query
-
-            $latestEvents = TrackerEvent::select('tracker_events.*')
-                ->join(
-                    DB::raw('(SELECT tracker_id, MAX(start_time) as latest_start_time FROM tracker_events GROUP BY tracker_id) as latest_events'),
-                    function ($join) {
-                        $join->on('tracker_events.tracker_id', '=', 'latest_events.tracker_id')
-                            ->on('tracker_events.start_time', '=', 'latest_events.latest_start_time');
-                    }
-                )
-                ->whereIn('tracker_events.tracker_id', $trackerIds)
-                ->get();
+            $latestEvents = TrackerEvent::whereIn('id', function ($query) use ($trackerIds) {
+                $query->select(DB::raw('MAX(id)'))
+                    ->from('tracker_events')
+                    ->whereIn('tracker_id', $trackerIds)
+                    ->whereNotNull('start_time')
+                    ->groupBy('tracker_id');
+            })->get();
+            
+            // return $latestEvents = TrackerEvent::select('tracker_events.*')
+            //     ->join(
+            //         DB::raw('(SELECT tracker_id, MAX(start_time) as latest_start_time FROM tracker_events GROUP BY tracker_id) as latest_events'),
+            //         function ($join) {
+            //             $join->on('tracker_events.tracker_id', '=', 'latest_events.tracker_id')
+            //                 ->on('tracker_events.start_time', '=', 'latest_events.latest_start_time');
+            //         }
+            //     )
+            //     ->whereIn('tracker_events.tracker_id', $trackerIds)
+            //     ->get();
 
                 // return $latestEvent = $latestEvents->firstWhere('tracker_id',18);
 
