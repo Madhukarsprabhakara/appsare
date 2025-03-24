@@ -117,14 +117,14 @@ class StatusPageController extends Controller
             // Fetch all tracker events for the trackers in one query
             $trackerIds = $trackers->pluck('id');
         $trackerEvents = TrackerEvent::selectRaw("
-            DATE_TRUNC('day', start_time) AS day,
+            DATE_TRUNC('day', created_at) AS day,
             COUNT(CASE WHEN message = 'Success' THEN 1 END) AS successful_requests,
             COUNT(*) AS total_requests,
             tracker_id
         ")
         ->whereIn('tracker_id', $trackerIds)
-        ->whereNotNull('start_time')
-        ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
+        ->whereNotNull('created_at')
+        ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', created_at)"))
         ->get();
             // $trackerEvents = TrackerEvent::select(
             //     DB::raw("DATE_TRUNC('day', start_time) as day"),
@@ -145,7 +145,7 @@ class StatusPageController extends Controller
                 $query->select(DB::raw('MAX(id)'))
                     ->from('tracker_events')
                     ->whereIn('tracker_id', $trackerIds)
-                    ->whereNotNull('start_time')
+                    ->whereNotNull('created_at')
                     ->groupBy('tracker_id');
             })->get();
             

@@ -19,7 +19,7 @@
           <div class="mr-8">
             <UptimeIndicator :uptime_data="tracker.uptime" />
             <p class="text-sm mt-2 text-gray-500">
-            <a href="#" class="hover:underline">HTTP | Up every hour for past 24 hours</a>
+            <a href="#" class="hover:underline">HTTP | Status each day for past 60 days</a>
           </p>
           </div>
           <Menu as="div" class="relative inline-block text-left">

@@ -106,14 +106,14 @@ func performTask(db *sql.DB) {
 		wg.Add(1)
 		go func(id int, url string, team_id int) {
 			defer wg.Done()
-			startTimeWTz := time.Now().Format("2006-01-02 15:04:05")
+			startTimeWTz := time.Now().UTC().Format("2006-01-02 15:04:05")
 			startTime := time.Now()
 			startTimeEpoch := startTime.Unix()
 			resp, err := client.Head(url)
 			endTime := time.Now()
 			endTimeEpoch := endTime.Unix()
 			responseTime := time.Since(startTime).Seconds()
-			endTimeWTz := time.Now().Format("2006-01-02 15:04:05")
+			endTimeWTz := time.Now().UTC().Format("2006-01-02 15:04:05")
 			if err != nil {
 				var previous_status string
 				previous_status = getPreviousStatus(db, id)

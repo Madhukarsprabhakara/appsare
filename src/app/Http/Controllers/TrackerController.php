@@ -24,14 +24,14 @@ class TrackerController extends Controller
             // Fetch all tracker events for the trackers in one query
             $trackerIds = $trackers->pluck('id');
             $trackerEvents = TrackerEvent::select(
-                DB::raw("DATE_TRUNC('day', start_time) as day"),
+                DB::raw("DATE_TRUNC('day', created_at) as day"),
                 DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
                 DB::raw("COUNT(*) as total_requests"),
                 'tracker_id'
             )
                 ->whereIn('tracker_id', $trackerIds) // Fetch events for all trackers in one query
-                ->whereNotNull('start_time') // Optional: Exclude null start_time
-                ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
+                ->whereNotNull('created_at') // Optional: Exclude null start_time
+                ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', created_at)"))
                 ->get();
 
             // Group tracker events by tracker_id

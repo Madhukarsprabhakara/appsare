@@ -46,8 +46,8 @@ const last60Days = computed(() => {
       const daym = dayjs(data.day);
       
       
-      const normalizedDay = daym.utcOffset(420).format('YYYY-MM-DD'); // Normalize the day format
-      
+      const normalizedDay = daym.format('YYYY-MM-DD'); // Normalize the day format
+      console.log('normalizedDay:', normalizedDay);
       return normalizedDay === day.dayo;
     });
 
