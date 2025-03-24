@@ -71,9 +71,11 @@ const last60Days = computed(() => {
 const getBarClass = (uptime_percentage) => {
   if (uptime_percentage === null) {
     return 'bg-gray-500 hover:bg-gray-400'; // Gray for no data
+  }  else if (uptime_percentage === 100) {
+    return 'bg-green-500 hover:bg-green-400'; // Dark green for high uptime
   } else if (uptime_percentage >= 99) {
-    return 'bg-green-500 hover:bg-green-400'; // Green for high uptime
-  } else if (uptime_percentage >= 90) {
+    return 'bg-green-300 hover:bg-green-200'; // Lighter green for high uptime
+  } else if (uptime_percentage >= 97) {
     return 'bg-orange-500 hover:bg-orange-400'; // Orange for degraded uptime
   } else {
     return 'bg-red-500 hover:bg-red-400'; // Red for low uptime
