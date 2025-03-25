@@ -1,7 +1,8 @@
 <template>
+  <!-- {{ props.uptime_data }} -->
   <div class="flex space-x-1">
     <!-- Render bars for the last 60 days -->
-    <div v-for="(day, index) in last60Days" :key="index"
+    <div v-for="(day, index) in props.uptime_data" :key="index"
       v-tooltip="`${day.day} ${day.uptime_percentage !== null ? day.uptime_percentage + '%' : 'No Data'}`"
       :class="getBarClass(day.uptime_percentage)" class="h-7 w-1 rounded-md"></div>
   </div>

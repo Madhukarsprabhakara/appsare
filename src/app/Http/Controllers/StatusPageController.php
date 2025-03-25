@@ -116,16 +116,15 @@ class StatusPageController extends Controller
 
             // Fetch all tracker events for the trackers in one query
             $trackerIds = $trackers->pluck('id');
-        $trackerEvents = TrackerEvent::selectRaw("
-            DATE_TRUNC('day', created_at) AS day,
+            $trackerEvents = TrackerEvent::selectRaw("
+            DATE(created_at) AS day,
             COUNT(CASE WHEN message = 'Success' THEN 1 END) AS successful_requests,
             COUNT(*) AS total_requests,
-            tracker_id
-        ")
-        ->whereIn('tracker_id', $trackerIds)
-        ->whereNotNull('created_at')
-        ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', created_at)"))
-        ->get();
+            tracker_id")
+                ->whereIn('tracker_id', $trackerIds)
+                ->whereNotNull('created_at')
+                ->groupBy('tracker_id', DB::raw("DATE(created_at)"))
+                ->get();
             // $trackerEvents = TrackerEvent::select(
             //     DB::raw("DATE_TRUNC('day', start_time) as day"),
             //     DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
@@ -148,7 +147,7 @@ class StatusPageController extends Controller
                     ->whereNotNull('created_at')
                     ->groupBy('tracker_id');
             })->get();
-            
+
             // return $latestEvents = TrackerEvent::select('tracker_events.*')
             //     ->join(
             //         DB::raw('(SELECT tracker_id, MAX(start_time) as latest_start_time FROM tracker_events GROUP BY tracker_id) as latest_events'),
@@ -160,7 +159,7 @@ class StatusPageController extends Controller
             //     ->whereIn('tracker_events.tracker_id', $trackerIds)
             //     ->get();
 
-                // return $latestEvent = $latestEvents->firstWhere('tracker_id',18);
+            // return $latestEvent = $latestEvents->firstWhere('tracker_id',18);
 
 
             // Map trackers and attach uptime data and latest state
@@ -184,7 +183,7 @@ class StatusPageController extends Controller
 
                 return $tracker;
             });
-            
+            // return $trackersWithData;
             return Inertia::render('StatusPages/Publicv2', [
                 'statusPage' => $statusPage,
                 'trackers' => $trackersWithData,
