@@ -204,6 +204,10 @@ func main() {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
+	// Create another ticker that triggers every 5 minutes
+	ticker5m := time.NewTicker(5 * time.Minute)
+	defer ticker5m.Stop()
+
 	// Perform the task immediately at startup
 	performTask(db)
 
@@ -216,6 +220,14 @@ func main() {
 		}
 	}()
 
+	go func() {
+		for {
+			select {
+			case <-ticker5m.C:
+				performFiveMinuteTask(db)
+			}
+		}
+	}()
 	// Keep the main function running
 	select {}
 }

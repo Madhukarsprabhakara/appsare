@@ -36,6 +36,7 @@ Route::middleware([
     })->name('dashboard');
     // Route::get('/dashboard', [App\Http\Controllers\TrackerController::class, 'index'])->name('dashboard');
     #Trackers route
+    Route::get('/trackerana',[App\Http\Controllers\TrackerAnalyticsController::class, 'index'] )->name('trackerana.index');
     Route::get('/trackers', [App\Http\Controllers\TrackerController::class, 'index'])->name('trackers.index');
     Route::get('/trackers/create', [App\Http\Controllers\TrackerController::class, 'create'])->name('trackers.create');
     Route::post('/trackers', [App\Http\Controllers\TrackerController::class, 'store'])->name('trackers.store');
