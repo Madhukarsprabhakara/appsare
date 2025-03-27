@@ -1,8 +1,8 @@
 <template>
   <!-- {{ props.uptime_data.daily_sixty_day_uptime }} -->
   <div class="flex space-x-1">
-    
-    <div v-for="(day, index) in props.uptime_data.daily_sixty_day_uptime" :key="index"
+
+    <div v-if="props.uptime_data" v-for="(day, index) in props.uptime_data.daily_sixty_day_uptime" :key="index"
       v-tooltip="`${day.day} ${day.daily_sixty_day_uptime !== null ? day.daily_sixty_day_uptime + '%' : 'No Data'}`"
       :class="getBarClass(day.daily_sixty_day_uptime)" class="h-7 w-1 rounded-md"></div>
   </div>
@@ -12,7 +12,7 @@
 import { computed, defineProps } from 'vue';
 import dayjs from 'dayjs';
 import dayjsPluginUTC from 'dayjs-plugin-utc'
- 
+
 dayjs.extend(dayjsPluginUTC)
 // Accept uptime_data as a prop
 const props = defineProps({
@@ -37,30 +37,30 @@ const last60Days = computed(() => {
   }
 
   // console.log('Generated last60Days:', days);
-  
-  
- 
+
+
+
   // Merge uptime_data into the last 60 days
   // Merge uptime_data into the last 60 days
   return days.map((day) => {
     const matchingData = props.uptime_data.find((data) => {
       const daym = dayjs(data.day);
-      
-      
+
+
       const normalizedDay = daym.format('YYYY-MM-DD'); // Normalize the day format
       console.log('normalizedDay:', normalizedDay);
       return normalizedDay === day.dayo;
     });
 
     if (matchingData) {
-      
+
       return {
         ...matchingData,
         day: day.dayo, // Ensure the day is in normalized format
       };
     }
 
-    
+
     return {
       day: day.dayo, // Explicitly set the day field for default days
       uptime_percentage: null, // Keep uptime_percentage as null for no data
@@ -72,7 +72,7 @@ const last60Days = computed(() => {
 const getBarClass = (uptime_percentage) => {
   if (uptime_percentage === null) {
     return 'bg-gray-500 hover:bg-gray-400'; // Gray for no data
-  }  else if (uptime_percentage == 100) {
+  } else if (uptime_percentage == 100) {
     return 'bg-green-500 hover:bg-green-400'; // Dark green for high uptime
   } else if (uptime_percentage >= 99) {
     return 'bg-green-300 hover:bg-green-200'; // Lighter green for high uptime
