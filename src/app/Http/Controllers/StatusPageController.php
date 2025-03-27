@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\StatusPage;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\StatusPageTracker;
+use App\Models\Tracker;
+
 use App\Services\TrackerService;
 use App\Models\TrackerEvent;
 use Illuminate\Support\Facades\DB;
@@ -93,100 +94,17 @@ class StatusPageController extends Controller
         //
 
         try {
-            // return $uptimePercentages = TrackerEvent::select(
-            //     'tracker_id',
-            //     DB::raw("DATE_TRUNC('day', start_time) as day"),
-            //     DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
-            //     DB::raw("COUNT(*) as total_requests")
-            // )
-            //     ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
-            //     ->get()
-            //     ->map(function ($item) {
-            //         return [
-            //             'tracker_id' => $item->tracker_id,
-            //             'day' => $item->day,
-            //             'uptime_percentage' => round(($item->successful_requests / $item->total_requests) * 100, 2),
-            //         ];
-            //     });
+            
             $statusPage = StatusPage::where('url_slug', $url_slug)->first();
             if (!$statusPage) {
                 abort(404, 'Not Found');
             }
+            // return Tracker::find(7)->latestEvent;
             $trackers = $statusPage->trackers;
-
-            // Fetch all tracker events for the trackers in one query
-            $trackerIds = $trackers->pluck('id');
-            $trackerEvents = TrackerEvent::selectRaw("
-            DATE(created_at) AS day,
-            COUNT(CASE WHEN message = 'Success' THEN 1 END) AS successful_requests,
-            COUNT(*) AS total_requests,
-            tracker_id")
-                ->whereIn('tracker_id', $trackerIds)
-                ->whereNotNull('created_at')
-                ->groupBy('tracker_id', DB::raw("DATE(created_at)"))
-                ->get();
-            // $trackerEvents = TrackerEvent::select(
-            //     DB::raw("DATE_TRUNC('day', start_time) as day"),
-            //     DB::raw("COUNT(CASE WHEN message = 'Success' THEN 1 END) as successful_requests"),
-            //     DB::raw("COUNT(*) as total_requests"),
-            //     'tracker_id'
-            // )
-            //     ->whereIn('tracker_id', $trackerIds) // Fetch events for all trackers in one query
-            //     ->whereNotNull('start_time') // Exclude null start_time
-            //     ->groupBy('tracker_id', DB::raw("DATE_TRUNC('day', start_time)"))
-            //     ->get();
-
-            // Group tracker events by tracker_id
-            $eventsByTracker = $trackerEvents->groupBy('tracker_id');
-
-            // Fetch the latest event for all trackers in one query
-            $latestEvents = TrackerEvent::whereIn('id', function ($query) use ($trackerIds) {
-                $query->select(DB::raw('MAX(id)'))
-                    ->from('tracker_events')
-                    ->whereIn('tracker_id', $trackerIds)
-                    ->whereNotNull('created_at')
-                    ->groupBy('tracker_id');
-            })->get();
-
-            // return $latestEvents = TrackerEvent::select('tracker_events.*')
-            //     ->join(
-            //         DB::raw('(SELECT tracker_id, MAX(start_time) as latest_start_time FROM tracker_events GROUP BY tracker_id) as latest_events'),
-            //         function ($join) {
-            //             $join->on('tracker_events.tracker_id', '=', 'latest_events.tracker_id')
-            //                 ->on('tracker_events.start_time', '=', 'latest_events.latest_start_time');
-            //         }
-            //     )
-            //     ->whereIn('tracker_events.tracker_id', $trackerIds)
-            //     ->get();
-
-            // return $latestEvent = $latestEvents->firstWhere('tracker_id',18);
-
-
-            // Map trackers and attach uptime data and latest state
-            $trackersWithData = $trackers->map(function ($tracker) use ($eventsByTracker, $latestEvents) {
-                // Attach uptime data
-                $uptimeData = $eventsByTracker->get($tracker->id, collect())->map(function ($item) {
-                    return [
-                        'day' => $item->day,
-                        'uptime_percentage' => round(($item->successful_requests / $item->total_requests) * 100, 2),
-                    ];
-                });
-
-                $tracker->uptime = $uptimeData;
-
-                // Attach latest event data
-                $latestEvent = $latestEvents->firstWhere('tracker_id', $tracker->id);
-                $tracker->latest_message = $latestEvent ? $latestEvent->message : null;
-                $tracker->state = $latestEvent && $latestEvent->message === 'Success'
-                    ? 'Operational'
-                    : 'Down';
-
-                return $tracker;
-            });
             // return $trackersWithData;
             return Inertia::render('StatusPages/Publicv2', [
                 'statusPage' => $statusPage,
-                'trackers' => $trackersWithData,
+                'trackers' => $trackers,
             ]);
         } catch (\Exception $e) {
             return $e->getMessage();

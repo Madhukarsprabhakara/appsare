@@ -17,7 +17,7 @@
         </div>
         <div class="flex shrink-0 self-center">
           <div class="mr-8">
-            <UptimeIndicator :uptime_data="tracker.uptime" />
+            <UptimeIndicator :uptime_data="tracker.analytics" />
             <p class="text-sm mt-2 text-gray-500">
             <a href="#" class="hover:underline">HTTP | Status each day for past 60 days</a>
           </p>

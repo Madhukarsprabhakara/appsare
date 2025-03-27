@@ -36,6 +36,7 @@ Route::middleware([
     })->name('dashboard');
     // Route::get('/dashboard', [App\Http\Controllers\TrackerController::class, 'index'])->name('dashboard');
     #Trackers route
+    Route::get('/trackerana',[App\Http\Controllers\TrackerAnalyticsController::class, 'index'] )->name('trackerana.index');
     Route::get('/trackers', [App\Http\Controllers\TrackerController::class, 'index'])->name('trackers.index');
     Route::get('/trackers/create', [App\Http\Controllers\TrackerController::class, 'create'])->name('trackers.create');
     Route::post('/trackers', [App\Http\Controllers\TrackerController::class, 'store'])->name('trackers.store');
@@ -53,6 +54,9 @@ Route::middleware([
     Route::put('/statuspages/{status_page}', [App\Http\Controllers\StatusPageController::class, 'update'])->name('statuspages.update');
     Route::delete('/statuspages/{status_page}', [App\Http\Controllers\StatusPageController::class, 'destroy'])->name('statuspages.destroy');
     
+    #Analytics route
+    Route::post('/trackeranalytics', [App\Http\Controllers\TrackerAnalyticsController::class, 'store'])->name('analytics.store');
+
     #Notifications route
     Route::get('/notifications',function() {
         return Inertia::render('Notifications/Show');
