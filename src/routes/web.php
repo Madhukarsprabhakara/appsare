@@ -54,6 +54,9 @@ Route::middleware([
     Route::put('/statuspages/{status_page}', [App\Http\Controllers\StatusPageController::class, 'update'])->name('statuspages.update');
     Route::delete('/statuspages/{status_page}', [App\Http\Controllers\StatusPageController::class, 'destroy'])->name('statuspages.destroy');
     
+    #Analytics route
+    Route::post('/trackeranalytics', [App\Http\Controllers\TrackerAnalyticsController::class, 'store'])->name('analytics.store');
+
     #Notifications route
     Route::get('/notifications',function() {
         return Inertia::render('Notifications/Show');

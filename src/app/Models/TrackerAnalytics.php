@@ -8,4 +8,7 @@ class TrackerAnalytics extends Model
 {
     //
     protected $guarded = [];
+    protected $casts = [
+        'daily_sixty_day_uptime' => 'array',
+    ];
 }

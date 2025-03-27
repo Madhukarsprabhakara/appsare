@@ -11,6 +11,6 @@ class StatusPage extends Model
 
     public function trackers()
     {
-        return $this->belongsToMany(Tracker::class, 'status_page_trackers', 'status_page_id', 'tracker_id');
+        return $this->belongsToMany(Tracker::class, 'status_page_trackers', 'status_page_id', 'tracker_id')->with('analytics','latestEvent');    ;
     }
 }

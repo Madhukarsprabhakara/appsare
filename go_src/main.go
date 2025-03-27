@@ -34,6 +34,34 @@ func getPreviousStatus(db *sql.DB, tracker_id int) string {
 func compareStatuses(db *sql.DB, tracker_id int, previous_status string, current_status string) {
 
 }
+func updateTrackerAnalytics(token string) {
+	// Create the POST request
+	req, err := http.NewRequest("POST", "https://appsare.com/trackeranalytics", nil)
+	if err != nil {
+		log.Printf("Error creating request: %v\n", err)
+		return
+	}
+
+	// Set the authorization header with the OAuth2 token
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+
+	// Send the POST request
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("Error sending request: %v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Check the response status
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("Error response from server: %v\n", resp.Status)
+	} else {
+		fmt.Printf("Tracker analytics updated successfully\n")
+	}
+}
 func sendNotifications(url string, tracker_id int, token string, service_type int) {
 	// Create the data to be sent in the POST request
 	data := map[string]interface{}{
@@ -190,7 +218,12 @@ func performTask(db *sql.DB) {
 	duration := time.Since(start)
 	fmt.Println("Duration:", duration)
 }
+func performFifteenMinuteTask() {
+	// Your specific task goes here
+	fmt.Println("Performing the 15-minute task at", time.Now().Format("2006-01-02 15:04:05"))
+	updateTrackerAnalytics("FwdJGH4yV1dW84CwnGPl2E58CEUKGTPCfwzO3HNhe9476059")
 
+}
 func main() {
 	//Connect to the db
 	db, err := sql.Open("pgx", "host=ar_postgres port=5432 user=postgres password=password dbname=appsare sslmode=disable")
@@ -205,12 +238,12 @@ func main() {
 	defer ticker.Stop()
 
 	// Create another ticker that triggers every 5 minutes
-	ticker5m := time.NewTicker(5 * time.Minute)
-	defer ticker5m.Stop()
+	ticker15m := time.NewTicker(15 * time.Minute)
+	defer ticker15m.Stop()
 
 	// Perform the task immediately at startup
 	performTask(db)
-
+	performFifteenMinuteTask()
 	go func() {
 		for {
 			select {
@@ -223,8 +256,8 @@ func main() {
 	go func() {
 		for {
 			select {
-			case <-ticker5m.C:
-				performFiveMinuteTask(db)
+			case <-ticker15m.C:
+				performFifteenMinuteTask()
 			}
 		}
 	}()

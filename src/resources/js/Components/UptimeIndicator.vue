@@ -1,10 +1,10 @@
 <template>
-  <!-- {{ props.uptime_data }} -->
+  <!-- {{ props.uptime_data.daily_sixty_day_uptime }} -->
   <div class="flex space-x-1">
-    <!-- Render bars for the last 60 days -->
-    <div v-for="(day, index) in props.uptime_data" :key="index"
-      v-tooltip="`${day.day} ${day.uptime_percentage !== null ? day.uptime_percentage + '%' : 'No Data'}`"
-      :class="getBarClass(day.uptime_percentage)" class="h-7 w-1 rounded-md"></div>
+    
+    <div v-for="(day, index) in props.uptime_data.daily_sixty_day_uptime" :key="index"
+      v-tooltip="`${day.day} ${day.daily_sixty_day_uptime !== null ? day.daily_sixty_day_uptime + '%' : 'No Data'}`"
+      :class="getBarClass(day.daily_sixty_day_uptime)" class="h-7 w-1 rounded-md"></div>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ dayjs.extend(dayjsPluginUTC)
 // Accept uptime_data as a prop
 const props = defineProps({
   uptime_data: {
-    type: Array,
+    type: [Array, Object],
     required: true,
   },
 });
@@ -72,7 +72,7 @@ const last60Days = computed(() => {
 const getBarClass = (uptime_percentage) => {
   if (uptime_percentage === null) {
     return 'bg-gray-500 hover:bg-gray-400'; // Gray for no data
-  }  else if (uptime_percentage === 100) {
+  }  else if (uptime_percentage == 100) {
     return 'bg-green-500 hover:bg-green-400'; // Dark green for high uptime
   } else if (uptime_percentage >= 99) {
     return 'bg-green-300 hover:bg-green-200'; // Lighter green for high uptime

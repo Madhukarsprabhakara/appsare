@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\TrackerAnalytics;
 use Illuminate\Http\Request;
 use App\Models\TrackerEvent;
+use App\Models\Tracker;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Jobs\TrackerAnalyticsUpdate;
 
 class TrackerAnalyticsController extends Controller
 {
@@ -29,7 +31,7 @@ class TrackerAnalyticsController extends Controller
           ELSE (COUNT(CASE WHEN message = '$succ' THEN 1 END) * 1.0 / COUNT(*)) * 100
         END,2) AS daily_sixty_day_uptime
         from tracker_events 
-        where tracker_id in (select id from trackers where team_id = 3) and created_at >= '$sixtyDaysAgo'
+        where tracker_id in (select id from trackers) and created_at >= '$sixtyDaysAgo'
         group by date(created_at), tracker_id
         order by date(created_at), tracker_id"));
 
@@ -60,7 +62,15 @@ class TrackerAnalyticsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dispatch job to update the analytics data
+        try {
+            TrackerAnalyticsUpdate::dispatch();
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
+        
     }
 
     /**

@@ -53,6 +53,6 @@ class Team extends JetstreamTeam
         ->where(function ($query) {
             $query->whereNull('is_archived')
                   ->orWhere('is_archived', false);
-        });
+        })->with('analytics','latestEvent');
     }
 }

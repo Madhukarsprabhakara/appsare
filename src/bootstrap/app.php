@@ -29,8 +29,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             
             'http://localhost/snotifications',
+            'http://localhost/trackeranalytics',
             '/snotifications',
+            '/trackeranalytics',
             'https://appsare.com/snotifications',
+            'https://appsare.com/trackeranalytics',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

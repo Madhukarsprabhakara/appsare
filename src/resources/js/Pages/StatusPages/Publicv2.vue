@@ -152,7 +152,7 @@
 
                 <div v-for="action in actions" :key="action.name" class="bg-white flex justify-center items-center">
                   <div>
-
+                   
                     <!-- <span :class="[action.iconBackground, action.iconForeground, 'inline-flex rounded-lg p-3 ring-4 ring-white']">
                         <component :is="action.icon" class="size-6" aria-hidden="true" />
                       </span> -->
@@ -162,14 +162,14 @@
                     <div class=" pb-3 sm:flex sm:items-center sm:justify-between">
                       <h3 class="text-base font-semibold text-gray-900">{{ action.url }}</h3>
                       <div class="mt-3 sm:ml-4 sm:mt-0">
-                        <span v-if="action.state === 'Operational'"
+                        <span v-if="action.latest_event.message === 'Success'"
                           class="inline-flex items-center gap-x-1.5 rounded-md bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700">
                           <svg class="size-1.5 fill-green-500" viewBox="0 0 6 6" aria-hidden="true">
                             <circle cx="3" cy="3" r="3" />
                           </svg>
                           Operational
                         </span>
-                        <span v-if="action.state === 'Down'"
+                        <span v-if="action.latest_event.message === 'Failed'"
                           class="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700">
                           <svg class="size-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
                             <circle cx="3" cy="3" r="3" />
@@ -184,7 +184,7 @@
 
 
                     
-                    <UptimeIndicator :uptime_data="action.uptime"/>
+                    <UptimeIndicator :uptime_data="action.analytics"/>
                     <!-- <p class="mt-2 text-sm text-gray-500">Doloribus dolores nostrum quia qui natus officia quod et dolorem. Sit repellendus qui ut at blanditiis et quo et molestiae.</p> -->
                   </div>
 
