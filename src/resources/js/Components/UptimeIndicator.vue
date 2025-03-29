@@ -18,7 +18,7 @@ dayjs.extend(dayjsPluginUTC)
 const props = defineProps({
   uptime_data: {
     type: [Array, Object],
-    required: true,
+    required: false,
   },
 });
 

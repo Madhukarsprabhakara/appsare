@@ -8,6 +8,7 @@
       ```
     -->
     <div>
+
         <Head :title="title" />
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
@@ -51,6 +52,7 @@
                                                         {{ item.name }}
                                                     </a>
                                                 </li>
+
                                             </ul>
                                         </li>
                                         <li>
@@ -97,14 +99,27 @@
                         <li>
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li v-for="item in navigation" :key="item.name">
-
-                                    <NavLink :href="item.href"
+                                    <Link :href="item.href"
+                                        :class="[route().current(item.namedRoute) ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold']">
+                                    <component :is="item.icon"
+                                        :class="[route().current(item.namedRoute) ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'size-6 shrink-0']"
+                                        aria-hidden="true" />
+                                    {{ item.name }}
+                                    </Link>
+                                    <!-- <NavLink :href="item.href"
                                         :class="[route().current(item.href) ? ' text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold']">
                                         <component :is="item.icon"
                                             :class="[route().current(item.href) ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600', 'size-6 shrink-0']"
                                             aria-hidden="true" />
                                         {{ item.name }}
-                                    </NavLink>
+                                    </NavLink> -->
+                                </li>
+                                <li>
+                                    <!-- <Link :href="route('trackers.index')"
+                                                        :class="[route().current('trackers.index') ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600', 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold']">
+                                                        <HomeIcon class="size-6 shrink-0" aria-hidden="true" />
+                                                        Trackers
+                                                    </Link> -->
                                 </li>
                             </ul>
                         </li>
@@ -242,7 +257,7 @@
                                     <span class="hidden lg:flex lg:items-center">
                                         <span class="ml-4 text-sm/6 font-medium text-gray-500" aria-hidden="true">{{
                                             $page.props.auth.user.name
-                                            }}</span>
+                                        }}</span>
                                         <ChevronDownIcon class="ml-2 size-5 text-gray-400" aria-hidden="true" />
                                     </span>
                                 </MenuButton>
@@ -364,11 +379,11 @@ const logout = () => {
     router.post(route('logout'));
 };
 const navigation = [
-    { name: 'Trackers', href: route('trackers.index'), icon: HomeIcon, current: false },
-    { name: 'Status Pages', href: route('statuspages.index'), icon: PresentationChartLineIcon, current: false },
-    { name: 'Team Members', href: route('teams.show', usePage().props.auth.user.current_team), icon: UsersIcon, current: false },
-    { name: 'Integrations', href: route('integrations.index'), icon: LinkIcon, current: false },
-    { name: 'Notification Settings', href: route('notification_settings.index'), icon: BellIcon, current: false },
+    { name: 'Trackers', href: route('trackers.index'), icon: HomeIcon, current: false, namedRoute: 'trackers.index' },
+    { name: 'Status Pages', href: route('statuspages.index'), icon: PresentationChartLineIcon, current: false, namedRoute: 'statuspages.index' },
+    { name: 'Team Members', href: route('teams.show', usePage().props.auth.user.current_team), icon: UsersIcon, current: false, namedRoute: 'teams.show' },
+    { name: 'Integrations', href: route('integrations.index'), icon: LinkIcon, current: false, namedRoute: 'integrations.index' },
+    { name: 'Notification Settings', href: route('notification_settings.index'), icon: BellIcon, current: false, namedRoute: 'notification_settings.index' },
 
 
 ]
