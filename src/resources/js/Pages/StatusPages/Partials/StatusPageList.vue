@@ -34,19 +34,19 @@
                         <MenuItems
                             class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                             <MenuItem v-slot="{ active }">
-                                <a :href="`/status-page/${statusPage.id}/edit`"
+                                <Link :href="route('statuspages.edit', statusPage.id)"
                                     :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-sm/6 text-gray-900']">Edit<span
-                                        class="sr-only">, {{ statusPage.name }}</span></a>
+                                        class="sr-only">, {{ statusPage.name }}</span></Link>
                             </MenuItem>
                             <MenuItem v-slot="{ active }">
-                                <a href="#"
+                                <Link href="#"
                                     :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-sm/6 text-gray-900']">Move<span
-                                        class="sr-only">, {{ statusPage.name }}</span></a>
+                                        class="sr-only">, {{ statusPage.name }}</span></Link>
                             </MenuItem>
                             <MenuItem v-slot="{ active }">
-                                <a href="#"
+                                <Link href="#"
                                     :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-sm/6 text-gray-900']">Delete<span
-                                        class="sr-only">, {{ statusPage.name }}</span></a>
+                                        class="sr-only">, {{ statusPage.name }}</span></Link>
                             </MenuItem>
                         </MenuItems>
                     </transition>
@@ -60,7 +60,8 @@
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
-import { usePage } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
+
 
 
 // Access the statusPages prop from Inertia's usePage

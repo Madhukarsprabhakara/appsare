@@ -114,9 +114,15 @@ class StatusPageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(StatusPage $statusPage)
+    public function edit(StatusPage $statusPage, TrackerService $trackerService)
     {
         //
+       // return $statusPage->load('trackersWithoutEvents');
+       $trackers = $trackerService->getTrackersOnly(auth()->user()->currentTeam); // Fetch all trackers
+        return Inertia::render('StatusPages/Edit', [
+            'statusPage' => $statusPage->load('trackersWithoutEvents'), // Include associated trackers
+            'trackers' => $trackers,
+        ]);
     }
 
     /**
@@ -125,6 +131,25 @@ class StatusPageController extends Controller
     public function update(Request $request, StatusPage $statusPage)
     {
         //
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'url_slug' => 'required|string|max:255',
+                'selectedOptions' => 'required|array',
+
+            ]);
+            $statusPage->update([
+                'name' => $validated['name'],
+                'url_slug' => $validated['url_slug'],
+            ]);
+            $trackerIds = collect($validated['selectedOptions'])->pluck('value')->toArray();
+            $statusPage->trackers()->detach();
+            $statusPage->trackers()->attach($trackerIds);
+            return back(303);
+        }
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

@@ -9,6 +9,10 @@ class TrackerService {
         
         return $team->trackers;
     }
+    public function getTrackersOnly(Team $team)
+    {
+        return $team->trackersOnly;
+    }
     public function storeTracker(Array $tracker_to_save)
     {
         $tracker=Tracker::create($tracker_to_save);
