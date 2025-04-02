@@ -55,11 +55,11 @@
     <!-- Delete Token Confirmation Modal -->
     <ConfirmationModal :show="slackConnectionBeingDeleted != null" @close="slackConnectionBeingDeleted = null">
             <template #title>
-                Delete Slack Connection
+                Delete Status Page
             </template>
 
             <template #content>
-                Are you sure you would like to disconnect from this Slack account? This will delete the token and notifications will no longer be sent. You may reconnect at any time.
+                Are you sure you want to delete the Status Page? This will delete the page and remove all tracker associations(<span class="font-bold underline">trackers are not deleted</span>). You can always recreate the page.
             </template>
 
             <template #footer>
