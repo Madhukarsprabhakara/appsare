@@ -1,4 +1,5 @@
 <template>
+    <div>
     <ul role="list"
         class="divide-y divide-gray-100  bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
         <li v-for="statusPage in statusPages" :key="statusPage.id"
@@ -38,33 +39,76 @@
                                     :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-sm/6 text-gray-900']">Edit<span
                                         class="sr-only">, {{ statusPage.name }}</span></Link>
                             </MenuItem>
+                           
                             <MenuItem v-slot="{ active }">
-                                <Link href="#"
-                                    :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-sm/6 text-gray-900']">Move<span
-                                        class="sr-only">, {{ statusPage.name }}</span></Link>
-                            </MenuItem>
-                            <MenuItem v-slot="{ active }">
-                                <Link href="#"
+                                <a @click="confirmSlackConnectionDeletion(statusPage.id)" href="#" 
                                     :class="[active ? 'bg-gray-50 outline-none' : '', 'block px-3 py-1 text-sm/6 text-gray-900']">Delete<span
-                                        class="sr-only">, {{ statusPage.name }}</span></Link>
+                                        class="sr-only">, {{ statusPage.name }}</span></a>
                             </MenuItem>
                         </MenuItems>
                     </transition>
                 </Menu>
             </div>
+             
         </li>
     </ul>
+    <!-- Delete Token Confirmation Modal -->
+    <ConfirmationModal :show="slackConnectionBeingDeleted != null" @close="slackConnectionBeingDeleted = null">
+            <template #title>
+                Delete Slack Connection
+            </template>
+
+            <template #content>
+                Are you sure you would like to disconnect from this Slack account? This will delete the token and notifications will no longer be sent. You may reconnect at any time.
+            </template>
+
+            <template #footer>
+                <SecondaryButton @click="slackConnectionBeingDeleted = null">
+                    Cancel
+                </SecondaryButton>
+
+                <DangerButton
+                    class="ms-3"
+                    :class="{ 'opacity-25': deleteSlackConnectionForm.processing }"
+                    :disabled="deleteSlackConnectionForm.processing"
+                    @click="deleteSlackConnection"
+                >
+                    Delete
+                </DangerButton>
+            </template>
+    </ConfirmationModal>
+</div>
 </template>
 
 <script setup>
-
+import { ref } from 'vue';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid';
-import { usePage, Link } from '@inertiajs/vue3';
-
+import { usePage, Link, useForm, router } from '@inertiajs/vue3';
+import ConfirmationModal from '@/Components/ConfirmationModal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import DangerButton from '@/Components/DangerButton.vue';
 
 
 // Access the statusPages prop from Inertia's usePage
 const { props } = usePage();
-const statusPages = props.statusPages;
+const statusPages = ref(props.statusPages);
+const slackConnectionBeingDeleted = ref(null);
+const deleteSlackConnectionForm = useForm({});
+
+const confirmSlackConnectionDeletion = (slack_connection_id) => {
+    
+    slackConnectionBeingDeleted.value = slack_connection_id;
+    
+    
+};
+const deleteSlackConnection = () => {
+    deleteSlackConnectionForm.delete(route('statuspages.destroy',slackConnectionBeingDeleted.value), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => (slackConnectionBeingDeleted.value = null, 
+        router.visit('/statuspages')),
+    });
+    console.log( props.statusPages);
+};
 </script>

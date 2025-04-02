@@ -94,7 +94,7 @@ class StatusPageController extends Controller
         //
 
         try {
-            
+
             $statusPage = StatusPage::where('url_slug', $url_slug)->first();
             if (!$statusPage) {
                 abort(404, 'Not Found');
@@ -117,8 +117,8 @@ class StatusPageController extends Controller
     public function edit(StatusPage $statusPage, TrackerService $trackerService)
     {
         //
-       // return $statusPage->load('trackersWithoutEvents');
-       $trackers = $trackerService->getTrackersOnly(auth()->user()->currentTeam); // Fetch all trackers
+        // return $statusPage->load('trackersWithoutEvents');
+        $trackers = $trackerService->getTrackersOnly(auth()->user()->currentTeam); // Fetch all trackers
         return Inertia::render('StatusPages/Edit', [
             'statusPage' => $statusPage->load('trackersWithoutEvents'), // Include associated trackers
             'trackers' => $trackers,
@@ -146,8 +146,7 @@ class StatusPageController extends Controller
             $statusPage->trackers()->detach();
             $statusPage->trackers()->attach($trackerIds);
             return back(303);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -158,5 +157,15 @@ class StatusPageController extends Controller
     public function destroy(StatusPage $statusPage)
     {
         //
+        // Delete the status page and its associated trackers
+        $statusPage->trackers()->detach();
+        // Optionally, you can also delete the status page itself
+        $status = $statusPage->delete();
+        if ($status) {
+            return redirect()->route('statuspages.index', [], 303);
+        }
+        return response()->json([
+            'message' => 'Failed to delete status page'
+        ], 500);
     }
 }
