@@ -13,4 +13,8 @@ class StatusPage extends Model
     {
         return $this->belongsToMany(Tracker::class, 'status_page_trackers', 'status_page_id', 'tracker_id')->with('analytics','latestEvent');    ;
     }
+    public function trackersWithoutEvents()
+    {
+        return $this->belongsToMany(Tracker::class, 'status_page_trackers', 'status_page_id', 'tracker_id');
+    }
 }

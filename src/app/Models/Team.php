@@ -55,4 +55,8 @@ class Team extends JetstreamTeam
                   ->orWhere('is_archived', false);
         })->with('analytics'); //,'latestEvent'
     }
+    public function trackersOnly()
+    {
+        return $this->hasMany(Tracker::class, 'team_id');
+    }
 }
