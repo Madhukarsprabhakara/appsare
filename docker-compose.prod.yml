@@ -3,20 +3,7 @@ networks:
   appsare:
     name: appsare
 services:
-  ar_postgres:
-    image: postgres:14.12
-    container_name: ar_postgres
-    networks:
-      - appsare
-    ports:
-      - 5433:5432
-    
-    volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=appsare
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+  
 
   ar_php:
     build:
@@ -35,7 +22,6 @@ services:
       - ./data/certbot/www:/var/www/certbot
     depends_on:
       - ar_php
-      - ar_postgres
     networks:
       - appsare
     ports:
@@ -97,8 +83,6 @@ services:
     depends_on:
       - ar_nginx
       - ar_php
-      - ar_postgres
-      - ar_go
     working_dir: /var/www/html
     networks:
       - appsare
