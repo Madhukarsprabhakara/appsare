@@ -35,7 +35,6 @@ services:
     container_name: ar_nginx
     depends_on:
       - ar_php
-      - ar_postgres
     networks:
       - appsare
     ports:
@@ -108,8 +107,8 @@ services:
     depends_on:
       - ar_nginx
       - ar_php
-      - ar_postgres
-      - ar_go
+     
+     
 
     volumes:
       - ./src:/var/www/html
