@@ -22,7 +22,8 @@ public function index(SlackService $slackService, UserService $userService, Push
             $pushoverConnection=$pushoverService->getPushoverConnection($userService->getLoggedinUserId());
             return Inertia::render('Integrations/Show', [
                 'slackConnection' => $slackConnection,
-                'pushoverConnection' => $pushoverConnection
+                'pushoverConnection' => $pushoverConnection,
+                'basecampConnection' => null,
             ]);
         }
         catch (\Exception $e) {
