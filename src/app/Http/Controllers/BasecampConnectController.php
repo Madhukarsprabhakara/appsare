@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Http;
 use App\Models\BasecampConnect;
 use Illuminate\Http\Request;
 use App\Services\BasecampService;
+
 class BasecampConnectController extends Controller
 {
     /**
@@ -16,30 +18,28 @@ class BasecampConnectController extends Controller
     }
     public function redirect(BasecampService $basecampService)
     {
-        $verificationCodeUrl=$basecampService->getBasecampVerificationCodeUrl();
+        $verificationCodeUrl = $basecampService->getBasecampVerificationCodeUrl();
         return \Redirect::to($verificationCodeUrl);
-        
     }
     public function handleCallback(Request $request, BasecampService $basecampService)
     {
         //
         try {
-            $data=$request->all();
-            $code=$data['code'];
-             $token=$basecampService->getBasecampToken($code);
-             $token->code=$code;
-               
-                return $token;
-            $basecamp_connect=BasecampConnect::where('team_id', \Auth::user()->currentTeam->id)->first();
-            if ($basecamp_connect)
-            {
-                $basecamp_connect->basecamp_code=$code;
-                $basecamp_connect->save();
+            $data = $request->all();
+            if (!isset($data['code'])) {
                 return \Redirect::route('integrations.index');
             }
-        }
-        catch (\Exception $e)
-        {
+            $code = $data['code'];
+            $token_response = $basecampService->getBasecampTokenResponse($code);
+            $token_response_array = json_decode($token_response, true);
+            $token_response_array_for_saving=$basecampService->getBasecampTokenArray($token_response_array, $code, \Auth::user()->currentTeam->id, $token_response_array['expires_in'],now()->addSeconds($token_response_array['expires_in'])->format('Y-m-d H:i:s'));
+            $status=$basecampService->saveBasecampTokenResponse($token_response_array_for_saving);
+            
+            
+            if ($status) {
+                return \Redirect::route('integrations.index');
+            }
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -49,8 +49,8 @@ class BasecampConnectController extends Controller
     public function create()
     {
         //
-        
-        
+
+
 
         $response = Http::asForm()->post('https://launchpad.37signals.com/authorization/token', [
             'type' => 'web_server',
@@ -59,7 +59,7 @@ class BasecampConnectController extends Controller
             'client_secret' => 'c3391ee3bfebd0f10a0abc9ec5b799f1729f7c9c',
             'code' => '42a42250',
         ]);
-        
+
         if ($response->successful()) {
             $data = $response->json();
             // Handle the response data

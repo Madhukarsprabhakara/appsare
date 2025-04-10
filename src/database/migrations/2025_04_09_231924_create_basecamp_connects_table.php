@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('basecamp_connects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained();
+            $table->foreignId('team_id')->unique()->constrained();
             $table->text('code')->nullable();
             $table->text('access_token')->nullable();
             $table->text('refresh_token')->nullable();
             $table->integer('expires_in')->nullable();
-            $table->date('expires_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
