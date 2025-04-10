@@ -39,5 +39,12 @@ return [
         'base_redirect_success' => env('PUSHOVER_REDIRECT_SUCCESS'),
         'base_redirect_failure' => env('PUSHOVER_REDIRECT_FAILURE'),
     ],
+    'basecamp' => [
+        'client_id' => env('BASECAMP_CLIENT_ID'),
+        'client_secret' => env('BASECAMP_CLIENT_SECRET'),
+        'temp_code_url'=>env('BASECAMP_TEMP_CODE_URL'),
+        'api_auth_url'=> env('BASECAMP_API_AUTH_URL'),
+        'redirect' => 'https://appsare.com/auth/basecamp/callback',
+    ],
 
 ];
