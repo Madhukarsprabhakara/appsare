@@ -43,4 +43,20 @@ class BasecampService
         $token_response_array['code'] = Crypt::encryptString($code);
         return $token_response_array;
     }
+    public function getBasecampConnection($team_id)
+    {
+        $basecamp_connect = BasecampConnect::where('team_id', $team_id)->first();
+        if ($basecamp_connect) {
+            return $basecamp_connect;
+        }
+        return false;
+    }
+    public function getBasecampToken($team_id)
+    {
+        $basecamp_connect = $this->getBasecampConnection($team_id);
+        if ($basecamp_connect) {
+            return Crypt::decryptString($basecamp_connect->access_token);
+        }
+        return false;
+    }
 }

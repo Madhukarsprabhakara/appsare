@@ -71,7 +71,7 @@ const updatePushoverChannelId = () => {
         </template>
 
         <template #description>
-            Connect your Pushover account to receive push notifications on your Pushover devices.
+            Connect your Pushover account to receive push notifications on your Pushover devices. You must already have a Pushover account and be loggedin to your Pushover account in order to connect.
         </template>
 
         <template #form>

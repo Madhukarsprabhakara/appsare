@@ -13,8 +13,8 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 const form = useForm({
     _method: 'PUT',
-    name: usePage().props.pushoverConnection ? usePage().props.pushoverConnection.Pushover_channel_id : '',
-    id: usePage().props.pushoverConnection ? usePage().props.pushoverConnection.id : '',
+    name: usePage().props.basecampConnection ? usePage().props.pushoverConnection.Pushover_channel_id : '',
+    id: usePage().props.basecampConnection ? usePage().props.basecampConnection.id : '',
 });
 const PushoverConnectionBeingDeleted = ref(null);
 const deletePushoverConnectionForm = useForm({});
@@ -26,7 +26,7 @@ const confirmPushoverConnectionDeletion = (Pushover_connection_id) => {
 };
 
 const deletePushoverConnection = () => {
-    deletePushoverConnectionForm.delete(route('pushover.destroy', { 'pushover_connect': PushoverConnectionBeingDeleted.value }), {
+    deletePushoverConnectionForm.delete(route('basecamp.destroy', { 'basecamp_connect': PushoverConnectionBeingDeleted.value }), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => (PushoverConnectionBeingDeleted.value = null),
@@ -85,7 +85,7 @@ const updatePushoverChannelId = () => {
                 <div v-else class="flex items-center mt-2">
 
                     <DangerButton type="button"
-                        @click.prevent="confirmPushoverConnectionDeletion($page.props.pushoverConnection.id)"
+                        @click.prevent="confirmPushoverConnectionDeletion($page.props.basecampConnection.id)"
                         :disabled="deletePushoverConnectionForm.processing"
                         class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white  hover:bg-red-500 ">
                         <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
@@ -112,11 +112,11 @@ const updatePushoverChannelId = () => {
     <!-- Delete Token Confirmation Modal -->
     <ConfirmationModal :show="PushoverConnectionBeingDeleted != null" @close="PushoverConnectionBeingDeleted = null">
         <template #title>
-            Delete Pushover Connection
+            Delete Basecamp Connection
         </template>
 
         <template #content>
-            Are you sure you would like to disconnect from this Pushover account? This will delete the token and
+            Are you sure you would like to disconnect from this Basecamp account? This will delete the token and
             notifications will no longer be sent. You may reconnect at any time.
         </template>
 
