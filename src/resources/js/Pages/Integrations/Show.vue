@@ -2,6 +2,7 @@
 import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import UpdateChannelId from '@/Pages/Integrations/Slack/UpdateChannelId.vue';  
 import ConnectPushover from '@/Pages/Integrations/Pushover/ConnectPushover.vue';
+import ConnectBasecamp from '@/Pages/Integrations/Basecamp/ConnectBasecamp.vue';
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue';
@@ -29,6 +30,8 @@ defineProps({
                     
                     <SectionBorder />
                     <ConnectPushover />
+                    <SectionBorder />
+                    <connectBasecamp />
 
                 </div>
                 <!--<div v-if="$page.props.jetstream.canUpdateProfileInformation">

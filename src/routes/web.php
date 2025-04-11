@@ -77,6 +77,13 @@ Route::middleware([
     Route::put('/slackconnect/{slack_connect}', [App\Http\Controllers\SlackConnectController::class, 'update'])->name('slack.update');
     Route::delete('/slackconnect/{slack_connect}', [App\Http\Controllers\SlackConnectController::class, 'destroy'])->name('slack.destroy');
 
+    # Basecamp routes
+    Route::get('/auth/basecamp/redirect', [App\Http\Controllers\BasecampConnectController::class, 'redirect'])->name('basecamp.redirect');
+    Route::get('/auth/basecamp/callback', [App\Http\Controllers\BasecampConnectController::class, 'handleCallback'])->name('basecamp.callback');
+    Route::get('/auth/basecamp/disconnect', [App\Http\Controllers\BasecampConnectController::class, 'disconnect'])->name('basecamp.disconnect');
+    Route::put('/basecamp/{basecamp_connect}', [App\Http\Controllers\BasecampConnectController::class, 'update'])->name('basecamp.update');
+    Route::delete('/basecamp/{basecamp_connect}', [App\Http\Controllers\BasecampConnectController::class, 'destroy'])->name('basecamp.destroy');
+
     #Pushover redirect routes
     Route::get('/auth/pushover/redirect', [App\Http\Controllers\PushoverConnectController::class, 'redirect'])->name('pushover.redirect');
     Route::get('/auth/pushover/callback', [App\Http\Controllers\PushoverConnectController::class, 'handleCallback'])->name('pushover.callback');

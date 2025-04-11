@@ -59,10 +59,10 @@ const updateSlackChannelId = () => {
                 </div>
                 <div v-else class="flex items-center mt-2">
                     
-                    <button type="button" @click.prevent="confirmSlackConnectionDeletion($page.props.slackConnection.id)" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white  hover:bg-red-500 " >
+                    <DangerButton type="button" @click.prevent="confirmSlackConnectionDeletion($page.props.slackConnection.id)" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white  hover:bg-red-500 " >
                         <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
                         Disconnect Slack
-                    </button>
+                    </DangerButton>
                     
                     
                 </div>

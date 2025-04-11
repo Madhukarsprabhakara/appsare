@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Integration;
+use App\Services\BasecampService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\SlackService;
@@ -14,15 +15,18 @@ class IntegrationController extends Controller
      * Display a listing of the resource.
      */
 
-public function index(SlackService $slackService, UserService $userService, PushoverService $pushoverService)
+public function index(SlackService $slackService, UserService $userService, PushoverService $pushoverService, BasecampService $basecampService)
     {
         //
         try {
             $slackConnection=$slackService->getSlackConnection($userService->getLoggedinUserTeam()->id);
             $pushoverConnection=$pushoverService->getPushoverConnection($userService->getLoggedinUserId());
+            //return $userService->getLoggedinUserTeam()->id;
+            $basecampConnection=$basecampService->getBasecampConnection($userService->getLoggedinUserTeam()->id);
             return Inertia::render('Integrations/Show', [
                 'slackConnection' => $slackConnection,
-                'pushoverConnection' => $pushoverConnection
+                'pushoverConnection' => $pushoverConnection,
+                'basecampConnection' => $basecampConnection,
             ]);
         }
         catch (\Exception $e) {
