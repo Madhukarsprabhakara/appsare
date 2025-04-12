@@ -11,6 +11,10 @@ import ActionMessage from '@/Components/ActionMessage.vue';
 import ConfirmationModal from '@/Components/ConfirmationModal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
+const organizationId = ref('');
+const projects = ref([]);
+const selectedProject = ref('');
+const campfireLine = ref('');
 const form = useForm({
     _method: 'PUT',
     name: usePage().props.basecampConnection ? usePage().props.pushoverConnection.Pushover_channel_id : '',
@@ -18,13 +22,23 @@ const form = useForm({
 });
 const PushoverConnectionBeingDeleted = ref(null);
 const deletePushoverConnectionForm = useForm({});
-
+const getProjects = useForm({});
 const confirmPushoverConnectionDeletion = (Pushover_connection_id) => {
 
     PushoverConnectionBeingDeleted.value = Pushover_connection_id;
 
 };
-
+const fetchProjects = async () => {
+    getProjects.processing = true;
+    try {
+        const response = await axios.get(route('basecamp.projects', { organization_id: organizationId.value }));
+        projects.value = response.data.projects;
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+    } finally {
+        form.processing = false;
+    }
+};
 const deletePushoverConnection = () => {
     deletePushoverConnectionForm.delete(route('basecamp.destroy', { 'basecamp_connect': PushoverConnectionBeingDeleted.value }), {
         preserveScroll: true,
@@ -95,8 +109,55 @@ const updatePushoverChannelId = () => {
 
                 </div>
             </div>
+             <!-- Organization ID Input -->
+             <div class="col-span-6">
+                <InputLabel for="organization_id" value="Basecamp Organization ID" />
+                <TextInput
+                    id="organization_id"
+                    v-model="organizationId"
+                    type="number"
+                    class="block w-full mt-1"
+                    placeholder="Enter your Basecamp Organization ID"
+                    required
+                />
+                <InputError :message="form.errors.organization_id" class="mt-2" />
+            </div>
 
+            <!-- Fetch Projects Button -->
+            <div class="col-span-6 mt-1">
+                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="fetchProjects">
+                    Fetch Projects
+                </PrimaryButton>
+            </div>
+            <!-- Project Selection -->
+             <!-- Projects Dropdown -->
+            <div class="col-span-6 mt-4">
+                <InputLabel for="project_id" value="Select a Project" />
+                <select
+                    id="project_id"
+                    v-model="selectedProject"
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                    <option v-for="project in projects" :key="project.id" :value="project.id">
+                        {{ project.name }}
+                    </option>
+                </select>
+                <InputError :message="form.errors.project_id" class="mt-2" />
+            </div>
 
+            <!-- Save Campfire Line -->
+            <div v-if="selectedProject" class="col-span-6 mt-4">
+                <InputLabel for="campfire_line" value="Campfire Line" />
+                <TextInput
+                    id="campfire_line"
+                    v-model="campfireLine"
+                    type="text"
+                    class="block w-full mt-1"
+                    placeholder="Enter Campfire Line"
+                    required
+                />
+                <InputError :message="form.errors.campfire_line" class="mt-2" />
+            </div>
         </template>
 
         <template v-if="$page.props.pushoverConnection" #actions>

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('refresh_token')->nullable();
             $table->integer('expires_in')->nullable();
             $table->timestamp('expires_at')->nullable();
+            $table->string('campfire_line')->nullable();
             $table->timestamps();
         });
     }

@@ -46,6 +46,11 @@ class BasecampConnectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    public function getBasecampProjects(BasecampService $basecampService)
+    {
+        $projects = $basecampService->getBasecampProjects();
+        return response()->json($projects);
+    }
     public function create()
     {
         //

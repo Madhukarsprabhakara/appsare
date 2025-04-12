@@ -59,4 +59,12 @@ class BasecampService
         }
         return false;
     }
+    public function refreshTokenIfExpired()
+    {
+
+    }
+    public function getBasecampProjects()
+    {
+        //send get request to get all projects
+    }
 }
