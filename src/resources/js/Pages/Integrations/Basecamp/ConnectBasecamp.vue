@@ -22,22 +22,18 @@ const form = useForm({
 });
 const PushoverConnectionBeingDeleted = ref(null);
 const deletePushoverConnectionForm = useForm({});
-const getProjects = useForm({});
+const getProjectsForm = useForm({});
 const confirmPushoverConnectionDeletion = (Pushover_connection_id) => {
 
     PushoverConnectionBeingDeleted.value = Pushover_connection_id;
 
 };
 const fetchProjects = async () => {
-    getProjects.processing = true;
-    try {
-        const response = await axios.get(route('basecamp.projects', { organization_id: organizationId.value }));
-        projects.value = response.data.projects;
-    } catch (error) {
-        console.error('Error fetching projects:', error);
-    } finally {
-        form.processing = false;
-    }
+    getProjectsForm.get(route('basecamp.projects'), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => (console.log("Projects fetched successfully")),
+    });
 };
 const deletePushoverConnection = () => {
     deletePushoverConnectionForm.delete(route('basecamp.destroy', { 'basecamp_connect': PushoverConnectionBeingDeleted.value }), {
@@ -125,7 +121,7 @@ const updatePushoverChannelId = () => {
 
             <!-- Fetch Projects Button -->
             <div class="col-span-6 mt-1">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="fetchProjects">
+                <PrimaryButton :class="{ 'opacity-25': getProjectsForm.processing }" :disabled="getProjectsForm.processing" @click="fetchProjects">
                     Fetch Projects
                 </PrimaryButton>
             </div>

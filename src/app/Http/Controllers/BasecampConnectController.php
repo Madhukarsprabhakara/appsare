@@ -48,6 +48,7 @@ class BasecampConnectController extends Controller
      */
     public function getBasecampProjects(BasecampService $basecampService)
     {
+        return "Fantastic";
         $projects = $basecampService->getBasecampProjects();
         return response()->json($projects);
     }
