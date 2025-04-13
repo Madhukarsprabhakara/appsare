@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
@@ -11,20 +11,63 @@ import ActionMessage from '@/Components/ActionMessage.vue';
 import ConfirmationModal from '@/Components/ConfirmationModal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
+const account_id = ref('');
+const projects = ref([]);
+const project_details = ref([]);
+const project_name = ref('');
+const campfire_line = ref('');
 const form = useForm({
     _method: 'PUT',
-    name: usePage().props.basecampConnection ? usePage().props.pushoverConnection.Pushover_channel_id : '',
-    id: usePage().props.basecampConnection ? usePage().props.basecampConnection.id : '',
+    project_name: '',
+    campfire_line: '',
+    account_id: '',
 });
 const PushoverConnectionBeingDeleted = ref(null);
 const deletePushoverConnectionForm = useForm({});
-
+const getProjectsForm = useForm({});
 const confirmPushoverConnectionDeletion = (Pushover_connection_id) => {
 
     PushoverConnectionBeingDeleted.value = Pushover_connection_id;
 
 };
+// Update form values when reactive variables change
+watch([project_name, campfire_line, account_id], ([newProjectName, newCampfireLine, newAccountId]) => {
+    form.project_name = newProjectName;
+    form.campfire_line = newCampfireLine;
+    form.account_id = newAccountId;
+});
+onMounted(() => {
+    // Check if data is available from the server
+    const basecampConnection = ref(usePage().props.basecampConnection);
 
+    if (basecampConnection) {
+        // Update the reactive variables with server data
+        project_name.value = basecampConnection.value.project_name || '';
+        campfire_line.value = basecampConnection.value.campfire_line || '';
+        account_id.value = basecampConnection.value.account_id || '';
+    }
+});
+const handleProjectSelection = (event) => {
+    const selectedValue = JSON.parse(event.target.value);// Get the selected value
+    campfire_line.value = selectedValue.campfire_line; // Set the campfire line (lines_url)
+    project_name.value = selectedValue.project_name; // Set the project name
+    console.log("Selected campfire line:", campfire_line.value);
+    console.log("Selected project name:", project_name.value);
+};
+const fetchProjects = async () => {
+    try {
+        const response = await axios.get(route('basecamp.projects',{'account_id':account_id.value, 'id': usePage().props.basecampConnection.id}), {
+            params: {
+                preserveScroll: true,
+                preserveState: true,
+            },
+        });
+
+        projects.value = response.data; // Assuming the response contains a `projects` array
+    } catch (error) {
+        console.error("Error fetching projects:", error);
+    }
+};
 const deletePushoverConnection = () => {
     deletePushoverConnectionForm.delete(route('basecamp.destroy', { 'basecamp_connect': PushoverConnectionBeingDeleted.value }), {
         preserveScroll: true,
@@ -33,9 +76,9 @@ const deletePushoverConnection = () => {
     });
 };
 
-const updatePushoverChannelId = () => {
-    form.post(route('Pushover.update', { 'Pushover_connect': usePage().props.pushoverConnection.id }), {
-        errorBag: 'updatePushoverChannelId',
+const updateBasecampConnection = () => {
+    form.post(route('basecamp.update', { 'basecamp_connect': usePage().props.basecampConnection.id }), {
+        errorBag: 'updateBasecampConnection',
         preserveScroll: true,
     });
 };
@@ -65,14 +108,13 @@ const updatePushoverChannelId = () => {
 }
 </style>
 <template>
-    <FormSection @submitted="updatePushoverChannelId">
+    <FormSection @submitted="updateBasecampConnection">
         <template #title>
             Basecamp
         </template>
 
         <template #description>
-            Connect your Basecamp account to receive push notifications on campfire chat and create a task on a todo
-            list.
+            Connect your Basecamp account to receive push notifications on campfire chat for the selected project.
         </template>
 
         <template #form>
@@ -95,8 +137,53 @@ const updatePushoverChannelId = () => {
 
                 </div>
             </div>
+             <!-- Organization ID Input -->
+              
+             <div v-if="$page.props.basecampConnection.id" class="col-span-6">
+                <InputLabel for="account_id" value="Basecamp Account ID" />
+                <TextInput
+                    id="account_id"
+                    v-model="account_id"
+                    type="number"
+                    class="block w-full mt-1"
+                    placeholder="Enter your Basecamp account ID"
+                    required
+                />
+                <InputError :message="getProjectsForm.errors.account_id" class="mt-2" />
+            </div>
 
+            <!-- Fetch Projects Button -->
+            <div v-if="$page.props.basecampConnection.id" class="col-span-6 mt-1">
+                <SecondaryButton :class="{ 'opacity-25': getProjectsForm.processing }" :disabled="getProjectsForm.processing" @click.prevent="fetchProjects">
+                    Fetch Projects
+                </SecondaryButton>
+            </div>
+            <div v-if="$page.props.basecampConnection.project_name" class="col-span-6 mt-1">
+                <p class="mt-1 text-sm leading-6 text-gray-600">
+                    <span class="underline font-bold">{{ $page.props.basecampConnection.project_name }}  </span> project was selected previouslyto receive campfire notifications. You may change this to any other project by fetching projects and selecting a different one.
+                </p>
 
+            </div>
+            <!-- Project Selection -->
+             <!-- Projects Dropdown -->
+            <div v-if="projects.length>0" class="col-span-6 mt-4">
+                <InputLabel for="project_id" value="Select a Project" />
+                <select
+                    id="project_id"
+                    v-model="project_details"
+                     @change="handleProjectSelection($event)"
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                    <option v-for="project in projects" :key="project.id" :value="JSON.stringify({ campfire_line: project.lines_url, project_name: project.bucket.name })">
+                        {{ project.bucket.name }}
+                    </option>
+                    
+                </select>
+                <InputError :message="form.errors.project_id" class="mt-2" />
+                <span class="text-sm leading-6 text-gray-600">Selected project: {{ project_name }}</span>
+            </div>
+            
+            <!-- Save Campfire Line -->
         </template>
 
         <template v-if="$page.props.pushoverConnection" #actions>

@@ -84,6 +84,7 @@ Route::middleware([
     Route::put('/basecamp/{basecamp_connect}', [App\Http\Controllers\BasecampConnectController::class, 'update'])->name('basecamp.update');
     Route::delete('/basecamp/{basecamp_connect}', [App\Http\Controllers\BasecampConnectController::class, 'destroy'])->name('basecamp.destroy');
 
+    Route::get('/basecamp_projects', [App\Http\Controllers\BasecampConnectController::class, 'getBasecampProjects'])->name('basecamp.projects');
     #Pushover redirect routes
     Route::get('/auth/pushover/redirect', [App\Http\Controllers\PushoverConnectController::class, 'redirect'])->name('pushover.redirect');
     Route::get('/auth/pushover/callback', [App\Http\Controllers\PushoverConnectController::class, 'handleCallback'])->name('pushover.callback');

@@ -19,6 +19,9 @@ return new class extends Migration
             $table->text('refresh_token')->nullable();
             $table->integer('expires_in')->nullable();
             $table->timestamp('expires_at')->nullable();
+            $table->string('project_name')->nullable();
+            $table->string('campfire_line')->nullable();
+            $table->integer('account_id')->nullable();
             $table->timestamps();
         });
     }

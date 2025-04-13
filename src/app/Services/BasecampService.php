@@ -59,4 +59,25 @@ class BasecampService
         }
         return false;
     }
+    public function refreshTokenIfExpired() {}
+    public function getBasecampProjects($accountId)
+    {
+        //send get request to get all projects
+        try {
+            $url = 'https://3.basecampapi.com/' . $accountId . '/chats.json';
+
+            //return $this->getBasecampToken(\Auth::user()->currentTeam->id);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->getBasecampToken(\Auth::user()->currentTeam->id), // Replace with your actual authorization token
+            ])->get($url);
+
+            if ($response->successful()) {
+
+                // Handle the response data
+                return $response;
+            } 
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
