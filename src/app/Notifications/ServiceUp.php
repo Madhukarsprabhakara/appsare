@@ -16,6 +16,8 @@ use App\Services\SlackService;
 use App\Services\PushoverService;
 use App\Services\NotificationSettingsService;
 use App\Models\Team;
+use App\Notifications\Channels\BasecampCampfireChannel;
+use App\Services\BasecampService;
 class ServiceUp extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -38,7 +40,7 @@ class ServiceUp extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail','slack', PushoverChannel::class];
+        return ['mail','slack', PushoverChannel::class, BasecampCampfireChannel::class];
     }
     public function shouldSend(object $notifiable, string $channel): bool
     {
@@ -46,6 +48,9 @@ class ServiceUp extends Notification implements ShouldQueue
         $notificationSettings = $notificationSettingsService->getNotificationSettingsOnTeam(Team::find($this->team_id));
         if (!$notificationSettings[0]->notificatons_enabled)
         {
+            return false;
+        }
+        if ($channel === 'mail') {
             return false;
         }
         if ($channel === 'slack') {
@@ -68,6 +73,17 @@ class ServiceUp extends Notification implements ShouldQueue
             if ($pushover_connect)
             {
                 return true;
+            }
+            return false;
+        }
+        if ($channel === BasecampCampfireChannel::class) {
+            $basecampService = new BasecampService();
+            $basecamp_connect = $basecampService->getBasecampConnection($this->team_id);
+            if ($basecamp_connect) {
+                if ($basecamp_connect->access_token && $basecamp_connect->campfire_line) {
+                    return true;
+                }
+                return false;
             }
             return false;
         }
@@ -107,6 +123,13 @@ class ServiceUp extends Notification implements ShouldQueue
             ->title('Up')
             ->priority(0);
         
+    }
+    public function toBasecampCampfire(object $notifiable): array
+    {
+
+        return [
+            'content' => 'Your website '.$this->url.' is up again.',
+        ];
     }
     /**
      * Get the array representation of the notification.

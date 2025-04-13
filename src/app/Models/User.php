@@ -15,9 +15,11 @@ use Spark\Billable;
 use Illuminate\Notifications\Slack\SlackRoute;
 use App\Services\SlackService;
 use App\Services\PushoverService;
+use App\Services\BasecampService;
 use Illuminate\Notifications\Slack\SlackWebhookChannel;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
+
 class User extends Authenticatable
 {
     use HasApiTokens, Billable;
@@ -80,17 +82,28 @@ class User extends Authenticatable
     {
         $team_id = $notification->toArray($this)['team_id'];
         $slackService = new SlackService();
-        $slack_connect=$slackService->getSlackConnection($team_id);
-        return SlackRoute::make($slack_connect->slack_channel_id, $slack_connect->slack_bot_code); 
-        
+        $slack_connect = $slackService->getSlackConnection($team_id);
+        return SlackRoute::make($slack_connect->slack_channel_id, $slack_connect->slack_bot_code);
     }
     public function routeNotificationForPushover()
     {
         $pushoverService = new PushoverService();
-        $pushover_connect=$pushoverService->getPushoverConnection($this->id);
-        $encryptedValue=$pushover_connect->makeVisible('pushover_code')->toArray();
+        $pushover_connect = $pushoverService->getPushoverConnection($this->id);
+        $encryptedValue = $pushover_connect->makeVisible('pushover_code')->toArray();
         return Crypt::decryptString($encryptedValue['pushover_code']);
     }
+    public function routeNotificationForBasecampCampfire(Notification $notification): mixed
+    {
+        $team_id = $notification->toArray($this)['team_id'];
+        $basecampService = new BasecampService();
+        $basecampConnect = $basecampService->getBasecampConnection($team_id);
+
+        return [
+            'access_token' => decrypt($basecampConnect->access_token), // Decrypt the access token
+            'campfire_url' => $basecampConnect->campfire_line, // Campfire URL
+        ];
+    }
+    
     public function isAdmin(): bool
     {
         return $this->id === 1;
