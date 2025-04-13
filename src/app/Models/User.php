@@ -99,8 +99,8 @@ class User extends Authenticatable
         $basecampConnect = $basecampService->getBasecampConnection($team_id);
 
         return [
-            'access_token' => decrypt($basecampConnect->access_token), // Decrypt the access token
-            'campfire_url' => $basecampConnect->campfire_line, // Campfire URL
+            'access_token' => Crypt::decryptString($basecampConnect->access_token), // Decrypt the access token
+            'campfire_line' => $basecampConnect->campfire_line, // Campfire URL
         ];
     }
     

@@ -13,8 +13,8 @@ class BasecampCampfireChannel
         $message = $notification->toBasecampCampfire($notifiable);
 
         // Fetch the access token and Campfire URL from the notifiable (e.g., team or user)
-        $accessToken = Crypt::decryptString($notifiable->routeNotificationForBasecampCampfire()['access_token']);
-        $campfireUrl = $notifiable->routeNotificationForBasecampCampfire()['campfire_url'];
+        $accessToken = $notifiable->routeNotificationForBasecampCampfire()['access_token'];
+        $campfireUrl = $notifiable->routeNotificationForBasecampCampfire()['campfire_line'];
 
         // Send the notification via Basecamp Campfire
         $response = Http::withHeaders([
