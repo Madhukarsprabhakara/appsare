@@ -46,11 +46,25 @@ class BasecampConnectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function getBasecampProjects(BasecampService $basecampService)
+    public function getBasecampProjects(BasecampService $basecampService, Request $request)
     {
-        return "Fantastic";
-        $projects = $basecampService->getBasecampProjects();
-        return response()->json($projects);
+        //Save account id
+
+        //fetch projects
+        //return $request->all()['organization_id'];
+        $data = $request->all();
+        $validated = $request->validate([
+            'account_id' => 'required|numeric',
+            'id' => 'required|numeric',
+
+        ]);
+        if (!$validated) {
+            return response()->json([
+                'message' => 'Validation failed'
+            ], 422);
+        }
+        $projects = $basecampService->getBasecampProjects($data['account_id']);
+        return $projects;
     }
     public function create()
     {
@@ -103,9 +117,34 @@ class BasecampConnectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BasecampConnect $basecampConnect)
+    public function update(Request $request, BasecampConnect $basecamp_connect)
     {
         //
+        try {
+            $data=$request->all();
+            // $validated = $request->validate([
+            //     'account_id' => 'required|numeric',
+            //     'id' => 'required|numeric',
+            //     'project_name' => 'required|string',
+            //     'campfire_line' => 'required|string',
+
+            // ]);
+            \Validator::make($data, [
+                'account_id' => 'required|numeric',
+                'project_name' => 'required|string',
+                'campfire_line' => 'required|string',
+            ])->validateWithBag('updateBasecampConnection');
+            $status=$basecamp_connect->update($data);
+            if ($status)
+            {
+                return back(303);
+            }
+            
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 
     /**
