@@ -10,8 +10,8 @@ class BasecampCampfireChannel
     public function send($notifiable, Notification $notification)
     {
         // Get the Basecamp message from the notification
-        $message = $notification->toBasecampCampfire($notifiable);
-
+        $message = $notification->toBasecampCampfire($this)['content'];
+        
         // Fetch the access token and Campfire URL from the notifiable (e.g., team or user)
         $accessToken = $notifiable->routeNotificationForBasecampCampfire()['access_token'];
         $campfireUrl = $notifiable->routeNotificationForBasecampCampfire()['campfire_line'];
@@ -21,7 +21,7 @@ class BasecampCampfireChannel
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
         ])->post($campfireUrl, [
-            'content' => $message->content,
+            'content' => $message,
         ]);
 
         if ($response->failed()) {
