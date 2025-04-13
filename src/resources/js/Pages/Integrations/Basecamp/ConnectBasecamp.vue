@@ -180,7 +180,7 @@ const updateBasecampConnection = () => {
                     
                 </select>
                 <InputError :message="form.errors.project_id" class="mt-2" />
-                {{ project_name }}
+                <span class="text-sm leading-6 text-gray-600">Selected project: {{ project_name }}</span>
             </div>
             
             <!-- Save Campfire Line -->
