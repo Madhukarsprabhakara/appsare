@@ -53,7 +53,7 @@ const createStatusPage = () => {
                 <p class="mt-1 text-sm leading-6 text-gray-600">Your status page will appear here <a
                         :href="`https://appsare.com/status-page/${form.url_slug}`" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline">
-                        https://appsare.com/s/{{ form.url_slug }}
+                        https://appsare.com/status-page/{{ form.url_slug }}
                     </a></p>
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
