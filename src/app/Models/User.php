@@ -98,7 +98,7 @@ class User extends Authenticatable
         $basecampService = new BasecampService();
         $basecampConnect = $basecampService->getBasecampConnection($team_id);
         //check if token is due for renewal, renew it one day prior to expiry
-        if ($basecampConnect && $basecampConnect->expires_at <= now()->addDay()) {
+        if ($basecampConnect && $basecampConnect->expires_at <= now()->addDays(2)) {
             $basecampService->refreshTokenIfExpired($basecampConnect);
             $basecampConnect = $basecampService->getBasecampConnection($team_id);
         }
