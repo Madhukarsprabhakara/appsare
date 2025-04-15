@@ -51,7 +51,7 @@ const createStatusPage = () => {
                 <InputLabel for="url_slug" value="AppsAre URL" />
                 <TextInput id="url_slug" v-model="form.url_slug" type="text" class="block w-full mt-1" required/>
                 <p class="mt-1 text-sm leading-6 text-gray-600">Your status page will appear here <a
-                        :href="`https://appsare.com/s/${form.url_slug}`" target="_blank" rel="noopener noreferrer"
+                        :href="`https://appsare.com/status-page/${form.url_slug}`" target="_blank" rel="noopener noreferrer"
                         class="text-blue-600 hover:underline">
                         https://appsare.com/s/{{ form.url_slug }}
                     </a></p>
