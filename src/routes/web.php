@@ -1,14 +1,11 @@
 <?php
 
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
-use GuzzleHttp\Client;
-use App\Models\Tracker;
-use App\Models\User;
-use App\Notifications\ServiceDown;
-use App\Notifications\ServiceUp;
+
 use App\Models\Team;
 Route::get('/', function () {
     if (\Auth::check())
@@ -65,24 +62,7 @@ Route::middleware([
     Route::get('/notifications',function() {
         return Inertia::render('Notifications/Show');
     })->name('notifications.index');
-    #Trigger notifictaions from Go service
-    // Route::get('/trigger-notification', function() {
-    //     $service_type = 0;
-    //     $tracker = Tracker::find(4);
-    //         $team = Team::find($tracker->team_id);
-    //         $all_users = $team->allUsers();
-    //         foreach ($all_users as $user) {
-    //             //check for disabled notificatons here 
-    //             if ($service_type === 1) {
-    //                 User::find($user->id)->notify(new ServiceUp($tracker->url, $tracker->team_id));
-    //             }
-    //             if ($service_type === 0) {
-    //                 User::find($user->id)->notify(new ServiceDown($tracker->url, $tracker->team_id));
-    //             }
-                
-    //         }
-    //         return 'Notification sent';
-    // })->name('notifications.trigger');
+    
     Route::post('/snotifications', [App\Http\Controllers\ApiNotificationController::class, 'create'])->name('apinotifications.create');
 
     Route::get('/notification_settings', [App\Http\Controllers\NotificationSettingController::class, 'index'])->name('notification_settings.index');

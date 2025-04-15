@@ -63,6 +63,10 @@ class BasecampConnectController extends Controller
                 'message' => 'Validation failed'
             ], 422);
         }
+        $basecampConnect = $basecampService->getBasecampConnection(\Auth::user()->currentTeam->id);
+        if ($basecampConnect && $basecampConnect->expires_at <= now()->addDays(2)) {
+            return $basecampService->refreshTokenIfExpired($basecampConnect);
+        }
         $projects = $basecampService->getBasecampProjects($data['account_id']);
         return $projects;
     }

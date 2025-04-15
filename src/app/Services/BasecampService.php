@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\BasecampConnect;
+use Faker\Provider\Base;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 
@@ -33,6 +34,10 @@ class BasecampService
     {
         return BasecampConnect::upsert($token_response_array_for_saving, uniqueBy: ['team_id'], update: ['team_id', 'expires_at', 'expires_in', 'access_token', 'refresh_token', 'code']);
     }
+    public function saveBasecampRefreshTokenResponse($token_response_array_for_saving) 
+    {
+        return BasecampConnect::upsert($token_response_array_for_saving, uniqueBy: ['team_id'], update: [ 'expires_at', 'expires_in', 'access_token']);
+    }
     public function getBasecampTokenArray($token_response_array, $code, $team_id, $expires_in, $expires_at)
     {
         $token_response_array['team_id'] =  $team_id;
@@ -59,7 +64,25 @@ class BasecampService
         }
         return false;
     }
-    public function refreshTokenIfExpired() {}
+    public function refreshTokenIfExpired(BasecampConnect $basecamp_connect) 
+    {
+        //return $basecamp_connect;
+        if ($basecamp_connect) {
+            
+            $url= 'https://launchpad.37signals.com/authorization/token?type=refresh&refresh_token=' . Crypt::decryptString($basecamp_connect->refresh_token) . '&client_id=' . config('services.basecamp.client_id') . '&client_secret=' . config('services.basecamp.client_secret');
+            $response = Http::asForm()->post($url);
+            
+            if ($response->successful()) {
+                $token_response_array = json_decode($response, true);
+                $expires_at=now()->addSeconds($token_response_array['expires_in'])->format('Y-m-d H:i:s');
+                $token_response_array['expires_at']=$expires_at;
+                $token_response_array['team_id'] = $basecamp_connect->team_id;
+                $token_response_array['access_token']=Crypt::encryptString($token_response_array['access_token']);
+                return $this->saveBasecampRefreshTokenResponse($token_response_array);
+            }
+        }
+        return false;
+    }
     public function getBasecampProjects($accountId)
     {
         //send get request to get all projects
