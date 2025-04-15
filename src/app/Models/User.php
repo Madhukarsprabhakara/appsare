@@ -97,7 +97,11 @@ class User extends Authenticatable
         $team_id = $notification->toArray($this)['team_id'];
         $basecampService = new BasecampService();
         $basecampConnect = $basecampService->getBasecampConnection($team_id);
-
+        //check if token is due for renewal, renew it one day prior to expiry
+        if ($basecampConnect && $basecampConnect->expires_at <= now()->addDay()) {
+            $basecampService->refreshTokenIfExpired($basecampConnect);
+            $basecampConnect = $basecampService->getBasecampConnection($team_id);
+        }
         return [
             'access_token' => Crypt::decryptString($basecampConnect->access_token), // Decrypt the access token
             'campfire_line' => $basecampConnect->campfire_line, // Campfire URL
