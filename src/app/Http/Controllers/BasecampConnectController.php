@@ -32,10 +32,10 @@ class BasecampConnectController extends Controller
             $code = $data['code'];
             $token_response = $basecampService->getBasecampTokenResponse($code);
             $token_response_array = json_decode($token_response, true);
-            $token_response_array_for_saving=$basecampService->getBasecampTokenArray($token_response_array, $code, \Auth::user()->currentTeam->id, $token_response_array['expires_in'],now()->addSeconds($token_response_array['expires_in'])->format('Y-m-d H:i:s'));
-            $status=$basecampService->saveBasecampTokenResponse($token_response_array_for_saving);
-            
-            
+            $token_response_array_for_saving = $basecampService->getBasecampTokenArray($token_response_array, $code, \Auth::user()->currentTeam->id, $token_response_array['expires_in'], now()->addSeconds($token_response_array['expires_in'])->format('Y-m-d H:i:s'));
+            $status = $basecampService->saveBasecampTokenResponse($token_response_array_for_saving);
+
+
             if ($status) {
                 return \Redirect::route('integrations.index');
             }
@@ -125,7 +125,7 @@ class BasecampConnectController extends Controller
     {
         //
         try {
-            $data=$request->all();
+            $data = $request->all();
             // $validated = $request->validate([
             //     'account_id' => 'required|numeric',
             //     'id' => 'required|numeric',
@@ -138,15 +138,13 @@ class BasecampConnectController extends Controller
                 'project_name' => 'required|string',
                 'campfire_line' => 'required|string',
             ])->validateWithBag('updateBasecampConnection');
-            $status=$basecamp_connect->update($data);
-            if ($status)
-            {
+            $updatedCampfireLine = str_replace('https://3.basecamp.com', 'https://3.basecampapi.com', $data['campfire_line']);
+            $data['campfire_line']=$updatedCampfireLine;
+            $status = $basecamp_connect->update($data);
+            if ($status) {
                 return back(303);
             }
-            
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
@@ -158,14 +156,11 @@ class BasecampConnectController extends Controller
     {
         //
         try {
-            $status=$basecamp_connect->delete();
-            if ($status)
-            {
+            $status = $basecamp_connect->delete();
+            if ($status) {
                 return back(303);
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
