@@ -30,6 +30,9 @@ const confirmPushoverConnectionDeletion = (Pushover_connection_id) => {
     PushoverConnectionBeingDeleted.value = Pushover_connection_id;
 
 };
+function findItem(array, key, value) {
+  return array.find(item => item[key] === value);
+}
 // Update form values when reactive variables change
 watch([project_name, campfire_line, account_id], ([newProjectName, newCampfireLine, newAccountId]) => {
     form.project_name = newProjectName;
@@ -174,8 +177,8 @@ const updateBasecampConnection = () => {
                      @change="handleProjectSelection($event)"
                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                    <option v-for="project in projects" :key="project.id" :value="JSON.stringify({ campfire_line: project.lines_url, project_name: project.bucket.name })">
-                        {{ project.bucket.name }}
+                    <option v-for="project in projects" :key="project.id" :value="JSON.stringify({ campfire_line: findItem(project.dock, 'name', 'chat').app_url+'/lines.json', project_name: project.name })">
+                        {{ project.name }}
                     </option>
                     
                 </select>

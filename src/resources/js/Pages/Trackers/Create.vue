@@ -12,7 +12,7 @@
 			
 		</template>
 		<template #main>
-			<CreateTrackerForm />
+			<CreateTrackerFormv2 />
 			
 		</template>
 		<template #right>
@@ -27,5 +27,6 @@ import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import DashboardLayout from '@/Pages/Dashboard/Partials/DashboardLayout.vue';
 import TrackerListHeader from '@/Pages/Trackers/Partials/TrackerListHeader.vue';
 import TrackerList from '@/Pages/Trackers/Partials/TrackerList.vue';
+import CreateTrackerFormv2 from '@/Pages/Trackers/Partials/CreateTrackerFormv2.vue';
 import CreateTrackerForm from '@/Pages/Trackers/Partials/CreateTrackerForm.vue';
 </script>

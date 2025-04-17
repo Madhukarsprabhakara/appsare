@@ -87,7 +87,7 @@ class BasecampService
     {
         //send get request to get all projects
         try {
-            $url = 'https://3.basecampapi.com/' . $accountId . '/chats.json';
+            $url = 'https://3.basecampapi.com/' . $accountId . '/projects.json';
 
             //return $this->getBasecampToken(\Auth::user()->currentTeam->id);
             $response = Http::withHeaders([
