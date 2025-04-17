@@ -19,8 +19,8 @@
           <div class="mr-8">
             <UptimeIndicator :uptime_data="tracker.analytics" />
             <p class="text-sm mt-2 text-gray-500">
-            <a href="#" class="hover:underline">HTTP | Status each day for past 60 days</a>
-          </p>
+              <a href="#" class="hover:underline">HTTP | Status each day for past 60 days</a>
+            </p>
           </div>
           <Menu as="div" class="relative inline-block text-left">
             <div>
@@ -37,25 +37,19 @@
               <MenuItems
                 class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
                 <div class="py-1">
+
                   <MenuItem v-slot="{ active }">
-                  <a href="#"
+                  <Link :href="route('trackers.edit', tracker.id)"
                     :class="[active ? 'bg-gray-100 text-gray-900 outline-none' : 'text-gray-700', 'flex px-4 py-2 text-sm']">
-                    <StarIcon class="mr-3 size-5 text-gray-400" aria-hidden="true" />
-                    <span>Add to favorites</span>
-                  </a>
+                  <PencilIcon class="mr-3 size-5 text-gray-400" aria-hidden="true" />
+                  <span>Edit</span>
+                  </Link>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                  <a href="#"
+                  <a @click="confirmSlackConnectionDeletion(tracker.id)" href="#"
                     :class="[active ? 'bg-gray-100 text-gray-900 outline-none' : 'text-gray-700', 'flex px-4 py-2 text-sm']">
-                    <CodeBracketIcon class="mr-3 size-5 text-gray-400" aria-hidden="true" />
-                    <span>Embed</span>
-                  </a>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                  <a href="#"
-                    :class="[active ? 'bg-gray-100 text-gray-900 outline-none' : 'text-gray-700', 'flex px-4 py-2 text-sm']">
-                    <FlagIcon class="mr-3 size-5 text-gray-400" aria-hidden="true" />
-                    <span>Report content</span>
+                    <TrashIcon class="mr-3 size-5 text-gray-400" aria-hidden="true" />
+                    <span>Delete</span>
                   </a>
                   </MenuItem>
                 </div>
@@ -64,7 +58,32 @@
           </Menu>
         </div>
       </div>
+      <!-- Delete Token Confirmation Modal -->
+      <ConfirmationModal :show="slackConnectionBeingDeleted != null" @close="slackConnectionBeingDeleted = null">
+        <template #title>
+          Delete Tracker
+        </template>
 
+        <template #content>
+          Are you sure you want to delete the Tracker? This will delete the Tracker and all the associated events
+          recorded so far. You can always add the tracker back.
+        </template>
+
+        <template #footer>
+          <ActionMessage :on="deleteTracker.processing" class="mr-4">
+            Deleting...
+          </ActionMessage>
+          <SecondaryButton @click="slackConnectionBeingDeleted = null">
+            Cancel
+          </SecondaryButton>
+
+          <DangerButton class="ms-3" :class="{ 'opacity-25': deleteTracker.processing }"
+            :disabled="deleteTracker.processing" @click="deleteSlackConnection">
+            Delete
+          </DangerButton>
+          
+        </template>
+      </ConfirmationModal>
 
     </div>
   </div>
@@ -72,10 +91,35 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { CodeBracketIcon, EllipsisVerticalIcon, FlagIcon, StarIcon } from '@heroicons/vue/20/solid';
+import { TrashIcon, EllipsisVerticalIcon, FlagIcon, PencilIcon } from '@heroicons/vue/20/solid';
+import { Link } from '@inertiajs/vue3';
 import UptimeIndicator from '@/Components/UptimeIndicator.vue';
+import ConfirmationModal from '@/Components/ConfirmationModal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import ActionMessage from '@/Components/ActionMessage.vue';
 const props = defineProps({
   tracker: Object,
 });
+const slackConnectionBeingDeleted = ref(null);
+const deleteTracker = useForm({});
+
+const confirmSlackConnectionDeletion = (slack_connection_id) => {
+
+  slackConnectionBeingDeleted.value = slack_connection_id;
+
+
+};
+const deleteSlackConnection = () => {
+  deleteTracker.delete(route('trackers.destroy', slackConnectionBeingDeleted.value), {
+    preserveScroll: true,
+    preserveState: true,
+    onSuccess: () => (slackConnectionBeingDeleted.value = null,
+      router.visit('/trackers')),
+  });
+  console.log(props.statusPages);
+};
 </script>

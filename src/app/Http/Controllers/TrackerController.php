@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Services\TrackerService;
 use App\Services\EssentialService;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Validator;
 use App\Models\TrackerEvent;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,7 @@ class TrackerController extends Controller
         try {
 
             $trackers = $trackerService->getTrackersOnTeamId($userService->getLoggedinUserTeam());
-            
+
             return Inertia::render('Trackers/Show', [
                 'trackers' => $trackers,
 
@@ -75,6 +76,14 @@ class TrackerController extends Controller
     public function edit(Tracker $tracker)
     {
         //
+        try {
+
+            return Inertia::render('Trackers/Edit', [
+                'tracker' => $tracker,
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -83,6 +92,17 @@ class TrackerController extends Controller
     public function update(Request $request, Tracker $tracker)
     {
         //
+
+        $data = $request->all();
+        Validator::make($data, [
+            'url' => 'required|url:http,https|max:255',
+        ])->validateWithBag('editTracker');
+
+
+        $tracker->update([
+            'url' => $data['url'],
+        ]);
+        return back(303);
     }
 
     /**
@@ -91,5 +111,20 @@ class TrackerController extends Controller
     public function destroy(Tracker $tracker)
     {
         //
+        // Delete the associated events
+        $tracker->events()->delete();
+        // Optionally, you can also delete the status page itself
+        // Delete associated status page relationships
+        DB::table('status_page_trackers')->where('tracker_id', $tracker->id)->delete();
+
+        // Delete associated tracker analytics
+        DB::table('tracker_analytics')->where('tracker_id', $tracker->id)->delete();
+        $status = $tracker->delete();
+        if ($status) {
+            return redirect()->route('trackers.index', [], 303);
+        }
+        return response()->json([
+            'message' => 'Failed to delete tracker'
+        ], 500);
     }
 }

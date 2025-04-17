@@ -21,4 +21,8 @@ class Tracker extends Model
     {
         return $this->hasOne(TrackerEvent::class)->latestOfMany();
     }
+    public function events()
+    {
+        return $this->hasMany(TrackerEvent::class);
+    }
 }
