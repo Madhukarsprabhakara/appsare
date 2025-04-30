@@ -132,7 +132,7 @@ return [
         'user' => [
             'model' => User::class,
 
-            'trial_days' => 10,
+            'trial_days' => 30,
 
             'default_interval' => 'yearly',
 
