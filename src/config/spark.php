@@ -139,6 +139,7 @@ return [
             'plans' => [
                 [
                     'name' => 'Appsare',
+                    'archived' => true,
                     'short_description' => 'This is a short, human friendly description of the plan.',
                     'monthly_id' => env('SPARK_STANDARD_MONTHLY_PLAN', 'price_id'),
                     'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'price_id'),
@@ -148,6 +149,56 @@ return [
                         'Feature 3',
                     ],
                 ],
+                [
+                    'name' => 'Indie Hacker - The dream',
+                    'short_description' => 'One month free with yearly plans.',
+                    'monthly_id' => env('SPARK_INDIE_HACKER_MONTHLY_PLAN', 'price_id'),
+                    'yearly_id' => env('SPARK_INDIE_HACKER_YEARLY_PLAN', 'price_id'),
+                    'features' => [
+                        '30-second check frequency',
+                        '10 trackers included',
+                        'Unlimited status pages',
+                        'Unlimited team members',
+                        'All integrations',
+                        'Email, Slack, Basecamp notifications',
+                        'Purchase SMS and Call credits',
+
+
+                    ],
+                ],
+                [
+                    'name' => 'Indie Hacker - Realized',
+                    'short_description' => 'One month free with yearly plans.',
+                    'monthly_id' => env('SPARK_INDIE_HACKER_R_MONTHLY_PLAN', 'price_id'),
+                    'yearly_id' => env('SPARK_INDIE_HACKER_R_YEARLY_PLAN', 'price_id'),
+                    'features' => [
+                        '30-second check frequency',
+                        '50 trackers included',
+                        'Unlimited status pages',
+                        'Unlimited team members',
+                        'All integrations',
+                        'Email, Slack, Basecamp notifications',
+                        'Purchase SMS and Call credits',
+                    ],
+                ],
+                [
+                    'name' => 'Small Business',
+                    'short_description' => 'One month free with yearly plans.',
+                    'monthly_id' => env('SPARK_SM_MONTHLY_PLAN', 'price_id'),
+                    'yearly_id' => env('SPARK_SM_YEARLY_PLAN', 'price_id'),
+                    'features' => [
+                        '30-second check frequency',
+                        '100 trackers included',
+                        'Unlimited status pages',
+                        'Unlimited team members',
+                        'All integrations',
+                        'Email, Slack, Basecamp notifications',
+                        'Purchase SMS and Call credits',
+                        'Multiple teams for clients',
+                    ],
+                ],
+
+
             ],
 
         ],
