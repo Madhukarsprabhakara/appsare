@@ -139,9 +139,21 @@ return [
             'plans' => [
                 [
                     'name' => 'Appsare',
+                    'archived' => true,
                     'short_description' => 'This is a short, human friendly description of the plan.',
                     'monthly_id' => env('SPARK_STANDARD_MONTHLY_PLAN', 'price_id'),
                     'yearly_id' => env('SPARK_STANDARD_YEARLY_PLAN', 'price_id'),
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                ],
+                [
+                    'name' => 'Indie Hacker - The dream',
+                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'monthly_id' => env('SPARK_INDIE_HACKER_MONTHLY_PLAN', 'price_id'),
+                    'yearly_id' => env('SPARK_INDIE_HACKER_YEARLY_PLAN', 'price_id'),
                     'features' => [
                         'Feature 1',
                         'Feature 2',
