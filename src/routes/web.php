@@ -23,7 +23,7 @@ Route::get('/phpinfo', function() {
     // dd(extension_loaded('soap'));
     return phpinfo();
 });
-//plan routes
+//plan routes - test
 Route::get('/activeplan', function() {
     $user = \Auth::user();
     return $user->sparkPlan();
