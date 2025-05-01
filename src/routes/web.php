@@ -23,6 +23,10 @@ Route::get('/phpinfo', function() {
     // dd(extension_loaded('soap'));
     return phpinfo();
 });
+Route::get('/activeplan', function() {
+    $user = \Auth::user();
+    return $user->sparkPlan();
+});
 Route::get('/layout', function() {
     return Inertia::render('Landingv2');
 });
