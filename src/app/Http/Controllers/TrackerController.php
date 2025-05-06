@@ -9,8 +9,8 @@ use App\Services\TrackerService;
 use App\Services\EssentialService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Validator;
-use App\Models\TrackerEvent;
 use Illuminate\Support\Facades\DB;
+use App\Services\SubscriptionPlanEligibility;
 
 class TrackerController extends Controller
 {
@@ -46,9 +46,10 @@ class TrackerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, EssentialService $essentialService, TrackerService $trackerService)
+    public function store(Request $request, SubscriptionPlanEligibility $subscriptionPlanEligibility, EssentialService $essentialService, TrackerService $trackerService)
     {
         //
+        $subscriptionPlanEligibility->isEligibleToCreateTrackers($request->user());
         $data = $request->all();
         $validated = $request->validate([
             'url' => 'required|string',

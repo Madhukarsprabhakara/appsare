@@ -29,12 +29,24 @@ class SubscriptionPlanEligibility {
         }
         if ($user->subscribed()) {
             $currentPlan=$user->sparkPlan()->name;
-            if ($currentPlan == 'Small Business') {
-                return;
+            $trackerCount = $user->currentTeam->trackersOnly()->count();
+            $trackerLimits = [
+                'Indie Hacker - The dream' => 10,
+                'Indie Hacker - Realized' => 50,
+                'Small Business' => 100,
+            ];
+            if (isset($trackerLimits[$currentPlan])) {
+                $allowedTrackers = $trackerLimits[$currentPlan];
+
+                // Restrict if the team exceeds the allowed number of trackers
+                if ($trackerCount > $allowedTrackers) {
+                    abort(403,'You are not allowed to have more than '.$allowedTrackers.' trackers on the "'.$currentPlan.'" plan. Please Contact ms@appsare.com.');
+                }
+                
             }
-            abort(403,'Please upgrade your plan to "Small Business" to create additional trackers.');
+            
         }
-        abort(403, 'Please upgrade your plan to "Small Business" to create additional trackers.');
+        
     }
     
 }
