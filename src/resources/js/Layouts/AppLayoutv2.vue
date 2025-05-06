@@ -124,7 +124,7 @@
                             </ul>
                         </li>
                         <li>
-                            <div class="text-xs/6 font-semibold text-gray-400">Your teams</div>
+                            <div class="text-xs/6 font-semibold text-gray-400">Support</div>
                             <ul role="list" class="-mx-2 mt-2 space-y-1">
                                 <li v-for="team in teams" :key="team.name">
                                     <a :href="team.href"
@@ -167,6 +167,13 @@
 
                         </div>
                         <div class="flex items-center gap-x-4 lg:gap-x-6">
+                            <div v-if="!$page.props.subscription_status">
+                                <p v-if="$page.props.trial_days > 0" class="underline"><a href="/billing">Trial days
+                                        remaining: {{ $page.props.trial_days }}</a></p>
+                                <p v-if="$page.props.trial_days == 0 || $page.props.trial_days < 0">Trial Expired. <a
+                                        href="/billing" class="underline">Choose a plan to continue</a></p>
+                            </div>
+
                             <div class="ms-3 relative">
                                 <!-- Teams Dropdown -->
                                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -257,7 +264,7 @@
                                     <span class="hidden lg:flex lg:items-center">
                                         <span class="ml-4 text-sm/6 font-medium text-gray-500" aria-hidden="true">{{
                                             $page.props.auth.user.name
-                                        }}</span>
+                                            }}</span>
                                         <ChevronDownIcon class="ml-2 size-5 text-gray-400" aria-hidden="true" />
                                     </span>
                                 </MenuButton>
@@ -388,9 +395,9 @@ const navigation = [
 
 ]
 const teams = [
-    { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-    { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-    { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+    { id: 1, name: 'Contact Us', href: '#', initial: 'H', current: false },
+    { id: 2, name: 'Youtube', href: '#', initial: 'T', current: false },
+    // { id: 3, name: 'Developers', href: '#', initial: 'W', current: false },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '#' },

@@ -12,6 +12,8 @@ class DeleteTeam implements DeletesTeams
      */
     public function delete(Team $team): void
     {
+        // Delete the related entry from notification_settings
+        \DB::table('notification_settings')->where('team_id', $team->id)->delete();
         $team->purge();
     }
 }

@@ -5,8 +5,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
-
+use App\Services\BasecampService;
 use App\Models\Team;
+
 Route::get('/', function () {
     if (\Auth::check())
     {
@@ -26,17 +27,36 @@ Route::get('/phpinfo', function() {
 //plan routes - test
 Route::get('/activeplan', function() {
     $user = \Auth::user();
-    return $user->sparkPlan();
+    // return $user->ownedTeams->count();
+    return $user->sparkPlan()->name;
 });
 Route::get('/layout', function() {
     return Inertia::render('Landingv2');
 });
-
+Route::get('/bcexp', function(BasecampService $basecampService){
+    $basecampConnect = $basecampService->getBasecampConnection(1);
+        //check if token is due for renewal, renew it one day prior to expiry
+        try {
+            return $basecampConnect;
+            if ($basecampConnect && $basecampConnect->expires_at <= now()->addDays(2)) {
+                
+                $basecampService->refreshTokenIfExpired($basecampConnect);
+                return $basecampConnect = $basecampService->getBasecampConnection(1);
+            }
+            return "No";
+        }
+        catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        
+});
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    
 ])->group(function () {
+    
     Route::get('/dashboard', function () {
         return to_route('trackers.index');
     })->name('dashboard');
