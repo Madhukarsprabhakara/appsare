@@ -229,7 +229,7 @@
             </ul>
             <Link :href="route('register')">
               <button class="mt-6 w-full bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-700">
-                START 30 DAYS FREE TRIAL
+                START 15 DAYS FREE TRIAL
               </button>
             </Link>
           </div>
@@ -304,7 +304,7 @@
             </ul>
             <Link :href="route('register')">
               <button class="mt-6 w-full bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-700">
-                START 30 DAYS FREE TRIAL
+                START 15 DAYS FREE TRIAL
               </button>
             </Link>
           </div>
@@ -379,7 +379,7 @@
             </ul>
             <Link :href="route('register')">
               <button class="mt-6 w-full bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-700">
-                START 30 DAYS FREE TRIAL
+                START 15 DAYS FREE TRIAL
               </button>
             </Link>
           </div>

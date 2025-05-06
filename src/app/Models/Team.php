@@ -49,14 +49,22 @@ class Team extends JetstreamTeam
     public function trackers()
     {
         return $this->hasMany(Tracker::class, 'team_id')
-        ->orderBy('created_at', 'desc')
-        ->where(function ($query) {
-            $query->whereNull('is_archived')
-                  ->orWhere('is_archived', false);
-        })->with('analytics'); //,'latestEvent'
+            ->orderBy('created_at', 'desc')
+            ->where(function ($query) {
+                $query->whereNull('is_archived')
+                    ->orWhere('is_archived', false);
+            })->with('analytics'); //,'latestEvent'
     }
     public function trackersOnly()
     {
         return $this->hasMany(Tracker::class, 'team_id');
+    }
+    public function subscription()
+    {
+        return $this->hasOne(TeamSubscription::class, 'team_id')->get('is_active_subscription');
+    }
+    public function subscriptionExists()
+    {
+        return $this->hasOne(TeamSubscription::class, 'team_id');
     }
 }

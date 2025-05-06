@@ -23,6 +23,9 @@ class DeleteUser implements DeletesUsers
     public function delete(User $user): void
     {
         DB::transaction(function () use ($user) {
+            $this->deleteNotificationSettings($user);
+            $this->deleteTeamSubscriptions($user);
+            $this->cancelSubscription($user);
             $this->deleteTeams($user);
             $user->deleteProfilePhoto();
             $user->tokens->each->delete();
@@ -40,5 +43,22 @@ class DeleteUser implements DeletesUsers
         $user->ownedTeams->each(function (Team $team) {
             $this->deletesTeams->delete($team);
         });
+    }
+    protected function deleteNotificationSettings(User $user): void
+    {
+        DB::table('notification_settings')->where('user_id', $user->id)->delete();
+    }
+    protected function deleteTeamSubscriptions(User $user): void
+    {
+        DB::table('team_subscriptions')->where('user_id', $user->id)->delete();
+    }
+    protected function cancelSubscription(User $user): void
+    {
+        // Implement the logic to cancel the user's subscription here
+        // For example, you might want to call a subscription service API
+        // or update the user's subscription status in your database.
+        if (optional($user->subscription())->recurring()) {
+            $user->subscription()->cancelNow();
+        }
     }
 }

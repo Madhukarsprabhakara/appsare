@@ -6,6 +6,7 @@ use Laravel\Jetstream\Events\TeamCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\NotificationSetting;
+
 class EnableNotificationsOnTeamCreation
 {
     /**
@@ -27,5 +28,7 @@ class EnableNotificationsOnTeamCreation
         $notificationSetting->user_id = $event->team->owner->id;
         $notificationSetting->notificatons_enabled = true;
         $notificationSetting->save();
+
+        
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Contracts\CreatesTeams;
 use Laravel\Jetstream\Events\AddingTeam;
 use Laravel\Jetstream\Jetstream;
-
+use App\Services\SubscriptionPlanEligibility;
 class CreateTeam implements CreatesTeams
 {
     /**
@@ -20,6 +20,8 @@ class CreateTeam implements CreatesTeams
     public function create(User $user, array $input): Team
     {
         Gate::forUser($user)->authorize('create', Jetstream::newTeamModel());
+        $eligibleUser = new SubscriptionPlanEligibility();
+        $eligible=$eligibleUser->isEligibleToCreateTeam($user);
 
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],

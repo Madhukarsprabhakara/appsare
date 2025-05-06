@@ -89,7 +89,7 @@ return [
         // Features::billingAddressCollection(['required' => true]),
         // Features::mustAcceptTerms(),
         // Features::euVatCollection(['home-country' => 'BE']),
-        // Features::invoiceEmails(['custom-addresses' => true]),
+        Features::invoiceEmails(['custom-addresses' => true]),
         Features::paymentNotificationEmails(),
     ],
 
@@ -105,11 +105,11 @@ return [
     */
 
     'invoice_data' => [
-        'vendor' => 'Your Product',
+        'vendor' => 'AppsAre',
         'product' => 'Your Product',
-        'street' => '111 Example St.',
-        'location' => 'Los Angeles, CA',
-        'phone' => '555-555-5555',
+        'street' => '5628 Metropolitan way',
+        'location' => 'Dublin, CA, USA',
+        'phone' => '+1734-926-7513',
     ],
 
     /*
@@ -132,7 +132,7 @@ return [
         'user' => [
             'model' => User::class,
 
-            'trial_days' => 30,
+            'trial_days' => 15,
 
             'default_interval' => 'yearly',
 
@@ -162,6 +162,7 @@ return [
                         'All integrations',
                         'Email, Slack, Basecamp notifications',
                         'Purchase SMS and Call credits',
+                        '--Multiple teams for clients',
 
 
                     ],
@@ -179,6 +180,7 @@ return [
                         'All integrations',
                         'Email, Slack, Basecamp notifications',
                         'Purchase SMS and Call credits',
+                        '--Multiple teams for clients',
                     ],
                 ],
                 [

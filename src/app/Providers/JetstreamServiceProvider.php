@@ -11,6 +11,8 @@ use App\Actions\Jetstream\RemoveTeamMember;
 use App\Actions\Jetstream\UpdateTeamName;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
+use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class JetstreamServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,34 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Inertia::share([
+            'trial_days' => function (Request $request) {
+                return $request->user() && $request->user()->trial_ends_at
+                    ? abs((int) round($request->user()->trial_ends_at->diffInDays(now())))
+                    : null;
+            },
+            'subscription_status' => function (Request $request) {
+                $user = $request->user();
+                // Default subscription status
+                $subscriptionStatus = null;
+
+                if ($user) {
+                    // Check if the current team has an active subscription
+                    $team = $user->currentTeam;
+
+                    $subscriptionStatusExist = $team->subscriptionExists()->exists();
+                    // Assuming TeamSubscription model has a `team_id` and `is_active_subscription` field
+                    if ($subscriptionStatusExist) {
+                        $subscriptionStatus = $team->subscription()[0]->is_active_subscription;
+                    }
+                }
+                return $subscriptionStatus;
+            },
+            // 'subscription_status' => function (Request $request) {
+            //     return $request->subscription_status ?? false;
+            // },
+        ]);
         $this->configurePermissions();
 
         Jetstream::createTeamsUsing(CreateTeam::class);
