@@ -158,7 +158,7 @@
                       </span> -->
                   </div>
                   
-                  <div class="mt-8 border-b-2 pb-4 border-gray-100">
+                  <div v-if="action.latest_event" class="mt-8 border-b-2 pb-4 border-gray-100">
                     <div class=" pb-3 sm:flex sm:items-center sm:justify-between">
                       <h3 class="text-base font-semibold text-gray-900">{{ action.url }}</h3>
                       <div class="mt-3 sm:ml-4 sm:mt-0">
@@ -210,21 +210,21 @@
                       <li v-for="announcement in announcements" :key="announcement.id" class="py-5">
                         <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
                           <h3 class="text-sm font-semibold text-gray-800">
-                            <a :href="announcement.href" class="hover:underline focus:outline-none">
+                            <a href="#" class="hover:underline focus:outline-none">
                               <!-- Extend touch target to entire panel -->
                               <span class="absolute inset-0" aria-hidden="true" />
                               {{ announcement.title }}
                             </a>
                           </h3>
-                          <p class="mt-1 line-clamp-2 text-sm text-gray-600">{{ announcement.preview }}</p>
+                          <p class="mt-1 line-clamp-2 text-sm text-gray-600">{{ announcement.content }}</p>
                         </div>
                       </li>
                     </ul>
                   </div>
                   <div class="mt-6">
-                    <a href="#"
+                    <!-- <a href="#"
                       class="flex w-full items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">View
-                      all</a>
+                      all</a> -->
                   </div>
                 </div>
               </div>
@@ -269,7 +269,7 @@
     <footer>
       <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left"><span
-            class="block sm:inline">&copy; 2021 Your Company, Inc.</span> <span class="block sm:inline">All rights
+            class="block sm:inline">&copy; 2025 AppsAre.</span> <span class="block sm:inline">All rights
             reserved.</span></div>
       </div>
     </footer>
@@ -363,27 +363,5 @@ const actions = props.trackers
 //     href: '#',
 //   },
 // ]
-const announcements = [
-  {
-    id: 1,
-    title: 'Office closed on July 2nd',
-    href: '#',
-    preview:
-      'Cum qui rem deleniti. Suscipit in dolor veritatis sequi aut. Vero ut earum quis deleniti. Ut a sunt eum cum ut repudiandae possimus. Nihil ex tempora neque cum consectetur dolores.',
-  },
-  {
-    id: 2,
-    title: 'New password policy',
-    href: '#',
-    preview:
-      'Alias inventore ut autem optio voluptas et repellendus. Facere totam quaerat quam quo laudantium cumque eaque excepturi vel. Accusamus maxime ipsam reprehenderit rerum id repellendus rerum. Culpa cum vel natus. Est sit autem mollitia.',
-  },
-  {
-    id: 3,
-    title: 'Office closed on July 2nd',
-    href: '#',
-    preview:
-      'Tenetur libero voluptatem rerum occaecati qui est molestiae exercitationem. Voluptate quisquam iure assumenda consequatur ex et recusandae. Alias consectetur voluptatibus. Accusamus a ab dicta et. Consequatur quis dignissimos voluptatem nisi.',
-  },
-]
+const announcements = props.announcements
 </script>

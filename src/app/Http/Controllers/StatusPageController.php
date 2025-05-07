@@ -101,10 +101,12 @@ class StatusPageController extends Controller
             }
             // return Tracker::find(7)->latestEvent;
             $trackers = $statusPage->trackers;
+            $announcements = $statusPage->announcements;
             // return $trackersWithData;
             return Inertia::render('StatusPages/Publicv2', [
                 'statusPage' => $statusPage,
                 'trackers' => $trackers,
+                'announcements' => $announcements,
             ]);
         } catch (\Exception $e) {
             return $e->getMessage();
