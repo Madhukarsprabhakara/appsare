@@ -53,8 +53,7 @@ class NotificationSettingsService
     }
     public function getNotificationSettingsOnTeam(User $user, Team $team)
     {
-
-        return TeamNotification::where('team_id', $team->id)->where('user_id', $user->id)->with('notificationType')->get();
+        return TeamNotification::where('team_id', $team->id)->with('notificationType')->get();
     }
     public function shouldSendEmail(User $user, Team $team): bool
     {
