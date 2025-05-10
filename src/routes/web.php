@@ -88,6 +88,7 @@ Route::middleware([
         return Inertia::render('Notifications/Show');
     })->name('notifications.index');
     
+    Route::put('/channel_notification_settings', [App\Http\Controllers\NotificationSettingController::class, 'updateChannelNotificationSettings'])->name('channel_notification_settings.update');
     Route::post('/snotifications', [App\Http\Controllers\ApiNotificationController::class, 'create'])->name('apinotifications.create');
 
     Route::get('/notification_settings', [App\Http\Controllers\NotificationSettingController::class, 'index'])->name('notification_settings.index');

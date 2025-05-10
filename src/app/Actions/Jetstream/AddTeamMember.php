@@ -27,11 +27,10 @@ class AddTeamMember implements AddsTeamMembers
         $newTeamMember = Jetstream::findUserByEmailOrFail($email);
 
         AddingTeamMember::dispatch($team, $newTeamMember);
-
+        
         $team->users()->attach(
             $newTeamMember, ['role' => $role]
         );
-
         TeamMemberAdded::dispatch($team, $newTeamMember);
     }
 

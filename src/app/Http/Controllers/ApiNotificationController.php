@@ -38,10 +38,10 @@ class ApiNotificationController extends Controller
             foreach ($all_users as $user) {
                 //check for disabled notificatons here 
                 if ($data['service_type'] === 1) {
-                    User::find($user->id)->notify(new ServiceUp($data['url'], $tracker->team_id));
+                    User::find($user->id)->notify(new ServiceUp($data['url'], $tracker->team_id, $user->id));
                 }
                 if ($data['service_type'] === 0) {
-                    User::find($user->id)->notify(new ServiceDown($data['url'], $tracker->team_id));
+                    User::find($user->id)->notify(new ServiceDown($data['url'], $tracker->team_id, $user->id));
                 }
                 
             }

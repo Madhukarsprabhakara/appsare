@@ -390,7 +390,7 @@ const navigation = [
     { name: 'Status Pages', href: route('statuspages.index'), icon: PresentationChartLineIcon, current: false, namedRoute: 'statuspages.index' },
     { name: 'Team Members', href: route('teams.show', usePage().props.auth.user.current_team), icon: UsersIcon, current: false, namedRoute: 'teams.show' },
     { name: 'Integrations', href: route('integrations.index'), icon: LinkIcon, current: false, namedRoute: 'integrations.index' },
-    { name: 'Notification Settings', href: route('notification_settings.index'), icon: BellIcon, current: false, namedRoute: 'notification_settings.index' },
+    { name: 'Notifications', href: route('notification_settings.index'), icon: BellIcon, current: false, namedRoute: 'notification_settings.index' },
 
 
 ]

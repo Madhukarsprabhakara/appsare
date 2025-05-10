@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Laravel\Jetstream\Events\TeamCreated;
+use Laravel\Jetstream\Events\TeamMemberAdded;
 use App\Listeners\HandleSubscriptionCreated;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
@@ -30,7 +31,12 @@ class AppServiceProvider extends ServiceProvider
         });
         Event::listen(
             SubscriptionCreated::class,
-            HandleSubscriptionCreated::class
+            HandleSubscriptionCreated::class,
+           
+        );
+        Event::listen(
+            TeamMemberAdded::class,
+            \App\Listeners\EnableDefaultNotificationsOnAddedMember::class
         );
     }
 }

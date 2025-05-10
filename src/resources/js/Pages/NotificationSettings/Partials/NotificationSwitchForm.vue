@@ -43,11 +43,11 @@ const updateSlackChannelId = () => {
 <template>
     <FormSection @submitted="updateSlackChannelId">
         <template #title>
-            Notification Switch
+            Global Notifications
         </template>
 
         <template #description>
-            Enable or Disable notifications on events.        </template>
+            Enable or Disable notifications for all channels with a single switch.        </template>
 
         <template #form>
             
@@ -67,7 +67,7 @@ const updateSlackChannelId = () => {
                     
                     <PrimaryButton  @click.prevent="confirmDisableNotification($page.props.notificationSettings[0].id)" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white  hover:bg-red-500 " >
                         <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
-                        Disable Notifications
+                        Disable ALL Notifications
                     </PrimaryButton>
                     
                     
@@ -76,7 +76,7 @@ const updateSlackChannelId = () => {
                     
                     <PrimaryButton @click.prevent="confirmDisableNotification($page.props.notificationSettings[0].id)" class="inline-flex items-center rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white  hover:bg-gray-700 " >
                         <!-- <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" /> -->
-                        Enable Notifications
+                        Enable ALL Notifications
                     </PrimaryButton>
                     
                     
