@@ -206,6 +206,7 @@
                 <div class="p-6">
                   <h2 class="text-base font-medium text-gray-900" id="announcements-title">Announcements</h2>
                   <div class="mt-6 flow-root">
+                    
                     <ul role="list" class="-my-5 divide-y divide-gray-200">
                       <li v-for="announcement in announcements" :key="announcement.id" class="py-5">
                         <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
@@ -216,7 +217,7 @@
                               {{ announcement.title }}
                             </a>
                           </h3>
-                          <p class="mt-1 line-clamp-2 text-sm text-gray-600">{{ announcement.content }}</p>
+                          <p class="mt-1  text-sm text-gray-600">{{ announcement.content }}</p>
                         </div>
                       </li>
                     </ul>
@@ -363,5 +364,5 @@ const actions = props.trackers
 //     href: '#',
 //   },
 // ]
-const announcements = props.announcements
+const announcements = props.announcements 
 </script>

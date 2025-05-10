@@ -118,7 +118,7 @@
           <h3 class="text-3xl font-bold text-gray-900 mb-4">Unlimited Status Pages</h3>
           <p class="text-lg text-gray-600 text-center max-w-3xl">
             Create one or 10 status pages with complete peace of mind that you won't be charged extra for it. Now and
-            forever.
+            forever. An example status page - <a href="https://appsare.com/status-page/appsare" target="_blank">https://appsare.com/status-page/appsare</a>
           </p>
         </div>
 
@@ -456,9 +456,7 @@
               What is your refund policy?
             </h3>
             <p class="mt-2 text-gray-600">
-              We want every customer to be happy. At any point if you are unhappy just let us know and we'll refund
-              unused portion of your subscription for the lastest month. We won't be able to refund for all previous
-              months. The subscriptions are very nominally priced.
+              We want every customer to be happy. At any point if you are unhappy just let us know and we'll refund. Also, subscriptions can be cancelled directly from the app.
             </p>
           </div>
         </div>
