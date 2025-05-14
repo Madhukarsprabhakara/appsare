@@ -119,19 +119,19 @@ Route::middleware([
     Route::delete('/pushover/{pushover_connect}', [App\Http\Controllers\PushoverConnectController::class, 'destroy'])->name('pushover.destroy');
     Route::get('/statuscheck', function(){
 
-        $team=Team::find(1);
-        $all_users=$team->allUsers();
-        foreach ($all_users as $user)
-        {
-            return $user->id;   
-        }
-        $start_time = microtime(true);
-        $response = Http::head('https://seasonsurvey.com');
-        $end_time = microtime(true);
-        $response_time = $end_time - $start_time;
-        return  $response_time*1000;
+        // $team=Team::find(1);
+        // $all_users=$team->allUsers();
+        // foreach ($all_users as $user)
+        // {
+        //     return $user->id;   
+        // }
+        // $start_time = microtime(true);
+        // $response = Http::head('https://seasonsurvey.com');
+        // $end_time = microtime(true);
+        // $response_time = $end_time - $start_time;
+        // return  $response_time*1000;
 
-        $host = 'demo-test.sopact.com';
+        $host = 'aop.sopact.com';
 $port = 443;
 
 $context = stream_context_create([
