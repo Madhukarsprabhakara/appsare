@@ -10,6 +10,7 @@ use App\Listeners\HandleSubscriptionCreated;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use Spark\Events\SubscriptionCreated;
+use App\Events\TrackerCreated;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -37,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             TeamMemberAdded::class,
             \App\Listeners\EnableDefaultNotificationsOnAddedMember::class
+        );
+        Event::listen(
+            TrackerCreated::class,
+            \App\Listeners\HandleTrackerCreated::class
         );
     }
 }

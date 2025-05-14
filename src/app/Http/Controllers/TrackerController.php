@@ -11,6 +11,7 @@ use App\Services\UserService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Services\SubscriptionPlanEligibility;
+use App\Events\TrackerCreated;
 
 class TrackerController extends Controller
 {
@@ -25,8 +26,6 @@ class TrackerController extends Controller
 
             return Inertia::render('Trackers/Show', [
                 'trackers' => $trackers,
-
-
 
             ]);
         } catch (\Exception $e) {
@@ -49,16 +48,31 @@ class TrackerController extends Controller
     public function store(Request $request, SubscriptionPlanEligibility $subscriptionPlanEligibility, EssentialService $essentialService, TrackerService $trackerService)
     {
         //
+        $domain_expiry = null;
+        $ssl_cert_expiry = null;
         $subscriptionPlanEligibility->isEligibleToCreateTrackers($request->user());
         $data = $request->all();
         $validated = $request->validate([
             'url' => 'required|string',
 
         ]);
+        // Validate the URL format
+        // ssl cert check
+        // dns check
+
+        if ($trackerService->checkDNS($data['url'])) {
+            $domain_expiry = $trackerService->checkDomainNameExpiry($data['url']);
+            $ssl_cert_expiry = $trackerService->checkSSLCertExpiry($data['url']);
+        } else {
+            abort(403, 'Invalid URL or DNS record not found.');
+        }
+
         $tracker_to_save = $essentialService->addUserIdTeamIdToArray($data);
-        $status = $trackerService->storeTracker($tracker_to_save);
+        $status = $trackerService->storeTracker($tracker_to_save, $domain_expiry, $ssl_cert_expiry);
 
         if ($status) {
+
+
             return \Redirect::route('trackers.index');
         }
     }
@@ -90,7 +104,7 @@ class TrackerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tracker $tracker)
+    public function update(Request $request, Tracker $tracker, TrackerService $trackerService)
     {
         //
 
@@ -99,10 +113,16 @@ class TrackerController extends Controller
             'url' => 'required|url:http,https|max:255',
         ])->validateWithBag('editTracker');
 
+        if ($trackerService->checkDNS($data['url'])) {
+            $domain_expiry = $trackerService->checkDomainNameExpiry($data['url']);
+            $ssl_cert_expiry = $trackerService->checkSSLCertExpiry($data['url']);
+            $trackerService->updateTracker($data, $tracker, $domain_expiry, $ssl_cert_expiry);
+            
+        } else {
+            abort(403, 'Invalid URL or DNS record not found.');
+        }
 
-        $tracker->update([
-            'url' => $data['url'],
-        ]);
+
         return back(303);
     }
 
@@ -114,6 +134,7 @@ class TrackerController extends Controller
         //
         // Delete the associated events
         $tracker->events()->delete();
+        $tracker->domainCert()->delete();
         // Optionally, you can also delete the status page itself
         // Delete associated status page relationships
         DB::table('status_page_trackers')->where('tracker_id', $tracker->id)->delete();

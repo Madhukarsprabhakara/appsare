@@ -11,9 +11,26 @@
           <p class="text-md font-semibold text-gray-900">
             <a :href="tracker.url" class="hover:underline">{{ tracker.url }}</a>
           </p>
-          <!-- <p class="text-sm text-gray-500">
-            <a href="#" class="hover:underline">HTTP | Up 1day and 5 hours</a>
-          </p> -->
+          <p v-if="tracker.domain_cert" class="text-sm text-gray-500 mt-2">
+            <span v-if="tracker.domain_cert.cert_expires_at"
+              :class="[
+                'mr-2 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset',
+                sslExpiryClass,
+              ]"
+            >
+              SSL Expires in {{ sslDaysRemaining }} days
+            </span>
+            <!-- Domain Expiry -->
+            <span v-if="tracker.domain_cert.domain_expires_at"
+              :class="[
+                'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset',
+                domainExpiryClass,
+              ]"
+            >
+              Domain Expires in {{ domainDaysRemaining }} days
+            </span>
+          </p>
+          
         </div>
         <div class="flex shrink-0 self-center">
           <div class="mr-8">
@@ -91,7 +108,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useForm, usePage, router } from '@inertiajs/vue3';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { TrashIcon, EllipsisVerticalIcon, FlagIcon, PencilIcon } from '@heroicons/vue/20/solid';
@@ -122,4 +139,38 @@ const deleteSlackConnection = () => {
   });
   console.log(props.statusPages);
 };
+
+// Helper function to calculate days remaining
+const calculateDaysRemaining = (date) => {
+  if (!date) return null;
+  const now = new Date();
+  const targetDate = new Date(date);
+  const diffTime = targetDate - now;
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+};
+
+// Computed properties for SSL and domain expiry
+const sslDaysRemaining = computed(() =>
+  calculateDaysRemaining(props.tracker.domain_cert?.cert_expires_at)
+);
+const domainDaysRemaining = computed(() =>
+  calculateDaysRemaining(props.tracker.domain_cert?.domain_expires_at)
+);
+
+// Computed properties for dynamic classes
+const sslExpiryClass = computed(() => {
+  if (sslDaysRemaining.value === null) return 'bg-gray-50 text-gray-600 ring-gray-500/10';
+  if (sslDaysRemaining.value >= 30) return 'bg-green-50 text-green-600 ring-green-500/10';
+  if (sslDaysRemaining.value < 30 && sslDaysRemaining.value >= 5)
+    return 'bg-orange-50 text-orange-600 ring-orange-500/10';
+  return 'bg-red-50 text-red-600 ring-red-500/10';
+});
+
+const domainExpiryClass = computed(() => {
+  if (domainDaysRemaining.value === null) return 'bg-gray-50 text-gray-600 ring-gray-500/10';
+  if (domainDaysRemaining.value >= 30) return 'bg-green-50 text-green-600 ring-green-500/10';
+  if (domainDaysRemaining.value < 30 && domainDaysRemaining.value >= 5)
+    return 'bg-orange-50 text-orange-600 ring-orange-500/10';
+  return 'bg-red-50 text-red-600 ring-red-500/10';
+});
 </script>

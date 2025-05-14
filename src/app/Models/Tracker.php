@@ -25,4 +25,8 @@ class Tracker extends Model
     {
         return $this->hasMany(TrackerEvent::class);
     }
+    public function domainCert()
+    {
+        return $this->hasOne(TrackerDomainCert::class);
+    }
 }
