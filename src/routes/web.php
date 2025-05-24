@@ -21,7 +21,7 @@ Route::get('/', function () {
     ]);
 });
 Route::get('/phpinfo', function() {
-    // dd(extension_loaded('soap'));// email sends again
+    // dd(extension_loaded('soap'));// email sends from live server
     return phpinfo();
 });
 //plan routes - test
