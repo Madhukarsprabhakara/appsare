@@ -22,5 +22,12 @@ import AppLayoutv2 from '@/Layouts/AppLayoutv2.vue';
 import Tracker from './Partials/Tracker.vue';
 import { usePage } from '@inertiajs/vue3';
 import Header from './Partials/Header.vue';
+
 const trackers = usePage().props.trackers;
+
+Echo.channel('tracker-created')
+    .listen('TrackerCreated', (e) => {
+        console.log('TrackerCreated event received:');
+    });
+
 </script>
