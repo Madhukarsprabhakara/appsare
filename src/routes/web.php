@@ -21,7 +21,7 @@ Route::get('/', function () {
     ]);
 });
 Route::get('/phpinfo', function() {
-    // dd(extension_loaded('soap'));// debiug true
+    // dd(extension_loaded('soap'));// broadcast connection fix
     return phpinfo();
 });
 //plan routes - test
