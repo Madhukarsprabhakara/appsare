@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TrackerCreated
+class TrackerCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -25,7 +25,10 @@ class TrackerCreated
         $this->ssl_cert_expiry = $ssl_cert_expiry;
         $this->tracker = $tracker;
     }
-    
+    public function broadcastOn()
+    {
+        return new Channel('tracker-created');
+    }
 
     /**
      * Get the channels the event should broadcast on.
