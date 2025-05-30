@@ -79,7 +79,7 @@ services:
   ar_reverb:
     build:
       context: .
-      dockerfile: php.dockerfile
+      dockerfile: php.prod.dockerfile
     container_name: ar_reverb
     working_dir: /var/www/html
     ports:
