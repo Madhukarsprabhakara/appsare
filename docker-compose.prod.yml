@@ -75,6 +75,19 @@ services:
     entrypoint: ["php", "artisan", "test"]
     networks:
       - appsare
+
+  ar_reverb:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: ar_reverb
+    working_dir: /var/www/html
+    ports:
+      - 8080:8080
+    entrypoint: ["php", "artisan", "reverb:start", "--host","0.0.0.0", "--port","8080", "--hostname", "ar_php"]
+    networks:
+      - appsare
+    restart: unless-stopped
   ar_supervisord:
     build:
       context: .
