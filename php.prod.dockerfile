@@ -16,6 +16,10 @@ RUN apk add libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql pgsql soap
 
 
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-configure pcntl --enable-pcntl
+
+
 
 
 
