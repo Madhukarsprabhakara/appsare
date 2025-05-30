@@ -27,7 +27,7 @@ const trackers = usePage().props.trackers;
 
 Echo.channel('tracker-created')
     .listen('TrackerCreated', (e) => {
-        console.log('TrackerCreated event received:');
+        console.log('TrackerCreated event received:' +e.tracker.id);
     });
 
 </script>
