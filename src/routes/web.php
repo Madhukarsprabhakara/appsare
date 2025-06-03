@@ -163,4 +163,5 @@ return [
     });
 });
 
+Route::get('/widget/uptime/{tracker}', [\App\Http\Controllers\WidgetController::class, 'uptime']);
 Route::get('/status-page/{url_slug}', [App\Http\Controllers\StatusPageController::class, 'show'])->name('statuspages.show');
